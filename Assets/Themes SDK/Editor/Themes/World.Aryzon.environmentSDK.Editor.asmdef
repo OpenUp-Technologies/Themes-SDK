@@ -1,0 +1,19 @@
+{
+    "name": "World.Aryzon.EnvironmentSDK.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:bed28a2a0396a45f4bca327cf7b3c799",
+        "GUID:0250fb3240493cd49870646b26cd7c13"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -1,0 +1,12 @@
+{
+  "name": "world.aryzon.themes-sdk",
+  "version": "1.0.0",
+  "displayName": "Aryzon World Themes SDK",
+  "description": "This package allows you to create and upload custom themes for the Aryzon.World application.",
+  "unity": "2021.3",
+  "unityRelese": "8f1",
+  "keywords": ["AR", "VR", "XR", "MR"],
+  "author": {
+    "name": "Aryzon World"
+  }
+}
