@@ -83,7 +83,6 @@ namespace OpenUp.Utils
             {
                 if (renderer.lightmapIndex == -1) continue;
                 if (renderer.lightmapScaleOffset == Vector4.zero) continue;
-                if (renderer.gameObject.layer != 22) continue;
 
                 Texture2D lightmap    = LightmapSettings.lightmaps[renderer.lightmapIndex].lightmapColor;
                 Texture2D lightmapDir = LightmapSettings.lightmaps[renderer.lightmapIndex].lightmapDir;

@@ -52,7 +52,7 @@ namespace OpenUp.Editor.EnvironmentsSdk
         [MenuItem("OpenUp/Themes/Manage Custom Themes &#e")]
         public static void ManageEnvironments()
         {
-            SettingsService.OpenProjectSettings("Project/OpenUp/Environments Settings");
+            SettingsService.OpenProjectSettings("Project/OpenUp/Custom Themes");
         }
     }
 }
