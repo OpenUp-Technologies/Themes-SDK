@@ -11,12 +11,10 @@ The `ConvertToSolution` component converts objects in your starting map into int
 | `Weight` | The weight of the object if it has physics                                                                                                                                                                          |
 | `Center of Mass Object` | Designate a custom transform to give the obejct a non-standard center of mass. By default the center of mass is derived from the colliders.                                                                         |
 | `Drag` | The drag coefficient for physics                                                                                                                                                                                    |
-| `Child of Root` | Indicates that this object is added to the root hierarchy of the game scene                                                                                                                                         |
-| `Children` | These objects will be added as children of this main object.                                                                                                                                                        |
 
 ### Notes on `Loaded Object`
 
-**The objects in the scene marked with `ConvertToSolution` is destroyed**.
+**The objects in the scene marked with `ConvertToSolution` are destroyed**.
 The loaded object is instantiated during runtime when the theme is loaded, replacing the destroyed object.
 Any changes in the scene relative to the prefab will be lost. 
 
@@ -30,13 +28,15 @@ All interaction in Aryzon.World with objects is done via their collider, if the 
 The center of mass is not stored as a separate transform object but as the location.
 You do not need to refer to an object that will also be known to the loaded object.
 
-### Notes on `Children` and `Child of Root`
+### Possible object duplication
 
-If an object is not a child of another and not a `Child of Root`, then it will not be loaded in.
+If you mark a nested part of a prefab with a convert to solution you can get this warning:
+![duplication_warning.png](..%2FImages%2Fduplication_warning.png)
 
-In newer versions these fields should become unneeded as they are confusing and should be derivable without custom input.
+When you load the theme you will see the object load in twice.
+This happens because the object is part of the parent object and supposed to be converted separately.
+The parent will be loaded in with this object being non-interactable and once where it is interactable.
 
-These fields completely ignore the hierarchy in your map prefab.
+To solve this issue remove the object that is causing the issue from the prefab that the parent loads in.
 
-Leaving the `Child of Root` enabled and referencing the object in another object's `Chldren` array will cause it to be loaded twice,
-both times at the same location.
+**Note:** This problem can only be detected in Unity version 2022.3 and higher due to requiring `PrefabUtility.GetOriginalSourceRootWhereGameObjectIsAdded` 

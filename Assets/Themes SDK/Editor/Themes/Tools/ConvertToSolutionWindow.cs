@@ -25,8 +25,6 @@ namespace OpenUp.Editor.ThemesSDK
             weightProp = serializedObject.FindProperty(nameof(ConvertToSolution.weight));
             centerOfMassProp = serializedObject.FindProperty(nameof(ConvertToSolution.centerOfMassObject));
             dragProp = serializedObject.FindProperty(nameof(ConvertToSolution.drag));
-            isRootProp = serializedObject.FindProperty(nameof(ConvertToSolution.childOfRoot));
-            childrenProp = serializedObject.FindProperty(nameof(ConvertToSolution.children));
         }
 
         public override void OnInspectorGUI()
@@ -41,9 +39,6 @@ namespace OpenUp.Editor.ThemesSDK
                 EditorGUILayout.PropertyField(centerOfMassProp);
                 EditorGUILayout.PropertyField(dragProp);
             }
-            
-            EditorGUILayout.PropertyField(isRootProp);
-            EditorGUILayout.PropertyField(childrenProp);
             
             serializedObject.ApplyModifiedProperties();
         }
@@ -80,6 +75,29 @@ namespace OpenUp.Editor.ThemesSDK
                 
                 GUILayout.EndHorizontal();
             }
+
+            ConvertToSolution outerConverter = target.transform.parent?.GetComponentInParent<ConvertToSolution>();
+            
+            if (outerConverter)
+                CheckForDuplication(outerConverter);
+        }
+
+        private void CheckForDuplication(ConvertToSolution outerConverter)
+        {
+#if UNITY_2022_3
+            GameObject sourcy = PrefabUtility.GetOriginalSourceRootWhereGameObjectIsAdded(target.gameObject); 
+            GameObject outer = AssetDatabase.LoadAssetAtPath<GameObject>(outerConverter.source);
+
+            if (sourcy == outer)
+            {
+                EditorGUILayout.LabelField(
+                    $"{target.gameObject.name} is already a child of prefab {outer.name}. During play {target.gameObject.name} will be instantiated twice.", 
+                    EditorStyles.helpBox);
+
+                if (EditorGUILayout.LinkButton("Click her for more info"))
+                    Help.BrowseURL("https://github.com/OpenUp-Technologies/Themes-SDK/blob/main/Documentation/Articles/ConvertToSolution.md#possible-object-duplication");
+            }
+#endif
         }
     }
 }

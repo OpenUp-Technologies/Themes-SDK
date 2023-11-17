@@ -32,11 +32,6 @@ namespace OpenUp.Interpreter.Utils
         /// Drag make the object fall slower and appear floaty.
         /// </summary>
         [SerializeField] public float drag = 1;
-
-        [Header("Hierarchy")]
-        [Tooltip("Check this box if the object should be part of the root hierarchy. Leave it unchecked if another object is the parent.")]
-        [SerializeField] public bool childOfRoot = true;
-        [SerializeField] public List<ConvertToSolution> children = new List<ConvertToSolution>();
         
 #if UNITY_EDITOR
         private void OnEnable()
@@ -52,7 +47,7 @@ namespace OpenUp.Interpreter.Utils
             if (prefab != gameObject)
                 return null;
             
-            GameObject prefabAsset = PrefabUtility.GetCorrespondingObjectFromSource(prefab);
+            GameObject prefabAsset = PrefabUtility.GetCorrespondingObjectFromOriginalSource(prefab);
             
             return AssetDatabase.GetAssetPath(prefabAsset);
         }
