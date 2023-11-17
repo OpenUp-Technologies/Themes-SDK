@@ -28,6 +28,14 @@ That account must either be a member of an organisation or have a special develo
 
 Themes are create and uploaded via a Unity Editor tool, so at least working knowledge of Unity is highly recommended.
 
+The theme must be built in Unity, your objects and base map must be prefabs built in Unity.
+
+#### Newtonsoft.Json
+
+Due to limitations with the standard Unity JSON package you need to add the Newtonsoft.JSON library.
+You need to add it in the package manager by name: `com.unity.nuget.newtonsoft-json`
+
+
 ## Installation
 
 There are two ways to install the Themes SDK.
@@ -42,7 +50,7 @@ Then in Unity simply navigate to `Assets > Import Package > Custom Package` and 
 An alternative way of adding the Themes SDK is adding the package via a git URL.
 To do this go to `Window > Package Manager`.
 Then add a link to this repository as a package from git here:  
-![demo](Documentation/Images/package_add_via_git.png)
+![demo](Documentation/Images/package_add_via_git.png)  
 The link you should use is:  
 https://github.com/OpenUp-Technologies/Themes-SDK.git?path=/Assets/Themes%20SDK  
 This makes sure you get the SDK part of the project
