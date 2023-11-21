@@ -11,10 +11,10 @@ namespace OpenUp.Editor.EnvironmentsSdk
     public class PerformanceAnalysis
     {
         public record HierarchyObject(Renderer Self, int[] Children, int Total);
-        public record Renderer(GameObject Source, Mesh Mesh, int VertexCount);
+        public record Renderer(GameObject Source, Mesh Mesh, int VertexCount, float Density);
 
-        public const int RECOMMENDED_VERTEX_LIMIT = 500;
-        public const int RECOMMENDED_COLLISION_FACES = 100;
+        public const int RECOMMENDED_VERTEX_LIMIT = 500_000;
+        public const int RECOMMENDED_COLLISION_FACES = 10_000;
         
         private readonly Dictionary<int, HierarchyObject> objects = new Dictionary<int, HierarchyObject>();
         private readonly Dictionary<int, Renderer> renderers = new Dictionary<int, Renderer>();
@@ -41,6 +41,14 @@ namespace OpenUp.Editor.EnvironmentsSdk
                 return 0;
             
             return cascade ? renderer.Total : renderer.Self.VertexCount;
+        }
+        
+        public float DensityOf(int targetId, bool cascade = false)
+        {
+            if (!objects.TryGetValue(targetId, out HierarchyObject renderer))
+                return 0;
+            
+            return cascade ? throw new NotImplementedException() : renderer.Self.Density;
         }
 
         private HierarchyObject Add(GameObject target)
@@ -89,11 +97,17 @@ namespace OpenUp.Editor.EnvironmentsSdk
         private Renderer GetRenderer(GameObject target)
         {
             if (target.GetComponent<MeshRenderer>() == null)
-                return new Renderer(target, null, 0);
+                return new Renderer(target, null, 0, 0);
             
             MeshFilter filt = target.GetComponent<MeshFilter>();
             Mesh mesh = filt.sharedMesh ?? filt.mesh;
-            Renderer renderer = new Renderer(target, mesh, mesh.vertexCount);
+
+            float density = mesh.vertexCount / VolumeOf(mesh.bounds);
+            density /= target.transform.lossyScale.x;
+            density /= target.transform.lossyScale.y;
+            density /= target.transform.lossyScale.z;
+            
+            Renderer renderer = new Renderer(target, mesh, mesh.vertexCount, density);
             renderers.Add(target.GetInstanceID(), renderer);
             TotalVertices += renderer.VertexCount;
 
@@ -108,6 +122,17 @@ namespace OpenUp.Editor.EnvironmentsSdk
                 analysis.Add(target);
 
             return analysis;
+        }
+
+        private float VolumeOf(Bounds bounds)
+        {
+            float volume = 1;
+
+            for (int i = 0; i < 3; i++)
+                if (bounds.size[i] > 0.003f) 
+                    volume *= bounds.size[i];
+
+            return volume;
         }
     }
 }

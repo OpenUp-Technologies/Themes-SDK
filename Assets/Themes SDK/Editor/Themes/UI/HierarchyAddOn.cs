@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace OpenUp.Editor.EnvironmentsSdk
 {
@@ -11,7 +12,8 @@ namespace OpenUp.Editor.EnvironmentsSdk
             CountIndividual,
             CountTotal,
             PercentIndividual,
-            PercentTotal
+            PercentTotal,
+            Density
         }
         
         private static bool hasAddedListener = false;
@@ -57,7 +59,7 @@ namespace OpenUp.Editor.EnvironmentsSdk
 
         private static void DrawOverlay(int instanceID, Rect selectionRect)
         {
-            if (mode is Mode.PercentIndividual or Mode.PercentTotal)
+            if (mode is not (Mode.CountIndividual or Mode.CountTotal))
                 return;
 
             int count = mode switch
@@ -67,7 +69,7 @@ namespace OpenUp.Editor.EnvironmentsSdk
                 _ => throw new ArgumentException()
             };
 
-            float lerpValue = count / (float)HighVertexCount;
+            float lerpValue = count / (float)PerformanceAnalysis.RECOMMENDED_VERTEX_LIMIT;
             lerpValue = lerpValue > 0 ? Mathf.Sqrt(lerpValue) : lerpValue;
 
             Color color = Color.Lerp(LowImpact, HighImpact, lerpValue);
@@ -83,14 +85,16 @@ namespace OpenUp.Editor.EnvironmentsSdk
             Rect rect = new Rect(selectionRect);
             rect.min = rect.max + Vector2.left * 50 + Vector2.down * 15;
 
-            string HideZeros(int i) => i > 0 ? i.ToString() : String.Empty;
+            string HideZerosI(int i) => i > 0 ? i.ToString() : String.Empty;
+            string HideZerosF(float i) => i > 0 ? i.ToString("F1") : String.Empty;
 
             string value = mode switch
             {
                 Mode.PercentTotal => currentAnalysis.ImpactOf(instanceID, true),
                 Mode.PercentIndividual => currentAnalysis.ImpactOf(instanceID, false),
-                Mode.CountTotal => HideZeros(currentAnalysis.VerticesOf(instanceID, true)),
-                Mode.CountIndividual => HideZeros(currentAnalysis.VerticesOf(instanceID, false)),
+                Mode.CountTotal => HideZerosI(currentAnalysis.VerticesOf(instanceID, true)),
+                Mode.CountIndividual => HideZerosI(currentAnalysis.VerticesOf(instanceID, false)),
+                Mode.Density => HideZerosF(currentAnalysis.DensityOf(instanceID, false)),
                 _ => throw new ArgumentException()
             };
             
@@ -130,6 +134,36 @@ namespace OpenUp.Editor.EnvironmentsSdk
         
         [MenuItem("GameObject/Analysis/Percentages (Full)")]
         private static void ShowAnalysisPercentsFull(MenuCommand cmd) 
-            => ShowAnalysis(cmd, Mode.PercentTotal);
+            => ShowAnalysis(cmd, Mode.PercentTotal);        
+        
+        [MenuItem("OpenUp/Analysis/Vertices (Individual)")]
+        private static void AnalyseSceneVertsIndividual() 
+            => AnalyseScene(Mode.CountIndividual);
+        
+        [MenuItem("OpenUp/Analysis/Vertices (Full)")]
+        private static void AnalyseSceneVertsFull() 
+            => AnalyseScene(Mode.CountTotal);
+        
+        [MenuItem("OpenUp/Analysis/Percentages (Individual)")]
+        private static void AnalyseScenePercentsIndividual() 
+            => AnalyseScene(Mode.PercentIndividual);
+        
+        [MenuItem("OpenUp/Analysis/Percentages (Full)")]
+        private static void AnalyseScenePercentsFull() 
+            => AnalyseScene(Mode.PercentTotal); 
+        
+        [MenuItem("OpenUp/Analysis/Density (Individual)")]
+        private static void AnalyseSceneDensityIndividual() 
+            => AnalyseScene(Mode.Density); 
+        
+        [MenuItem("OpenUp/Analysis/None")]
+        private static void AnalyseSceneNone() 
+            => Hide();
+        
+        private static void AnalyseScene(Mode _mode)
+        {
+            mode = _mode;
+            ShowFor(SceneManager.GetActiveScene().GetRootGameObjects());
+        }
     }
 }
