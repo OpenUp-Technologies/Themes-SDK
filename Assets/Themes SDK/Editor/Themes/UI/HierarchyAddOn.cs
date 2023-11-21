@@ -27,7 +27,6 @@ namespace OpenUp.Editor.EnvironmentsSdk
             if (hasAddedListener) 
                 return;
             
-            
             hasAddedListener = true;
             EditorApplication.hierarchyWindowItemOnGUI += OnHierarchyGUI;
         }

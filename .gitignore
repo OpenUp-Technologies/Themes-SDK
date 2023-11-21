@@ -334,47 +334,8 @@ sysinfo.txt
 *.apk
 *.unitypackage
 UnityExtension/**/manifest.json
-Assembly-CSharp.Player.csproj
-Assembly-CSharp.csproj
-Assembly-CSharp-Editor.csproj
-Assembly-CSharp.Player.csproj
-Assembly-CSharp.csproj
-Assembly-CSharp-Editor.csproj
 *.csproj
-Assembly-CSharp.csproj
-Assembly-CSharp-Editor.csproj
-
-# Ignore all worlds
-Assets/Environments/*
-Assets/Resources/Assets/Environments/*
-!Assets/Resources/Assets/Environments/VTC
-
-# LDraw Parts
-Assets/Resources/LDraw Base Parts/*
-Assets/Resources/LDraw Files (.mpd)/.ldraw/*
-GeneratedMeshes
-
-Assets/Resources/Assets/OpenUpEditorSettings.asset
-Assets/Resources/Assets/OpenUpEditorSettings.asset.meta
-Assets/Resources/Worlds/CHE Full/*
-
-Assets/Resources/Worlds/VTC/Models/*
-Assets/Resources/Worlds/VTC/Models.meta
-
-Assets/Resources/Worlds/OfficeAssets/*
-Assets/Plugins/Android/assets/vuplex-webview-gecko-extension.meta
-Assets/Plugins/Android/assets/vuplex-webview-gecko-extension/manifest.json.meta
-Assets/Plugins/Vuplex.meta
-Assets/Plugins/Vuplex/WebView.meta
-Assets/Plugins/Vuplex/WebView/Plugins.meta
-
-ElasticSearchCredentials.*
 UserSettings/Layouts/default-2021.dwlt
 
-Assets/Resources/Assets/Build configurations.meta
-Assets/Resources/Assets/Build configurations/*
-
-!Assets/Resources/Assets/Build configurations/production.*
-!Assets/Resources/Assets/Build configurations/acceptance.*
-
 Assets/AryzonWorld/Core/Resources/Settings/Dev profiles/*
+UserSettings/Layouts/default-2022.dwlt

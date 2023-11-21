@@ -90,9 +90,9 @@ namespace OpenUp.Editor.ThemesSDK
 
             if (sourcy == outer)
             {
-                EditorGUILayout.LabelField(
+                EditorGUILayout.HelpBox(
                     $"{target.gameObject.name} is already a child of prefab {outer.name}. During play {target.gameObject.name} will be instantiated twice.", 
-                    EditorStyles.helpBox);
+                    MessageType.Warning);
 
                 if (EditorGUILayout.LinkButton("Click her for more info"))
                     Help.BrowseURL("https://github.com/OpenUp-Technologies/Themes-SDK/blob/main/Documentation/Articles/ConvertToSolution.md#possible-object-duplication");

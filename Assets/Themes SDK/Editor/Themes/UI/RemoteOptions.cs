@@ -77,8 +77,8 @@ namespace OpenUp.Editor.EnvironmentsSdk
                 {
                     UploadVersionWindow window = EditorWindow.GetWindow<UploadVersionWindow>();
                     window.environment = option;
-                    window.localAsset = local;
                     window.existingVersion = version;
+                    window.SetAsset(local);
                     window.ShowUtility();
                     
                     environmentsEditor.FetchRemotes();
@@ -97,7 +97,7 @@ namespace OpenUp.Editor.EnvironmentsSdk
             {
                 UploadVersionWindow window = EditorWindow.GetWindow<UploadVersionWindow>();
                 window.environment = option;
-                window.localAsset = local;
+                window.SetAsset(local);
                 window.ShowUtility();
                 
                 environmentsEditor.FetchRemotes();

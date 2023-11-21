@@ -1,21 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using OpenUp.Interpreter.Utils;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace OpenUp.Editor.EnvironmentsSdk
 {
     public class PerformanceAnalysis
     {
-        public record Renderer(GameObject Source, Mesh Mesh, int VertexCount);
         public record HierarchyObject(Renderer Self, int[] Children, int Total);
+        public record Renderer(GameObject Source, Mesh Mesh, int VertexCount);
+
+        public const int RECOMMENDED_VERTEX_LIMIT = 500;
+        public const int RECOMMENDED_COLLISION_FACES = 100;
         
         private readonly Dictionary<int, HierarchyObject> objects = new Dictionary<int, HierarchyObject>();
         private readonly Dictionary<int, Renderer> renderers = new Dictionary<int, Renderer>();
         public IReadOnlyCollection<Renderer> Renderers => renderers.Values;
         public IReadOnlyDictionary<int, HierarchyObject> Objects => objects;
         public int  TotalVertices { get; private set; }
+        public int InteractableObjects { get; private set; }
+        public int ColliderCount { get; private set; }
+        public int MeshColliderFaces { get; private set; }
 
         public string ImpactOf(int targetId, bool cascade = false)
         {
@@ -50,6 +58,30 @@ namespace OpenUp.Editor.EnvironmentsSdk
             );
             
             objects.Add(target.GetInstanceID(), obj);
+
+            if (target.GetComponent<ConvertToSolution>())
+                InteractableObjects++;
+
+            if (target.GetComponent<Collider>())
+                ColliderCount++;
+
+            if (target.GetComponent<MeshCollider>())
+            {
+                MeshCollider mc = target.GetComponent<MeshCollider>();
+
+                if (mc.convex)
+                {
+                    using Mesh.MeshDataArray data = Mesh.AcquireReadOnlyMeshData(mc.sharedMesh);
+                    Mesh.MeshData meshData = data[0];
+
+                    MeshColliderFaces += meshData.indexFormat switch
+                    {
+                        IndexFormat.UInt16 => meshData.GetIndexData<ushort>().Length / 3,
+                        IndexFormat.UInt32 => meshData.GetIndexData<int>().Length / 3,
+                    };
+                }
+                
+            }
 
             return obj;
         }

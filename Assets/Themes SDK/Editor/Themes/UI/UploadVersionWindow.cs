@@ -28,12 +28,19 @@ namespace OpenUp.Editor.EnvironmentsSdk
 
         private string versionCode;
         private string codeIssue;
+        private PerformanceAnalysis analysis;
         
         // Only way to do this due to the upload being async...
         private bool isFinished;
         
-        public EnvironmentOption localAsset;
+        private EnvironmentOption localAsset;
         private readonly HashSet<Platform> chosenPlatforms = new HashSet<Platform>();
+
+        public void SetAsset(EnvironmentOption option)
+        {
+            localAsset = option;
+            analysis = PerformanceAnalysis.Analyse(localAsset.rootObject.asset);
+        }
 
         private void OnGUI()
         {
@@ -62,11 +69,12 @@ namespace OpenUp.Editor.EnvironmentsSdk
 
             localAsset = EditorGUILayout.ObjectField("Environment Asset", localAsset, typeof(EnvironmentOption), false) as EnvironmentOption;
 
+            PerformanceUI.DrawWarnings(analysis);
+            
             RenderPlatformSelection();
+            RenderUploadButton();
             
             if (localAsset) PreviewAsset();
-
-            RenderUploadButton();
         }
 
         private void PreviewAsset()
