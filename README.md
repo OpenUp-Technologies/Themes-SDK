@@ -30,6 +30,8 @@ Themes are create and uploaded via a Unity Editor tool, so at least working know
 
 The theme must be built in Unity, your objects and base map must be prefabs built in Unity.
 
+**IMPORTANT:** Assets bundled with Unity 2022.3 or later seem to not load with Aryzon.World 2023.0.3 or earlier.
+
 #### Newtonsoft.Json
 
 Due to limitations with the standard Unity JSON package you need to add the Newtonsoft.JSON library.
@@ -42,7 +44,7 @@ There are two ways to install the Themes SDK.
 
 ### Releases Page (Simple)
 
-The easiest way to install the Themes SDK is to simply download the `.unitypackage` file from the releases page here on github.
+The easiest way to install the Themes SDK is to simply download the `.unitypackage` file from the [releases page](https://github.com/OpenUp-Technologies/Themes-SDK/releases) here on github.
 Then in Unity simply navigate to `Assets > Import Package > Custom Package` and select the package you just downloaded.
 
 ### Via Github Link (Advanced)
