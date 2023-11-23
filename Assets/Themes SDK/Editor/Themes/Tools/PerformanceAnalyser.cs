@@ -77,18 +77,14 @@ namespace OpenUp.Editor.EnvironmentsSdk
             {
                 MeshCollider mc = target.GetComponent<MeshCollider>();
 
-                if (mc.convex)
-                {
-                    using Mesh.MeshDataArray data = Mesh.AcquireReadOnlyMeshData(mc.sharedMesh);
-                    Mesh.MeshData meshData = data[0];
+                using Mesh.MeshDataArray data = Mesh.AcquireReadOnlyMeshData(mc.sharedMesh);
+                Mesh.MeshData meshData = data[0];
 
-                    MeshColliderFaces += meshData.indexFormat switch
-                    {
-                        IndexFormat.UInt16 => meshData.GetIndexData<ushort>().Length / 3,
-                        IndexFormat.UInt32 => meshData.GetIndexData<int>().Length / 3,
-                    };
-                }
-                
+                MeshColliderFaces += meshData.indexFormat switch
+                {
+                    IndexFormat.UInt16 => meshData.GetIndexData<ushort>().Length / 3,
+                    IndexFormat.UInt32 => meshData.GetIndexData<int>().Length / 3,
+                };
             }
 
             return obj;
@@ -96,11 +92,14 @@ namespace OpenUp.Editor.EnvironmentsSdk
 
         private Renderer GetRenderer(GameObject target)
         {
-            if (target.GetComponent<MeshRenderer>() == null)
+            if (target.GetComponent<UnityEngine.Renderer>() == null)
                 return new Renderer(target, null, 0, 0);
             
             MeshFilter filt = target.GetComponent<MeshFilter>();
-            Mesh mesh = filt.sharedMesh ?? filt.mesh;
+            SkinnedMeshRenderer smr = target.GetComponent<SkinnedMeshRenderer>();
+            
+            Mesh mesh = filt != null ? (filt.sharedMesh ?? filt.mesh)
+                                     : smr.sharedMesh;
 
             float density = mesh.vertexCount / VolumeOf(mesh.bounds);
             density /= target.transform.lossyScale.x;

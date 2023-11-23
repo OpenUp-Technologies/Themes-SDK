@@ -1,6 +1,7 @@
 ﻿using System;
 using OpenUp.Environment;
 using UnityEditor;
+using UnityEngine;
 
 namespace OpenUp.Editor.EnvironmentsSdk
 {
@@ -71,8 +72,15 @@ namespace OpenUp.Editor.EnvironmentsSdk
             PerformanceUI.DrawWarnings(analysis);
 
             EditorGUILayout.BeginVertical(EditorStyles.helpBox);
-            
+
+            EditorGUILayout.BeginHorizontal(GUILayout.ExpandWidth(true));
             EditorGUILayout.LabelField("Stats", EditorStyles.boldLabel);
+            
+            if (GUILayout.Button("Recalculate")) 
+                analysis = PerformanceAnalysis.Analyse(target.rootObject.asset);
+            
+            EditorGUILayout.EndHorizontal();
+            
             EditorGUILayout.LabelField("Vertices", analysis.TotalVertices.ToString());
             EditorGUILayout.LabelField("Total Objects", analysis.Objects.Count.ToString());
             EditorGUILayout.LabelField("Interactable Objects", analysis.InteractableObjects.ToString());
