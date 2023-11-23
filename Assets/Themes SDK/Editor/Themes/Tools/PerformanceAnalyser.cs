@@ -92,11 +92,11 @@ namespace OpenUp.Editor.EnvironmentsSdk
 
         private Renderer GetRenderer(GameObject target)
         {
-            if (target.GetComponent<UnityEngine.Renderer>() == null)
-                return new Renderer(target, null, 0, 0);
-            
             MeshFilter filt = target.GetComponent<MeshFilter>();
             SkinnedMeshRenderer smr = target.GetComponent<SkinnedMeshRenderer>();
+            
+            if (filt == null && smr == null)
+                return new Renderer(target, null, 0, 0);
             
             Mesh mesh = filt != null ? (filt.sharedMesh ?? filt.mesh)
                                      : smr.sharedMesh;
