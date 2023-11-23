@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using OpenUp.Environment;
 using OpenUp.Interpreter.Environment;
+using OpenUp.Interpreter.Utils;
 using UnityEditor;
 using UnityEngine;
 
@@ -41,12 +42,13 @@ namespace OpenUp.Editor.EnvironmentsSdk
         {
             string           bundleName = $"world_{option.GetInstanceID()}";
             string rootPath = AssetDatabase.GetAssetPath(option.rootObject.asset.GetInstanceID());
-            
-            
-            string rootPathAR = option.rootObjectAR.isSet ? AssetDatabase.GetAssetPath(option.rootObjectAR.asset.GetInstanceID())
-                    : rootPath;
 
-            Regex    dontWants = new Regex(@"\.cs|\.dll");
+
+            string rootPathAR = option.rootObjectAR.isSet
+                ? AssetDatabase.GetAssetPath(option.rootObjectAR.asset.GetInstanceID())
+                : rootPath;
+            
+            Regex dontWants = new Regex(@"\.cs|\.dll");
 
             IEnumerable<string> allFiles = AssetDatabase.GetDependencies(rootPath, true)
                                                         .Concat(AssetDatabase.GetDependencies(rootPathAR, true))
@@ -76,7 +78,13 @@ namespace OpenUp.Editor.EnvironmentsSdk
                 
                 allFiles = allFiles.Concat(prefabFiles);
             }
-
+            
+            // Playable object can reference prefabs not included yet
+            allFiles = allFiles.Concat(option.rootObject.asset.GetComponentsInChildren<PlayableObject>().Select(play => play.source));
+            
+            if (option.rootObjectAR.isSet) 
+                allFiles = allFiles.Concat(option.rootObjectAR.asset.GetComponentsInChildren<PlayableObject>().Select(play => play.source));
+            
             string[] deps = allFiles.Distinct()
                                     .ToArray();
 
