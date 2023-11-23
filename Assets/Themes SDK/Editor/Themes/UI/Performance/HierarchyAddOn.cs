@@ -134,7 +134,11 @@ namespace OpenUp.Editor.EnvironmentsSdk
         
         [MenuItem("GameObject/Analysis/Percentages (Full)")]
         private static void ShowAnalysisPercentsFull(MenuCommand cmd) 
-            => ShowAnalysis(cmd, Mode.PercentTotal);        
+            => ShowAnalysis(cmd, Mode.PercentTotal); 
+        
+        [MenuItem("GameObject/Analysis/Density Level (Individual)")]
+        private static void ShowAnalysisDensity(MenuCommand cmd) 
+            => ShowAnalysis(cmd, Mode.Density);        
         
         [MenuItem("OpenUp/Analysis/Vertices (Individual)")]
         private static void AnalyseSceneVertsIndividual() 

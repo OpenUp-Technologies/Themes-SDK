@@ -123,6 +123,17 @@ See the [full article](Documentation/Articles/ConvertToSolution.md) for details.
 You can also define themed objects that are available under the Theme tab in add objects.
 This is simply a list of prefabs in the theme asset.
 
+### Performance Measuring
+
+[Full Article](Documentation/Articles/PerformanceTools.md)
+
+To help make sure your theme performs well on all platforms, a set of tools have been added to allow you to find high impact parts of your theme.
+
+These tools include:
+- A stats window added to the theme asset inspector.
+- Special warnings when uploading themes that exceed recommended performance indicators.
+- Annotation to the hierarchy window to highlight problem areas.
+
 ## Lighting
 
 By default, Unity does not support baked lighting on prefabs, only on the scene.
