@@ -196,7 +196,7 @@ namespace OpenUp.Editor.EnvironmentsSdk
                 RemoteVersion newVersion = existingVersion ?? new RemoteVersion
                                                               {
                                                                   BundleVersion = versionCode,
-                                                                  AppVersion = "2023.0.0"
+                                                                  AppVersion = "2023.0.3"
                                                               };
 
                 await uploader.ConfirmUploadOf(newVersion, localAsset.prefabPaths, uploaded);
