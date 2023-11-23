@@ -67,7 +67,7 @@ namespace OpenUp.Editor.EnvironmentsSdk
             
             objects.Add(target.GetInstanceID(), obj);
 
-            if (target.GetComponent<ConvertToSolution>())
+            if (target.GetComponent<PlayableObject>())
                 InteractableObjects++;
 
             if (target.GetComponent<Collider>())

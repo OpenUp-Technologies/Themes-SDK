@@ -114,9 +114,9 @@ This theme affects which predefined objects players can add and the starting map
 A theme's starting map consists of an immutable base environment and a collection of starting objects.
 The starting map is a prefab that you assign to the `Root Object` field of your theme.
 
-You can then mark objects in the starting map with a special `ConvertToSolution` component that makes them playable objects once the map has been loaded.
+You can then mark objects in the starting map with a special `PlayableObject` component that makes them playable objects once the map has been loaded.
 It does this by referencing a specific prefab that should be loaded in as the playable object.
-See the [full article](Documentation/Articles/ConvertToSolution.md) for details. 
+See the [full article](Documentation/Articles/PlayableObject.md) for details. 
 
 ### Custom Objects
 

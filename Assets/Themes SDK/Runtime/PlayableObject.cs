@@ -1,14 +1,18 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 
+// Scripts in asset bundles are saved under their full name and assembly name,
+// don't rename these scripts as all themes would need to be rebuilt.
+// see: https://forum.unity.com/threads/asset-bundle-cannot-find-scripts-from-assembly-definition-files.531804/#post-3521699
+
+
 namespace OpenUp.Interpreter.Utils
 {
     [ExecuteInEditMode]
-    public class ConvertToSolution : MonoBehaviour
+    public class PlayableObject : MonoBehaviour
     {
         /// <summary>
         /// The path to the model source.

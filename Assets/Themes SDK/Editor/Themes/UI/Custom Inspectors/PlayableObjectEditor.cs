@@ -5,8 +5,8 @@ using UnityEngine;
 
 namespace OpenUp.Editor.ThemesSDK
 {
-    [CustomEditor(typeof(ConvertToSolution))]
-    public class ConvertToSolutionWindow : UnityEditor.Editor
+    [CustomEditor(typeof(PlayableObject))]
+    public class PlayableObjectEditor : UnityEditor.Editor
     {
         private SerializedProperty sourceProp;
         private SerializedProperty noPhysicsProp;
@@ -16,15 +16,15 @@ namespace OpenUp.Editor.ThemesSDK
         private SerializedProperty isRootProp;
         private SerializedProperty childrenProp;
         
-        private new ConvertToSolution target => base.target as ConvertToSolution;
+        private new PlayableObject target => base.target as PlayableObject;
 
         public void OnEnable()
         {
-            sourceProp = serializedObject.FindProperty(nameof(ConvertToSolution.source));
-            noPhysicsProp = serializedObject.FindProperty(nameof(ConvertToSolution.noPhysics));
-            weightProp = serializedObject.FindProperty(nameof(ConvertToSolution.weight));
-            centerOfMassProp = serializedObject.FindProperty(nameof(ConvertToSolution.centerOfMassObject));
-            dragProp = serializedObject.FindProperty(nameof(ConvertToSolution.drag));
+            sourceProp = serializedObject.FindProperty(nameof(PlayableObject.source));
+            noPhysicsProp = serializedObject.FindProperty(nameof(PlayableObject.noPhysics));
+            weightProp = serializedObject.FindProperty(nameof(PlayableObject.weight));
+            centerOfMassProp = serializedObject.FindProperty(nameof(PlayableObject.centerOfMassObject));
+            dragProp = serializedObject.FindProperty(nameof(PlayableObject.drag));
         }
 
         public override void OnInspectorGUI()
@@ -76,13 +76,13 @@ namespace OpenUp.Editor.ThemesSDK
                 GUILayout.EndHorizontal();
             }
 
-            ConvertToSolution outerConverter = target.transform.parent?.GetComponentInParent<ConvertToSolution>();
+            PlayableObject outerConverter = target.transform.parent?.GetComponentInParent<PlayableObject>();
             
             if (outerConverter)
                 CheckForDuplication(outerConverter);
         }
 
-        private void CheckForDuplication(ConvertToSolution outerConverter)
+        private void CheckForDuplication(PlayableObject outerConverter)
         {
 #if UNITY_2022_3
             GameObject sourcy = PrefabUtility.GetOriginalSourceRootWhereGameObjectIsAdded(target.gameObject); 

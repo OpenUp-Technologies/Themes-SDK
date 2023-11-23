@@ -1,6 +1,6 @@
-## ConvertToSolution
+## PlayableObject
 
-The `ConvertToSolution` component converts objects in your starting map into interactable objects once the map has been loaded in for players.
+The `PlayableObject` component converts objects in your starting map into interactable objects once the map has been loaded in for players.
 
 ### Fields
 
@@ -14,11 +14,11 @@ The `ConvertToSolution` component converts objects in your starting map into int
 
 ### Notes on `Loaded Object`
 
-**The objects in the scene marked with `ConvertToSolution` are destroyed**.
+**The objects in the scene marked with `PlayableObject` are destroyed**.
 The loaded object is instantiated during runtime when the theme is loaded, replacing the destroyed object.
 Any changes in the scene relative to the prefab will be lost. 
 
-There is no requirement that the object marked with `ConvertToSolution` is an instance of the `Loaded Object`,
+There is no requirement that the object marked with `PlayableObject` is an instance of the `Loaded Object`,
 but the editor does display a warning when you do this as it is usually not the intention.
 
 All interaction in Aryzon.World with objects is done via their collider, if the `Loaded Object` does not have a collider it will be unusable in Aryzon.World.
@@ -30,7 +30,7 @@ You do not need to refer to an object that will also be known to the loaded obje
 
 ### Possible object duplication
 
-If you mark a nested part of a prefab with a convert to solution you can get this warning:
+If you mark a nested part of a prefab with a convert to solution you can get this warning:  
 ![duplication_warning.png](..%2FImages%2Fduplication_warning.png)
 
 When you load the theme you will see the object load in twice.

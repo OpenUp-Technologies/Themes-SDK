@@ -27,7 +27,7 @@ namespace OpenUp.Editor.EnvironmentsSdk
                 return;
             }
 
-            if (prefab.GetComponent<ConvertToSolution>())
+            if (prefab.GetComponent<PlayableObject>())
             {
                 Debug.LogWarning($"Object {target.name} will already be converted, skipping.");
                 return;
@@ -38,7 +38,7 @@ namespace OpenUp.Editor.EnvironmentsSdk
             string path = AssetDatabase.GetAssetPath(prefabAsset);
 
             // Makes sure the undo command can clean it up if unwanted
-            ConvertToSolution convert = Undo.AddComponent<ConvertToSolution>(target);
+            PlayableObject convert = Undo.AddComponent<PlayableObject>(target);
 
             convert.source = path;
         }
