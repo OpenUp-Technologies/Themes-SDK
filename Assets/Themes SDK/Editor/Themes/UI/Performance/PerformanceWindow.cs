@@ -30,7 +30,8 @@ namespace OpenUp.Editor.EnvironmentsSdk
         /// Note that this gets fired for each object individually if you have multiple selected.
         /// </remarks>
         /// <param name="cmd">The individual object this command is being executed on.</param>
-        [MenuItem("GameObject/OpenUp/Analyse Performance")]
+        // TODO: This menu has been disabled for now. The tool is in a decent enough state for now.
+        // [MenuItem("GameObject/OpenUp/Analyse Performance")]
         public static void AnalysePerformance(MenuCommand cmd)
         {
             if (cmd.context is not GameObject gameObject)

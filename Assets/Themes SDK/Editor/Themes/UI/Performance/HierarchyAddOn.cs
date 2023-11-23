@@ -86,7 +86,7 @@ namespace OpenUp.Editor.EnvironmentsSdk
             rect.min = rect.max + Vector2.left * 50 + Vector2.down * 15;
 
             string HideZerosI(int i) => i > 0 ? i.ToString() : String.Empty;
-            string HideZerosF(float i) => i > 0 ? i.ToString("F1") : String.Empty;
+            string ToLevel(float i) => i > 0 ? Mathf.Clamp(Mathf.Log10(i), 0, 100).ToString("F1") : String.Empty;
 
             string value = mode switch
             {
@@ -94,7 +94,7 @@ namespace OpenUp.Editor.EnvironmentsSdk
                 Mode.PercentIndividual => currentAnalysis.ImpactOf(instanceID, false),
                 Mode.CountTotal => HideZerosI(currentAnalysis.VerticesOf(instanceID, true)),
                 Mode.CountIndividual => HideZerosI(currentAnalysis.VerticesOf(instanceID, false)),
-                Mode.Density => HideZerosF(currentAnalysis.DensityOf(instanceID, false)),
+                Mode.Density => ToLevel(currentAnalysis.DensityOf(instanceID, false)),
                 _ => throw new ArgumentException()
             };
             
@@ -152,7 +152,7 @@ namespace OpenUp.Editor.EnvironmentsSdk
         private static void AnalyseScenePercentsFull() 
             => AnalyseScene(Mode.PercentTotal); 
         
-        [MenuItem("OpenUp/Analysis/Density (Individual)")]
+        [MenuItem("OpenUp/Analysis/Density Level (Individual)")]
         private static void AnalyseSceneDensityIndividual() 
             => AnalyseScene(Mode.Density); 
         
