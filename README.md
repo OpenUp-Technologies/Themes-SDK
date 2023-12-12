@@ -12,6 +12,7 @@ This package allows you to create and upload custom themes for the Aryzon.World 
 - [Features](#features)
 - [Creating a new Theme](#creating-a-new-theme)
 - [Lighting](#lighting)
+- [Known Issues](#known-issues)
 
 </details>
 
@@ -145,3 +146,18 @@ To use this utility add the script `Bake Prefab Lighting` to the root object of 
 Then add this root prefab to a new scene and set up the lighting so that it looks good.
 Once you've done that select `Assets > Bake Prefab Lightmaps`. 
 The Unity Editor will run its lightmap baking routine, then store the baked lightmaps using the `BakePrefabLighting` script.
+
+## Known Issues
+
+### Upload can throw a `TaskCancelledException` when targeting something than your current build target.
+
+**Make sure the build target of the Unity editor is also what you are bundling for.**
+
+When building your theme for something other than your current target Unity switches to that build target to make the bundle.
+After it is finished it switches back to your current target.
+If bundling ends on something other than you current target then the upload of your theme will be interrupted by this switch back.
+
+### Custom Themes menu can get stuck on `Fetching remote options...`
+
+**Navigate away form that menu and force Unity to reload its script, for instance by making a new script or editing an existing one.**
+
