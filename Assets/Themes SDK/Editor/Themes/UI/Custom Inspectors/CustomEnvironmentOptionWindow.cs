@@ -39,7 +39,8 @@ namespace OpenUp.Editor.EnvironmentsSdk
 
         private void OnEnable()
         {
-            analysis = PerformanceAnalysis.Analyse(target.rootObject.asset);
+            if (target.rootObject.isSet)
+                analysis = PerformanceAnalysis.Analyse(target.rootObject.asset);
         }
 
         private void RenderObjectList()
@@ -69,6 +70,9 @@ namespace OpenUp.Editor.EnvironmentsSdk
 
         private void RenderStats()
         {
+            if (analysis == null)
+                return;
+            
             PerformanceUI.DrawWarnings(analysis);
 
             EditorGUILayout.BeginVertical(EditorStyles.helpBox);
