@@ -63,7 +63,7 @@ namespace OpenUp.Editor.EnvironmentsSdk
         {
             EnvironmentsEditor.Organisation current = null;
             
-            if (organisation != null) permissions.organisations.TryGetValue(organisation, out current); 
+            if (organisation != null) permissions.organisations?.TryGetValue(organisation, out current); 
             
             if (GUILayout.Button(current?.orgName ?? "Set an organisation"))
             {
