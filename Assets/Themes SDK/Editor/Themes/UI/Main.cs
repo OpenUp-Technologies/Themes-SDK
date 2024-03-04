@@ -32,7 +32,7 @@ namespace OpenUp.Editor.EnvironmentsSdk
         {
             base.OnActivate(searchContext, rootElement);
             
-            core = EnvironmentsEditor.Instance;
+            core = new EnvironmentsEditor();
             
             core.FetchRemotes();
             core.FindLocalOptions();
