@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -17,6 +18,16 @@ namespace OpenUp.Editor.EnvironmentsSdk
             public string path;
             public string hash;
         }
+
+        public record ValidationResult(bool IsValid, IEnumerable<string> Reasons)
+        {
+            public ValidationResult Combine(ValidationResult other) =>
+                new ValidationResult(IsValid && other.IsValid, Reasons.Concat(other.Reasons));
+            
+            public ValidationResult Combine(bool isValid, string reason) =>
+                new ValidationResult(IsValid && isValid, Reasons.Append(reason));
+        };
+
      
         private static readonly IReadOnlyDictionary<Platform, BuildTarget> TargetPlatformMap =
             new Dictionary<Platform, BuildTarget>
@@ -38,7 +49,45 @@ namespace OpenUp.Editor.EnvironmentsSdk
             this.option = option;
         }
 
-        public AssetBundleBuild CreateBuildInstructions()
+        /// <summary>
+        /// Checks whether the output of this bundle could be used by the target version. 
+        /// </summary>
+        /// <param name="targetVersion"></param>
+        /// <returns></returns>
+        public ValidationResult Validate(RemoteVersion targetVersion)
+        {
+            ValidationResult result = new ValidationResult(true, Array.Empty<string>());
+
+            if (!option.rootObject.isSet || option.rootObject.isBroken)
+                result = result.Combine(false, "Root object is missing");
+
+            if (targetVersion != null)
+                result = result.Combine(ValidateForTargetVersion(targetVersion));
+            
+            return result;
+        }
+
+        private ValidationResult ValidateForTargetVersion(RemoteVersion targetVersion)
+        {
+            ValidationResult result = new ValidationResult(true, Array.Empty<string>());
+            string[] ourPaths = option.prefabs.Select(AssetDatabase.GetAssetPath).ToArray();
+            
+            foreach (string path in ourPaths)
+            {
+                if (!targetVersion.PrefabPaths.Contains(path))
+                    result = result.Combine(false, $"Prefab {path} is not part of the remote prefabs list");
+            }
+            
+            foreach (string path in targetVersion.PrefabPaths)
+            {
+                if (!ourPaths.Contains(path))
+                    result = result.Combine(false, $"Missing prefab for remotely listed object {path}");
+            }
+
+            return result;
+        }
+
+        private AssetBundleBuild CreateBuildInstructions()
         {
             string           bundleName = $"world_{option.GetInstanceID()}";
             string rootPath = AssetDatabase.GetAssetPath(option.rootObject.asset.GetInstanceID());

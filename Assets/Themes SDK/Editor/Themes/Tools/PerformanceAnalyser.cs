@@ -117,7 +117,7 @@ namespace OpenUp.Editor.EnvironmentsSdk
         {
             PerformanceAnalysis analysis = new PerformanceAnalysis();
 
-            foreach (GameObject target in targets)
+            foreach (GameObject target in targets.Where(t => t != null))
                 analysis.Add(target);
 
             return analysis;
