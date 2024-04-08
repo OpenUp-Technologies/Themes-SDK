@@ -27,7 +27,7 @@ That account must either be a member of an organisation or have a special develo
 
 ### Unity
 
-Themes are create and uploaded via a Unity Editor tool, so at least working knowledge of Unity is highly recommended.
+Themes are created and uploaded via a Unity Editor tool, so at least working knowledge of Unity is highly recommended.
 
 The theme must be built in Unity, your objects and base map must be prefabs built in Unity.
 
@@ -149,7 +149,7 @@ The Unity Editor will run its lightmap baking routine, then store the baked ligh
 
 ## Known Issues
 
-### Upload can throw a `TaskCancelledException` when targeting something than your current build target.
+### Upload can throw a `TaskCancelledException` when targeting something other than your current build target.
 
 **Solution:** Make sure the build target of the Unity editor is also what you are bundling for.
 
