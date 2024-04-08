@@ -178,7 +178,23 @@ namespace OpenUp.Editor.EnvironmentsSdk
             
             Platform[] platforms = chosenPlatforms.ToArray();
 
-            Bundler              bundler = new Bundler(localAsset);
+            Bundler bundler = new Bundler(localAsset);
+            Bundler.ValidationResult result = bundler.Validate(existingVersion);
+
+            if (!result.IsValid)
+            {
+                Debug.LogError("Bundle was not Valid, see following errors for reasons");
+                foreach (string reason in result.Reasons)
+                    Debug.LogError(reason);
+
+                EditorUtility.DisplayDialog(
+                    "Bundle Invalid", 
+                    "There are 1 or more errors with the bundle stopping it from being uploaded, see console for details.", 
+                    "Ok");
+                
+                return;
+            }
+            
             Bundler.BundledEnv[] bundles = bundler.BuildBundles(platforms);
 
             Task.Run(() => DoAsyncUploadWork(profile, bundles));
