@@ -28,10 +28,18 @@ namespace OpenUp.Editor.EnvironmentsSdk
             rootPrefab = null;
             skybox = null;
             titleContent = new GUIContent("New Theme");
+            
+            EnvironmentsEditor.Instance.FetchRemotes();
         }
 
         private void OnGUI()
         {
+            if (permissions == null)
+            {
+                EditorGUILayout.LabelField("Getting permissions...");
+                return;
+            }
+            
             envName = EditorGUILayout.TextField("Theme Name", envName);
             rootPrefab = EditorGUILayout.ObjectField("Root Prefab", rootPrefab, typeof(GameObject), false) as GameObject;
             skybox = EditorGUILayout.ObjectField("Skybox", skybox, typeof(Material), false) as Material;
