@@ -1,0 +1,16 @@
+In order to build your theme for the Oculus/META Quest you will need to do a couple of things. Without these settings you may encounter a blue, very bright world or other unexpected behaviour:
+
+1. Install XR Plugin Management
+  - Go to your Project Settings (Edit -> Project Settings)
+  - Select XR Plugin Management -> Install
+2. Enable Oculus in the XR Plugin Management settings for Android
+  - While XR Plugin Management is selected go to the Android tab in the inspector and enable Oculus.
+3. Update your Player Settings
+  - In the Project Settings menu go to 'Player' and unfold 'Other'
+  - Set Color Space to 'Linear'
+  - Deselect Auto Graphics API
+  - Remove Vulkan from the Graphics API and make sure only OpenGLES3 is there.
+  - Set Texture Compression Format to 'ETC'
+  - Set Normal Map Encoding to 'XYZ'
+  - Set Lightmap Encoding to 'Low Quality'
+  - Set HRD Cubemap Encoding to 'Low Quality'
