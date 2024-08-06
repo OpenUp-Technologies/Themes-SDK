@@ -2,6 +2,12 @@
 
 This package allows you to create and upload custom themes for the Aryzon.World application.
 
+## Quick Start
+
+The quickest way to get started is to work using this video tutorial.
+
+[![Video tutorial](https://img.youtube.com/vi/Q4zna5l04xk/maxresdefault.jpg)](https://www.youtube.com/watch?v=Q4zna5l04xk)
+
 ## Table of Contents
 
 <details>
