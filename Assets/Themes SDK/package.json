@@ -1,6 +1,6 @@
 {
   "name": "world.aryzon.themes-sdk",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "displayName": "Aryzon World Themes SDK",
   "description": "This package allows you to create and upload custom themes for the Aryzon.World application.",
   "unity": "2021.3",

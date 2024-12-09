@@ -122,6 +122,7 @@ namespace OpenUp.Interpreter.Environment
         public string          Id           { get; set; }
         public string          Name         { get; set; }
         public UserInfo        Author       { get; set; }
+        public string OrganisationId { get; set; }
         public string          ThumbnailUrl { get; set; }
         public bool            IsPrivate    { get; set; }
         public RemoteVersion[] Versions     { get; set; }

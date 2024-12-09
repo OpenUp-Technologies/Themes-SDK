@@ -14,6 +14,7 @@ namespace OpenUp.Editor.EnvironmentsSdk
         private readonly EnvironmentsEditor  environmentsEditor;
         private bool fetchIsRunning => environmentsEditor.isFetchingRemotes;
         private List<RemoteOption> options => environmentsEditor.remoteOptions;
+        private EnvironmentsEditor.Permissions permissions => environmentsEditor.permissions;
         private EnvironmentOption[] localOptions => environmentsEditor.localOptions;
 
         public RemoteOptions(EnvironmentsEditor environmentsEditor)
@@ -37,11 +38,25 @@ namespace OpenUp.Editor.EnvironmentsSdk
                 EditorGUILayout.LabelField("", GUILayout.Height(0));
             }
             
-            foreach (RemoteOption option in options)
+            foreach (RemoteOption option in options.Where(CanUpdate))
             {
-                if (option.Author?.Id != DeveloperProfile.Instance.userId) continue;
                 RenderOption(option);
             }
+        }
+
+        private bool CanUpdate(RemoteOption option)
+        {
+            // Authors can update their own themes.
+            if (option.Author?.Id == DeveloperProfile.Instance.userId)
+                return true;
+            
+            // Organisation manager can update their org's themes.
+            if (option.OrganisationId != null
+             && permissions.organisations.ContainsKey(option.OrganisationId)
+             && permissions.organisations[option.OrganisationId].canManage)
+                return true;
+
+            return false;
         }
 
         private void RenderOption(RemoteOption option)
