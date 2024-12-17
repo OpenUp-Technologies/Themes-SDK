@@ -22,8 +22,15 @@ namespace OpenUp.Editor.EnvironmentsSdk
 
         private void OnGUI()
         {
-            EditorGUILayout.LabelField($"Analysed {analysis.Renderers.Count} objects", EditorStyles.boldLabel);
-            EditorGUILayout.LabelField($"Total vertex count:", analysis.TotalVertices.ToString());
+            if (analysis == null)
+            {
+                EditorGUILayout.HelpBox("Could not run performance analysis", MessageType.Warning);
+            }
+            else
+            {
+                EditorGUILayout.LabelField($"Analysed {analysis.Renderers.Count} objects", EditorStyles.boldLabel);
+                EditorGUILayout.LabelField($"Total vertex count:", analysis.TotalVertices.ToString());
+            }
         }
 
         /// <remarks>

@@ -141,7 +141,7 @@ namespace OpenUp.Editor.EnvironmentsSdk
 
         private void RenderUploadButton()
         {
-            const string uploadText = "Upload new version";
+            string uploadText = existingVersion != null ? $"Update version {existingVersion.BundleVersion}" : "Upload new version";
             string content = null;
 
             if (existingVersion == null && versionCode == null)

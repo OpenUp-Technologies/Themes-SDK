@@ -73,10 +73,10 @@ namespace OpenUp.Editor.EnvironmentsSdk
             if (target.GetComponent<Collider>())
                 ColliderCount++;
 
-            if (target.GetComponent<MeshCollider>())
+            MeshCollider mc = target.GetComponent<MeshCollider>();
+            
+            if (mc && mc.sharedMesh)
             {
-                MeshCollider mc = target.GetComponent<MeshCollider>();
-
                 using Mesh.MeshDataArray data = Mesh.AcquireReadOnlyMeshData(mc.sharedMesh);
                 Mesh.MeshData meshData = data[0];
 
@@ -98,8 +98,10 @@ namespace OpenUp.Editor.EnvironmentsSdk
             if (filt == null && smr == null)
                 return new Renderer(target, null, 0, 0);
             
-            Mesh mesh = filt != null ? (filt.sharedMesh ?? filt.mesh)
-                                     : smr.sharedMesh;
+            Mesh mesh = filt != null ? filt.sharedMesh : smr.sharedMesh;
+
+            if (mesh == null)
+                return new Renderer(target, null, 0, 0);
 
             float density = mesh.vertexCount / VolumeOf(mesh.bounds);
             density /= target.transform.lossyScale.x;
