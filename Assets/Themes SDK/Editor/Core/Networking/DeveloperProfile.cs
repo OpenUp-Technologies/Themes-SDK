@@ -27,9 +27,17 @@ namespace OpenUp.Networking.Editor
 
         public static DeveloperProfile Instance => _Instance ??= GetInstance() ;
         private static DeveloperProfile _Instance;
+        private static float lastInstanceCheck;
         
         private static DeveloperProfile GetInstance()
         {
+            long now = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+
+            if (now < lastInstanceCheck + 1000)
+                return null;
+
+            lastInstanceCheck = now;
+            
             string[] guids = AssetDatabase.FindAssets("t:DeveloperProfile");
 
             DeveloperProfile[] profiles = guids.Select(AssetDatabase.GUIDToAssetPath)
@@ -49,6 +57,8 @@ namespace OpenUp.Networking.Editor
             }
             
             AssetDatabase.SaveAssets();
+
+            profiles[0].GetCredentials();
 
             return profiles[0];
         }
@@ -70,6 +80,7 @@ namespace OpenUp.Networking.Editor
             }
             
             AssetDatabase.SaveAssets();
+            _Instance = null;
         }
 
         public void SetActive()
