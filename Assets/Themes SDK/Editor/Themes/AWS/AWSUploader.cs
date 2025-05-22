@@ -19,6 +19,8 @@ namespace OpenUp.Networking.AWS
         /// <exception cref="HttpRequestException"></exception>
         public static async Task UploadAsset(UploadTask task, SimpleApiCaller caller)
         {
+            HTTPClient.Timeout = TimeSpan.FromHours(1);
+            
             try
             {
                 // Get signing URLs
