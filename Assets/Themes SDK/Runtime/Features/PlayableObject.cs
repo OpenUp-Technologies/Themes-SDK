@@ -4,15 +4,9 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
-// Scripts in asset bundles are saved under their full name and assembly name,
-// don't rename these scripts as all themes would need to be rebuilt.
-// see: https://forum.unity.com/threads/asset-bundle-cannot-find-scripts-from-assembly-definition-files.531804/#post-3521699
-
-
-namespace OpenUp.Interpreter.Utils
+namespace OpenUp.Environment.Features
 {
-    [ExecuteInEditMode]
-    public class PlayableObject : MonoBehaviour
+    public class PlayObject : MonoBehaviour
     {
         /// <summary>
         /// The path to the model source.
@@ -73,4 +67,14 @@ namespace OpenUp.Interpreter.Utils
         }
 #endif
     }
+}
+
+// Scripts in asset bundles are saved under their full name and assembly name,
+// Don't rename these scripts as all themes would need to be rebuilt.
+// see: https://forum.unity.com/threads/asset-bundle-cannot-find-scripts-from-assembly-definition-files.531804/#post-3521699
+namespace OpenUp.Interpreter.Utils
+{
+    [ExecuteInEditMode]
+    public class PlayableObject : OpenUp.Environment.Features.PlayObject { }
+
 }
