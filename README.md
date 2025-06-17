@@ -15,8 +15,8 @@ The quickest way to get started is to work using this video tutorial.
 
 - [Requirements](#requirements)
 - [Installation](#installation)
-- [Features](#features)
 - [Creating a new Theme](#creating-a-new-theme)
+- [Features](#features)
 - [Lighting](#lighting)
 - [Known Issues](#known-issues)
 
@@ -131,6 +131,18 @@ See the [full article](Documentation/Articles/PlayableObject.md) for details.
 
 You can also define themed objects that are available under the Theme tab in add objects.
 This is simply a list of prefabs in the theme asset.
+
+### Terrain
+
+Your theme should have a `Floor` and optionally some `Walls`. 
+These objects affect how players can navigate the world.
+Players can stand on floors and walls, and walls stop players from moving through them including blocking teleporting.
+As a fall-back, if you don't add a `Floor` the world will just interpret all colliders as floor.
+
+### Spawn Points
+
+Spawn Points can be added to your theme to control where the player spawns in.
+If the world contains multiple spawn points then one of the points is chosen at random.
 
 ### Performance Measuring
 
