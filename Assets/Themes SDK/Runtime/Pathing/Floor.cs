@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.Serialization;
 
 namespace OpenUp.Environment.Pathing
@@ -7,6 +8,7 @@ namespace OpenUp.Environment.Pathing
     {
         private int floorLayer;
         private int existingLayer;
+        private bool isTempLayer;
         
         private IPathing pathing;
 
@@ -25,10 +27,18 @@ namespace OpenUp.Environment.Pathing
         {
             if (!enabled) return;
 
+            if (isTempLayer)
+                throw new NotSupportedException($"Floor {name} cannot be in more than one temporary layer");
+
             existingLayer = gameObject.layer;
             gameObject.layer = layer;
+            isTempLayer = true;
         }
 
-        public void ResetLayer() => gameObject.layer = existingLayer;
+        public void ResetLayer()
+        {
+            gameObject.layer = existingLayer;
+            isTempLayer = false;
+        }
     }
 }

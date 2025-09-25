@@ -15,6 +15,7 @@ namespace OpenUp.Environment.Pathing
         private int existingLayer;
         private IPathing pathing;
         private Collider box;
+        private bool isTempLayer;
 
         private void Awake()
         {
@@ -40,12 +41,20 @@ namespace OpenUp.Environment.Pathing
         public void SetLayer(int layer)
         {
             if (!enabled) return;
+
+            if (isTempLayer)
+                throw new InvalidOperationException($"Wall {name} Cannot be in more than one temporary layer at the same time.");
             
+            isTempLayer = true;
             existingLayer = gameObject.layer;
             gameObject.layer = layer;
         }
 
-        public void ResetLayer() => gameObject.layer = existingLayer;
+        public void ResetLayer()
+        {
+            gameObject.layer = existingLayer;
+            isTempLayer = false;
+        }
 
         /// <summary>
         /// Similar to DistanceToPoint but allows us to filter using the much more performant ClosestPointOnBounds.
