@@ -1,6 +1,7 @@
 ﻿using System;
 using OpenUp.Interpreter.Environment;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace OpenUp.Environment
 {
@@ -10,6 +11,7 @@ namespace OpenUp.Environment
         public const string ROOT_OBJECT_NAME = "RootObject";
         public const string ROOT_OBJECT_NAME_AR = "RootObjectAR";
         public const string SKYBOX_NAME = "SkyBox";
+        public const string SCENE_NAME = "RootScene";
 
         public string Name => environmentName;
 
@@ -43,6 +45,9 @@ namespace OpenUp.Environment
         /// </summary>
         public LazyLoadReference<Material> skybox;
 
+#if UNITY_EDITOR
+        public UnityEditor.SceneAsset scene;
+#endif
         /// <summary>
         /// Cannot use LazyLoadReference due to crash on device.
         /// </summary>

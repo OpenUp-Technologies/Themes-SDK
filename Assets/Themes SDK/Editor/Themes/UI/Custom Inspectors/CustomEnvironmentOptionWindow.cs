@@ -12,25 +12,30 @@ namespace OpenUp.Editor.EnvironmentsSdk
         private SerializedProperty rootObjProp;
         private SerializedProperty rootObjARProp;
         private SerializedProperty skyboxProp;
+        private SerializedProperty sceneProp;
         private PerformanceAnalysis analysis;
 
         private new EnvironmentOption target => base.target as EnvironmentOption;
         
         public override void OnInspectorGUI()
         {
+            RenderStats();
             serializedObject.Update ();
             
             nameProp = serializedObject.FindProperty(nameof(EnvironmentOption.environmentName));
             rootObjProp = serializedObject.FindProperty(nameof(EnvironmentOption.rootObject));
             rootObjARProp = serializedObject.FindProperty(nameof(EnvironmentOption.rootObjectAR));
             skyboxProp = serializedObject.FindProperty(nameof(EnvironmentOption.skybox));
-
-            RenderStats();
+            sceneProp = serializedObject.FindProperty(nameof(EnvironmentOption.scene));
+            
             
             EditorGUILayout.PropertyField(nameProp);
             EditorGUILayout.PropertyField(rootObjProp);
             EditorGUILayout.PropertyField(rootObjARProp);
             EditorGUILayout.PropertyField(skyboxProp);
+            EditorGUILayout.PropertyField(sceneProp);
+            
+            // base.OnInspectorGUI();
             
             RenderObjectList();
             

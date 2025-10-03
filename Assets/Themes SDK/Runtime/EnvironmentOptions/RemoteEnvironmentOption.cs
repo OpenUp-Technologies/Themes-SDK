@@ -21,6 +21,8 @@ namespace OpenUp.Interpreter.Environment
     {
         public string BundleUrl  { get; set; }
         public string BundleHash { get; set; }
+        public string SceneBundleUrl { get; set; }
+        public string SceneBundleHash { get; set; }
     }
 
     public class RemoteVersion : IEnvironmentOption

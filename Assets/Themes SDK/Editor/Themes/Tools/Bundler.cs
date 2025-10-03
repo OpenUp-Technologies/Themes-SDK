@@ -17,6 +17,8 @@ namespace OpenUp.Editor.EnvironmentsSdk
         {
             public string path;
             public string hash;
+            public string scenePath;
+            public string sceneHash;
         }
 
         public record ValidationResult(bool IsValid, IEnumerable<string> Reasons)
@@ -87,7 +89,7 @@ namespace OpenUp.Editor.EnvironmentsSdk
             return result;
         }
 
-        private AssetBundleBuild CreateBuildInstructions()
+        private (AssetBundleBuild prefabs, AssetBundleBuild scene) CreateBuildInstructions()
         {
             string           bundleName = $"world_{option.GetInstanceID()}";
             string rootPath = AssetDatabase.GetAssetPath(option.rootObject.asset.GetInstanceID());
@@ -112,6 +114,12 @@ namespace OpenUp.Editor.EnvironmentsSdk
             {
                 skyboxPath = AssetDatabase.GetAssetPath(option.skybox.asset.GetInstanceID());
                 allFiles   = allFiles.Append(skyboxPath);
+            }
+
+            string scenePath = null;
+            if (option.scene != null)
+            {
+                scenePath = AssetDatabase.GetAssetPath(option.scene.GetInstanceID());
             }
 
             IEnumerable<string> prefabPaths = option.prefabs.Select(AssetDatabase.GetAssetPath);
@@ -141,22 +149,36 @@ namespace OpenUp.Editor.EnvironmentsSdk
             
             for (int i = 0; i < deps.Length; i++)
             {
-                if (deps[i] == rootPath) names[i] = EnvironmentOption.ROOT_OBJECT_NAME;
-                else if (deps[i] == rootPathAR) names[i] = EnvironmentOption.ROOT_OBJECT_NAME_AR;
-                else if (deps[i] == skyboxPath) names[i] = EnvironmentOption.SKYBOX_NAME;
+                if (deps[i] == rootPath) 
+                    names[i] = EnvironmentOption.ROOT_OBJECT_NAME;
+                else if (deps[i] == rootPathAR) 
+                    names[i] = EnvironmentOption.ROOT_OBJECT_NAME_AR;
+                else if (deps[i] == skyboxPath) 
+                    names[i] = EnvironmentOption.SKYBOX_NAME;
+                else if (deps[i] == scenePath)
+                    names[i] = EnvironmentOption.SCENE_NAME;
 
                 else names[i] = deps[i];
             }
 
-            return new AssetBundleBuild
+            var prefabs = new AssetBundleBuild
             {
                 assetBundleName = bundleName,
                 assetNames = deps,
                 addressableNames = names
             };
+            
+            var scene = new AssetBundleBuild
+            {
+                assetBundleName = bundleName+"_root_scene",
+                assetNames = new[] { scenePath },
+                addressableNames = new[] { EnvironmentOption.SCENE_NAME }
+            };
+            
+            return (prefabs, scene);
         }
 
-        public BundledEnv[] BuildBundles(AssetBundleBuild build, Platform[] platforms)
+        public BundledEnv[] BuildBundles((AssetBundleBuild prefabs, AssetBundleBuild scene) build, Platform[] platforms)
         {
             string targetFolder = $"{Application.temporaryCachePath}/env_bundles";
 
@@ -166,9 +188,11 @@ namespace OpenUp.Editor.EnvironmentsSdk
             // for each unique build target
             foreach (BuildTarget target in bundles.Select(b => b.target).Distinct())
             {
-                AssetBundleBuild targetBuild = build;
+                AssetBundleBuild buildPrefabs = build.prefabs;
+                AssetBundleBuild buildScene = build.scene;
                 
-                targetBuild.assetBundleName = $"{build.assetBundleName}_{target}";
+                buildPrefabs.assetBundleName = $"{build.prefabs.assetBundleName}_{target}";
+                buildScene.assetBundleName = $"{build.scene.assetBundleName}_{target}";
                 
                 string subFolder = $"{targetFolder}/{target}";
 
@@ -176,7 +200,7 @@ namespace OpenUp.Editor.EnvironmentsSdk
                 
                 AssetBundleManifest manifest = BuildPipeline.BuildAssetBundles(
                     subFolder, 
-                    new[] { targetBuild },
+                    new[] { buildPrefabs, buildScene },
                     BuildAssetBundleOptions.StrictMode, 
                     target
                 );
@@ -186,8 +210,11 @@ namespace OpenUp.Editor.EnvironmentsSdk
                 // assign the built bundle to all platforms that use this target.
                 foreach (BundledEnv bundledEnv in targetedPlatforms)
                 {
-                    bundledEnv.path = $"{subFolder}/{targetBuild.assetBundleName}";
-                    bundledEnv.hash = manifest.GetAssetBundleHash(targetBuild.assetBundleName)
+                    bundledEnv.path = $"{subFolder}/{buildPrefabs.assetBundleName}";
+                    bundledEnv.scenePath = $"{subFolder}/{buildScene.assetBundleName}";
+                    bundledEnv.hash = manifest.GetAssetBundleHash(buildPrefabs.assetBundleName)
+                                              .ToString();
+                    bundledEnv.sceneHash = manifest.GetAssetBundleHash(buildScene.assetBundleName)
                                               .ToString();
                 }
             }

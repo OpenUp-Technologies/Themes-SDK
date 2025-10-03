@@ -35,6 +35,7 @@ namespace OpenUp.Editor.EnvironmentsSdk
              foreach (Bundler.BundledEnv bundle in bundles)
              {
                  sourceForTarget[new FileInfo(bundle.path)] = bundle;
+                 sourceForTarget[new FileInfo(bundle.scenePath)] = bundle;
              }
              
              AWSDataSource[] files = sourceForTarget.Keys.ToArray();
@@ -72,15 +73,17 @@ namespace OpenUp.Editor.EnvironmentsSdk
         
              await AsyncHelperEditor.DoUnityWork(EditorUtility.ClearProgressBar);
         
-             for (int i = 0; i < files.Length; i++)
+             for (int i = 0; i < files.Length; i+=2)
              {
                  Bundler.BundledEnv bundl = sourceForTarget[files[i]];
 
                  uploaded[bundl.platform] =
                      new RemoteBundle
                      {
+                         BundleUrl = $@"https://openup-environments.s3.eu-central-1.amazonaws.com/{environment.Id}/{task.files[i].name}",
                          BundleHash = bundl.hash,
-                         BundleUrl = $@"https://openup-environments.s3.eu-central-1.amazonaws.com/{environment.Id}/{task.files[i].name}"
+                         SceneBundleUrl = $@"https://openup-environments.s3.eu-central-1.amazonaws.com/{environment.Id}/{task.files[i+1].name}",
+                         SceneBundleHash = bundl.sceneHash,
                      };
              }
 

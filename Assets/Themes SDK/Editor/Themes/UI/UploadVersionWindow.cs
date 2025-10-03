@@ -8,6 +8,7 @@ using OpenUp.Networking;
 using OpenUp.Networking.Editor;
 using UnityEditor;
 using UnityEngine;
+using PackageInfo = UnityEditor.PackageManager.PackageInfo;
 
 namespace OpenUp.Editor.EnvironmentsSdk
 {
@@ -197,10 +198,11 @@ namespace OpenUp.Editor.EnvironmentsSdk
             
             Bundler.BundledEnv[] bundles = bundler.BuildBundles(platforms);
 
-            Task.Run(() => DoAsyncUploadWork(profile, bundles));
+            PackageInfo themesPackage = PackageInfo.FindForPackageName("world.aryzon.themes-sdk");
+            Task.Run(() => DoAsyncUploadWork(profile, bundles, themesPackage));
         }
 
-        private async Task DoAsyncUploadWork(DeveloperProfile developerProfile, Bundler.BundledEnv[] bundles)
+        private async Task DoAsyncUploadWork(DeveloperProfile developerProfile, Bundler.BundledEnv[] bundles, PackageInfo themesPackage)
         {
             try
             {
@@ -208,11 +210,10 @@ namespace OpenUp.Editor.EnvironmentsSdk
                 
                 Dictionary<Platform, RemoteBundle> uploaded = await uploader.UploadAllBuildsAsync(bundles);
 
-
                 RemoteVersion newVersion = existingVersion ?? new RemoteVersion
                                                               {
                                                                   BundleVersion = versionCode,
-                                                                  AppVersion = "2023.0.3"
+                                                                  AppVersion = themesPackage.version
                                                               };
 
                 await uploader.ConfirmUploadOf(newVersion, localAsset.prefabPaths, uploaded);
