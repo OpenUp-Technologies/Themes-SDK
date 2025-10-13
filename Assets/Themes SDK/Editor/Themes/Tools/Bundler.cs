@@ -4,10 +4,13 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using OpenUp.Environment;
+using OpenUp.Environment.Features;
 using OpenUp.Interpreter.Environment;
 using OpenUp.Interpreter.Utils;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace OpenUp.Editor.EnvironmentsSdk
 {
@@ -89,11 +92,36 @@ namespace OpenUp.Editor.EnvironmentsSdk
             return result;
         }
 
+        // Creates a StartingState scriptable object and returns the path to it.
+        private string CreateStartingStateObject()
+        {
+            StartingState startingState = ScriptableObject.CreateInstance<StartingState>();
+
+            if (option.scene != null)
+            {
+                string scenePath = AssetDatabase.GetAssetPath(option.scene);
+                Scene scene = SceneManager.GetSceneByPath(scenePath);
+
+                if (!scene.isLoaded)
+                    EditorSceneManager.OpenScene(scenePath);
+
+                var roots = scene.GetRootGameObjects();
+                startingState.SetStartingState(roots);
+            }
+            else
+            {
+                startingState.SetStartingState(option.rootObject.asset);
+            }
+
+            string tempPath = @"Assets/Generated/StartingState.asset";
+            AssetDatabase.CreateAsset(startingState, tempPath);
+            return tempPath;
+        }
+
         private (AssetBundleBuild prefabs, AssetBundleBuild scene) CreateBuildInstructions()
         {
             string           bundleName = $"world_{option.GetInstanceID()}";
             string rootPath = AssetDatabase.GetAssetPath(option.rootObject.asset.GetInstanceID());
-
 
             string rootPathAR = option.rootObjectAR.isSet
                 ? AssetDatabase.GetAssetPath(option.rootObjectAR.asset.GetInstanceID())
@@ -141,6 +169,10 @@ namespace OpenUp.Editor.EnvironmentsSdk
             
             if (option.rootObjectAR.isSet) 
                 allFiles = allFiles.Concat(option.rootObjectAR.asset.GetComponentsInChildren<PlayableObject>().Select(play => play.source));
+
+            string startingStatePath = CreateStartingStateObject();
+
+            allFiles = allFiles.Append(startingStatePath);
             
             string[] deps = allFiles.Distinct()
                                     .ToArray();
@@ -157,9 +189,13 @@ namespace OpenUp.Editor.EnvironmentsSdk
                     names[i] = EnvironmentOption.SKYBOX_NAME;
                 else if (deps[i] == scenePath)
                     names[i] = EnvironmentOption.SCENE_NAME;
+                else if (deps[i] == startingStatePath)
+                    names[i] = EnvironmentOption.STARTING_STATE_NAME;
 
                 else names[i] = deps[i];
             }
+            
+            Debug.Log($"{deps.Length} items in prefabs bundle");
 
             var prefabs = new AssetBundleBuild
             {

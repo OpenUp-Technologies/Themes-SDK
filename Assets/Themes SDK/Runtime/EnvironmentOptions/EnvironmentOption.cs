@@ -1,7 +1,6 @@
 ﻿using System;
 using OpenUp.Interpreter.Environment;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace OpenUp.Environment
 {
@@ -12,6 +11,7 @@ namespace OpenUp.Environment
         public const string ROOT_OBJECT_NAME_AR = "RootObjectAR";
         public const string SKYBOX_NAME = "SkyBox";
         public const string SCENE_NAME = "RootScene";
+        public const string STARTING_STATE_NAME = "StartingState";
 
         public string Name => environmentName;
 

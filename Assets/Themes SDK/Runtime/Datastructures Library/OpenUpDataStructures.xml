@@ -1,0 +1,2789 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>OpenUpDataStructures</name>
+    </assembly>
+    <members>
+        <member name="T:OpenUp.Utils.CSharpExtensions.ListExtensions">
+            <summary>
+            A class adding extensions to the <see cref="T:System.Collections.Generic.List`1"/> class. 
+            </summary>
+        </member>
+        <member name="M:OpenUp.Utils.CSharpExtensions.ListExtensions.AddMany``1(System.Collections.Generic.List{``0},``0[])">
+            <summary>
+            Adds an array of elements to a List.
+            </summary>
+            <param name="list">The List to which the elements are added.</param>
+            <param name="elements">The elements added to the List.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when either the List or Array is null.</exception>
+        </member>
+        <member name="M:OpenUp.Utils.CSharpExtensions.ListExtensions.First``1(System.Collections.Generic.List{``0},System.Int32)">
+            <summary>
+            Returns the first n elements of a List.
+            </summary>
+            <param name="list">The List from which the elements are taken.</param>
+            <param name="count">The number of elements taken.</param>
+            <returns>Returns a new list with the first n elements of the given List.</returns>
+        </member>
+        <member name="M:OpenUp.Utils.CSharpExtensions.ListExtensions.Contains``1(System.Collections.Generic.List{``0},``0[])">
+            <summary>
+            Checks whether or not a range of elements exists in a List.
+            </summary>
+            <param name="list">Dictionary against which a range of elements are checked.</param>
+            <param name="elements">The elements checked against the List.</param>
+            <returns>True when all passed elements exist in the List, false when one or more do not.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when either the List or Array is null.</exception>
+        </member>
+        <member name="M:OpenUp.Utils.CSharpExtensions.ListExtensions.MinBy``1(System.Collections.Generic.List{``0},System.Func{``0,System.Single})">
+            <summary>
+            Find the list item for which comparer produces the smallest value. If multiple items have the smallest value, returns the first one found.
+            </summary>
+            <param name="list">The list to search through.</param>
+            <param name="comparer">Function that returns a float for each list item.</param>
+            <returns>The "smallest" item according to comparer.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when either the List or Array is null or has length 0.</exception>
+        </member>
+        <member name="M:OpenUp.Utils.CSharpExtensions.ListExtensions.MinBy``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Single},System.Single@)">
+            <summary>
+            Find the list item for which comparer produces the smallest value. If multiple items have the smallest value, returns the first one found.
+            </summary>
+            <param name="list">The list to search through.</param>
+            <param name="comparer">Function that returns a float for each list item.</param>
+            <param name="min">The smallest value.</param>
+            <returns>The "smallest" item according to comparer.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when either the List or Array is null or has length 0.</exception>
+        </member>
+        <member name="M:OpenUp.Utils.CSharpExtensions.ListExtensions.AllMinBy``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Single})">
+            <summary>
+            Returns all objects that have the lowest value given by comparer.
+            </summary>
+            <param name="enumerable">The collection to look through.</param>
+            <param name="comparer">The function that returns a numeric value for each object in the collection.</param>
+            <typeparam name="T">The type of objects in the collection.</typeparam>
+            <returns>A collection that contains all objects that have to lowest value via comparer.</returns>
+            <example>
+            Vector2[] points = new Vector2[] {
+                new Vector2(0,3),
+                new Vector2(1,1),
+                new Vector2(4,1),
+                new Vector2(3,2)
+            };
+            
+            return points.AllMinBy(v => v.y)
+            // returns { (1,1), (4,1) }
+            </example>
+        </member>
+        <member name="T:OpenUp.Utils.IBinaryHandler`1">
+            <summary>
+            Represents an object that can turn <typeparamref name="T"/> into
+            binary data and vice versa
+            </summary>
+            <typeparam name="T">The type of object this handler can convert</typeparam>
+        </member>
+        <member name="P:OpenUp.Utils.IBinaryHandler`1.ReadObject">
+            <summary>
+            The function that turns binary data int o a <typeparamref name="T"/> .
+            </summary>
+        </member>
+        <member name="P:OpenUp.Utils.IBinaryHandler`1.SizeObject">
+            <summary>
+            The function that determines the size of a <typeparamref name="T"/> in binary.
+            </summary>
+        </member>
+        <member name="P:OpenUp.Utils.IBinaryHandler`1.WriteObject">
+            <summary>
+            The function that converts a <typeparamref name="T"/> into bytes.
+            </summary>
+        </member>
+        <member name="M:OpenUp.Utils.IBinaryHandler`1.GetBytes(`0)">
+            <summary>
+            Returns the object as a byte array.
+            </summary>
+            <param name="item">The object to turn into binary data.</param>
+            <returns>The object as binary data.</returns>
+        </member>
+        <member name="T:OpenUp.Utils.ObjectBinaryHandler`1">
+            <summary>
+            The simplest implementation of <see cref="T:OpenUp.Utils.IBinaryHandler`1"/>
+            </summary>
+            <typeparam name="T">The type of object this handler can convert</typeparam>
+        </member>
+        <member name="P:OpenUp.Utils.ObjectBinaryHandler`1.ReadObject">
+            <inheritdoc/>
+        </member>
+        <member name="P:OpenUp.Utils.ObjectBinaryHandler`1.SizeObject">
+            <inheritdoc/>
+        </member>
+        <member name="P:OpenUp.Utils.ObjectBinaryHandler`1.WriteObject">
+            <inheritdoc/>
+        </member>
+        <member name="M:OpenUp.Utils.ObjectBinaryHandler`1.GetBytes(`0)">
+            <inheritdoc/>
+        </member>
+        <member name="T:OpenUp.Utils.Pipeline`2">
+            <summary>
+            Pipelines are used to take multiple objects of arbitrary type
+            and convert them to and from binary.
+            </summary>
+            <typeparam name="T1">First type to convert</typeparam>
+            <typeparam name="T2">Second type to convert</typeparam>
+        </member>
+        <member name="T:OpenUp.Utils.BinaryUtils">
+            <summary>
+            A bunch of methods to make it easier to manipulate binary data
+            </summary>
+        </member>
+        <member name="P:OpenUp.Utils.BinaryUtils.GUID_SIZE">
+            <summary>
+            The byte size of a <see cref="T:System.Guid"/>
+            </summary>
+        </member>
+        <member name="M:OpenUp.Utils.BinaryUtils.StringSize(System.String)">
+            <summary>
+            Get the size of a string when encoded into bytes.
+            </summary>
+            <param name="s"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OpenUp.Utils.BinaryUtils.ReadStruct``1(System.ArraySegment{System.Byte})">
+            <summary>
+            Read the given bytes in to a new struct of type <see cref="!:T"/>
+            </summary>
+            <remarks>This function works on an extremely low level and copies the individual bytes.</remarks>
+            <param name="data">A set of bytes to read out.</param>
+            <typeparam name="T">The type of the object being read, must be unmanaged.</typeparam>
+            <seealso href="https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/unmanaged-types"/>
+            <returns>A new object of the required type.</returns>
+            <exception cref="T:System.IO.InvalidDataException">If the slice is smaller than the size of the Type to be written to.</exception>
+        </member>
+        <member name="M:OpenUp.Utils.BinaryUtils.ReadStruct``1(System.ArraySegment{System.Byte},``0@)">
+            <summary>
+            Reads the data as an unmanaged type.
+            </summary>
+            <param name="data">The data to be read, only first sizeof(T) bytes are read and the rest is ignored.</param>
+            <param name="target"></param>
+            <typeparam name="T">Type to read data as, must be unmanaged, i.e. a struct that only has structs or numbers/bools as fields (which must also be unmanaged)</typeparam>
+            <returns></returns>
+            <exception cref="T:System.IO.InvalidDataException"></exception>
+        </member>
+        <member name="M:OpenUp.Utils.BinaryUtils.ReadStruct``1(System.ReadOnlySpan{System.Byte})">
+            <summary>
+            Read the given bytes in to a new struct of type <see cref="!:T"/>
+            </summary>
+            <remarks>This function works on an extremely low level and copies the individual bytes.</remarks>
+            <param name="data">A set of bytes to read out.</param>
+            <typeparam name="T">The type of the object being read, must be unmanaged.</typeparam>
+            <seealso href="https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/unmanaged-types"/>
+            <returns>A new object of the required type.</returns>
+            <exception cref="T:System.IO.InvalidDataException">If the slice is smaller than the size of the Type to be written to.</exception>
+        </member>
+        <member name="M:OpenUp.Utils.BinaryUtils.ReadStruct``1(System.ReadOnlySpan{System.Byte},``0@)">
+            <summary>
+            Reads the data as an unmanaged type.
+            </summary>
+            <param name="data">The data to be read, only first sizeof(T) bytes are read and the rest is ignored.</param>
+            <param name="target"></param>
+            <typeparam name="T">Type to read data as, must be unmanaged, i.e. a struct that only has structs or numbers/bools as fields (which must also be unmanaged)</typeparam>
+            <returns></returns>
+            <exception cref="T:System.IO.InvalidDataException"></exception>
+        </member>
+        <member name="M:OpenUp.Utils.BinaryUtils.ReadBlock``1(System.ArraySegment{System.Byte},``0[]@)">
+            <summary>
+            Reads some binary data to an array of unmanaged objects
+            </summary>
+            <param name="data"></param>
+            <param name="block"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:OpenUp.Utils.BinaryUtils.SizeBlock``1(``0[])">
+            <summary>
+            Gets the binary size of an array of unmanaged objects
+            </summary>
+            <param name="block"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:OpenUp.Utils.BinaryUtils.WriteBlock``1(``0[],System.Byte[],System.Int32)">
+            <summary>
+            Copies a array of unmanaged objects to a buffer.
+            </summary>
+            <param name="block"></param>
+            <param name="buffer"></param>
+            <param name="startIdx"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:OpenUp.Utils.CollectionUtils.UnionOf``1(System.Collections.Generic.HashSet{``0}[])">
+            <summary>
+            Return a single hashset that contains all items in any of the given sets.
+            </summary>
+            <param name="sets">The sets to combine.</param>
+            <returns>A single set with all the items.</returns>
+        </member>
+        <member name="M:OpenUp.Utils.CollectionUtils.UnionOf``1(System.Collections.Generic.IEnumerable{System.Collections.Generic.HashSet{``0}})">
+            <summary>
+            Return a single hashset that contains all items in any of the given sets.
+            </summary>
+            <param name="sets">The sets to combine.</param>
+            <returns>A single set with all the items.</returns>
+        </member>
+        <member name="T:OpenUp.Utils.Phase">
+            <summary>
+            This enum indicates how finished an item/feature is.
+            </summary>
+            <remarks>
+            Inherits from int so that <c>&gt;</c> and <c>&lt;</c>
+            can be used to compare to a minimum value.
+            </remarks>
+        </member>
+        <member name="T:OpenUp.Utils.OpenToUsersAttribute">
+            <summary>
+            This attribute is used to indicate that the target method or property is
+            something that is settable and usable by the user generated app.
+            </summary>
+        </member>
+        <member name="F:OpenUp.Utils.OpenToUsersAttribute.displayName">
+            <summary>
+            The name of the member in English
+            </summary>
+        </member>
+        <member name="F:OpenUp.Utils.OpenToUsersAttribute.complexityLevel">
+            <summary>
+            How hard the member's functionality is to understand. Is used to filter
+            members displayed to the users to avoid giving to many complex possibilities.
+            </summary>
+        </member>
+        <member name="F:OpenUp.Utils.OpenToUsersAttribute.phase">
+            <inheritdoc />
+            <inheritdoc cref="T:OpenUp.Utils.Phase"/>
+        </member>
+        <member name="M:OpenUp.Utils.OpenToUsersAttribute.GetTargetMembers(System.Type,System.Boolean,System.Int32)">
+            <summary>Get members from components such as behaviours</summary>
+        </member>
+        <member name="T:OpenUp.Utils.OpenToUsersTester">
+            <summary>
+            Static class used to get details about members of custom classes.
+            <seealso cref="T:OpenUp.Utils.OpenToUsersAttribute"/>
+            </summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.AppRuntimeData.IdFieldNumber">
+            <summary>Field number for the "id" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.AppRuntimeData.ObjectsFieldNumber">
+            <summary>Field number for the "objects" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.AppRuntimeData.GlobalVariablesFieldNumber">
+            <summary>Field number for the "globalVariables" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.AppRuntimeData.GlobalEventsFieldNumber">
+            <summary>Field number for the "globalEvents" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.AppRuntimeData.RootHierarchyFieldNumber">
+            <summary>Field number for the "rootHierarchy" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.AppRuntimeData.EnvironmentFieldNumber">
+            <summary>Field number for the "environment" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.AppRuntimeData.BuffersFieldNumber">
+            <summary>Field number for the "buffers" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.AppRuntimeData.ServicesFieldNumber">
+            <summary>Field number for the "services" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.AppPlayData.InstancesFieldNumber">
+            <summary>Field number for the "instances" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.AppPlayData.GlobalVariablesFieldNumber">
+            <summary>Field number for the "globalVariables" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.AppPlayData.ObjectivesFieldNumber">
+            <summary>Field number for the "objectives" field.</summary>
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.Buffers.BufferCollection.GetBuffer(System.Single,System.Int32)">
+            <inheritdoc cref="M:OpenUp.Protobuf.AppData.Buffers.BufferCollection.GetBuffer(System.Int32,System.Int32)"/>
+            <remarks>Convenience as <see cref="P:OpenUp.Protobuf.AppData.ValueData.Number"/> is often used as index and is a float.</remarks> 
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.Buffers.BufferCollection.GetBuffer(System.Int32,System.Int32)">
+            <summary>
+            Returns a buffer at the given index. If there is no buffer there, it is automatically created.
+            </summary>
+            <param name="index">Index of the buffer.</param>
+            <param name="type">
+            An integer to denote the type of the buffer. This is to make sure
+            you get an understandable error message when you access the wrong buffer.
+            </param>
+            <returns></returns>
+            <exception cref="T:System.InvalidOperationException"></exception>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Buffers.BufferCollection.ValuesFieldNumber">
+            <summary>Field number for the "values" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Buffers.Buffer.IdFieldNumber">
+            <summary>Field number for the "id" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Buffers.Buffer.TypeFieldNumber">
+            <summary>Field number for the "type" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Buffers.Buffer.NameFieldNumber">
+            <summary>Field number for the "name" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Buffers.Buffer.ValueFieldNumber">
+            <summary>Field number for the "value" field.</summary>
+        </member>
+        <member name="T:OpenUp.Protobuf.AppData.Buffers.BuffersReflection">
+            <summary>Holder for reflection information generated from AppData/Buffers.proto</summary>
+        </member>
+        <member name="P:OpenUp.Protobuf.AppData.Buffers.BuffersReflection.Descriptor">
+            <summary>File descriptor for AppData/Buffers.proto</summary>
+        </member>
+        <member name="T:OpenUp.Protobuf.AppData.IExpressionData">
+            <summary>
+            Generic interface to get an expression as wrapped in an <see cref="T:OpenUp.Protobuf.AppData.ExpressionData"/>.
+            </summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.VariableCollection.VariablesFieldNumber">
+            <summary>Field number for the "variables" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Variable.NameFieldNumber">
+            <summary>Field number for the "name" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Variable.IdFieldNumber">
+            <summary>Field number for the "id" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Variable.CalculationFieldNumber">
+            <summary>Field number for the "calculation" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Variable.CurrentValueFieldNumber">
+            <summary>Field number for the "currentValue" field.</summary>
+        </member>
+        <member name="T:OpenUp.Protobuf.AppData.Variable.ValueOneofCase">
+            <summary>Enum of possible cases for the "value" oneof.</summary>
+        </member>
+        <member name="T:OpenUp.Protobuf.AppData.ExpressionData">
+            <summary>
+            Generic container for some expression. Holds the expression in one of its sub fields.
+            </summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.ExpressionData.AssignFieldNumber">
+            <summary>Field number for the "assign" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.ExpressionData.BinaryFieldNumber">
+            <summary>Field number for the "binary" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.ExpressionData.ConstantFieldNumber">
+            <summary>Field number for the "constant" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.ExpressionData.MethodFieldNumber">
+            <summary>Field number for the "method" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.ExpressionData.BlockFieldNumber">
+            <summary>Field number for the "block" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.ExpressionData.PropertyFieldNumber">
+            <summary>Field number for the "property" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.ExpressionData.UnaryFieldNumber">
+            <summary>Field number for the "unary" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.ExpressionData.VariableFieldNumber">
+            <summary>Field number for the "variable" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.ExpressionData.IfFieldNumber">
+            <summary>Field number for the "if" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.ExpressionData.TemplateFieldNumber">
+            <summary>Field number for the "template" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.ExpressionData.CustomNameFieldNumber">
+            <summary>Field number for the "customName" field.</summary>
+        </member>
+        <member name="T:OpenUp.Protobuf.AppData.ExpressionData.ValueOneofCase">
+            <summary>Enum of possible cases for the "value" oneof.</summary>
+        </member>
+        <member name="T:OpenUp.Protobuf.AppData.AssignExpressionData">
+            <summary>
+            Expression that assigns a value to some property.
+            </summary>
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.AssignExpressionData.GetReferences">
+            <inheritdoc />
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.AssignExpressionData.GetExpressionData">
+            <inheritdoc />
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.AssignExpressionData.LeftFieldNumber">
+            <summary>Field number for the "left" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.AssignExpressionData.RightFieldNumber">
+            <summary>Field number for the "right" field.</summary>
+        </member>
+        <member name="T:OpenUp.Protobuf.AppData.BinaryExpressionData">
+            <summary>
+            Expression that takes an operator and a left and right argument.
+            </summary>
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.BinaryExpressionData.GetReferences">
+            <inheritdoc />
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.BinaryExpressionData.GetExpressionData">
+            <inheritdoc />
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.BinaryExpressionData.LeftFieldNumber">
+            <summary>Field number for the "left" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.BinaryExpressionData.RightFieldNumber">
+            <summary>Field number for the "right" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.BinaryExpressionData.OperatorFieldNumber">
+            <summary>Field number for the "operator" field.</summary>
+        </member>
+        <member name="T:OpenUp.Protobuf.AppData.ConstantExpressionData">
+            <summary>
+            Expression that represents a constant value.
+            </summary>
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.ConstantExpressionData.GetExpressionData">
+            <inheritdoc />
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.ConstantExpressionData.ValueFieldNumber">
+            <summary>Field number for the "value" field.</summary>
+        </member>
+        <member name="T:OpenUp.Protobuf.AppData.MethodExpressionData">
+            <summary>
+            Expression that invokes a method.
+            </summary>
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.MethodExpressionData.GetReferences">
+            <inheritdoc />
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.MethodExpressionData.GetExpressionData">
+            <inheritdoc />
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.MethodExpressionData.MethodNameFieldNumber">
+            <summary>Field number for the "methodName" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.MethodExpressionData.SourceFieldNumber">
+            <summary>Field number for the "source" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.MethodExpressionData.ArgumentsFieldNumber">
+            <summary>Field number for the "arguments" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.MethodExpressionData.ReturnTypeFieldNumber">
+            <summary>Field number for the "returnType" field.</summary>
+        </member>
+        <member name="T:OpenUp.Protobuf.AppData.BlockExpressionData">
+            <summary>
+            Expression that has multiple sub expressions.
+            </summary>
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.BlockExpressionData.GetReferences">
+            <inheritdoc />
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.BlockExpressionData.GetExpressionData">
+            <inheritdoc />
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.BlockExpressionData.ExpressionsFieldNumber">
+            <summary>Field number for the "expressions" field.</summary>
+        </member>
+        <member name="T:OpenUp.Protobuf.AppData.PropertyExpressionData">
+            <summary>
+            Expression that accesses some property.
+            </summary>
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.PropertyExpressionData.GetReferences">
+            <inheritdoc />
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.PropertyExpressionData.GetExpressionData">
+            <inheritdoc />
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.PropertyExpressionData.NameFieldNumber">
+            <summary>Field number for the "name" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.PropertyExpressionData.SourceFieldNumber">
+            <summary>Field number for the "source" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.PropertyExpressionData.ExpectedTypeFieldNumber">
+            <summary>Field number for the "expectedType" field.</summary>
+        </member>
+        <member name="T:OpenUp.Protobuf.AppData.UnaryExpressionData">
+            <summary>
+            Expression that applies an operator to a single argument.
+            </summary>
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.UnaryExpressionData.GetReferences">
+            <inheritdoc />
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.UnaryExpressionData.GetExpressionData">
+            <inheritdoc />
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.UnaryExpressionData.OperatorFieldNumber">
+            <summary>Field number for the "operator" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.UnaryExpressionData.ValueFieldNumber">
+            <summary>Field number for the "value" field.</summary>
+        </member>
+        <member name="T:OpenUp.Protobuf.AppData.VariableExpressionData">
+            <summary>
+            Expression that accesses some variable by name.
+            </summary>
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.VariableExpressionData.GetReferences">
+            <inheritdoc />
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.VariableExpressionData.GetExpressionData">
+            <inheritdoc />
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.VariableExpressionData.NameFieldNumber">
+            <summary>Field number for the "name" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.VariableExpressionData.SelfFieldNumber">
+            <summary>Field number for the "self" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.VariableExpressionData.SourceFieldNumber">
+            <summary>Field number for the "source" field.</summary>
+        </member>
+        <member name="T:OpenUp.Protobuf.AppData.VariableExpressionData.SourceObjectOneofCase">
+            <summary>Enum of possible cases for the "sourceObject" oneof.</summary>
+        </member>
+        <member name="T:OpenUp.Protobuf.AppData.IfExpressionData">
+            <summary>
+            Expression that conditionally does some action
+            </summary>
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.IfExpressionData.GetReferences">
+            <inheritdoc />
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.IfExpressionData.GetExpressionData">
+            <inheritdoc />
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.IfExpressionData.TestFieldNumber">
+            <summary>Field number for the "test" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.IfExpressionData.TrueBranchFieldNumber">
+            <summary>Field number for the "trueBranch" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.IfExpressionData.FalseBranchFieldNumber">
+            <summary>Field number for the "falseBranch" field.</summary>
+        </member>
+        <member name="T:OpenUp.Protobuf.AppData.Flow">
+            <summary>
+            Flow is the visual scripting tool to create expressions to run the events
+            </summary>
+            <summary>
+            The Flow service is a visual editor for the expressions.
+            </summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Flow.NodesFieldNumber">
+            <summary>Field number for the "nodes" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Flow.FlowsFieldNumber">
+            <summary>Field number for the "flows" field.</summary>
+        </member>
+        <member name="T:OpenUp.Protobuf.AppData.FlowNode">
+            <summary>
+            Each node is a single object in the visual scripting. 
+            </summary>
+            <summary>
+            A FlowNode is a block in the Flow editor.
+            </summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.FlowNode.IdFieldNumber">
+            <summary>Field number for the "id" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.FlowNode.NameFieldNumber">
+            <summary>Field number for the "name" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.FlowNode.ComponentIdFieldNumber">
+            <summary>Field number for the "componentId" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.FlowNode.VisibleFieldNumber">
+            <summary>Field number for the "visible" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.FlowNode.TransformFieldNumber">
+            <summary>Field number for the "transform" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.FlowNode.ConnectionsFieldNumber">
+            <summary>Field number for the "connections" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.FlowNode.PropertiesFieldNumber">
+            <summary>Field number for the "properties" field.</summary>
+        </member>
+        <member name="T:OpenUp.Protobuf.AppData.FlowSet">
+            <summary>
+            A FlowSet is a set of FlowNodes that can be converted to a set of events for an object.
+            </summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.FlowSet.IdFieldNumber">
+            <summary>Field number for the "id" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.FlowSet.NameFieldNumber">
+            <summary>Field number for the "name" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.FlowSet.TriggersFieldNumber">
+            <summary>Field number for the "triggers" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Hierarchy.ChildDataFieldNumber">
+            <summary>Field number for the "childData" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Hierarchy.ChildOrderFieldNumber">
+            <summary>Field number for the "childOrder" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Child.ChildIDFieldNumber">
+            <summary>Field number for the "childID" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Child.ObjectIDFieldNumber">
+            <summary>Field number for the "objectID" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Child.UpdatesFieldNumber">
+            <summary>Field number for the "updates" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Child.OverridesFieldNumber">
+            <summary>Field number for the "overrides" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Objectives.AllObjectivesFieldNumber">
+            <summary>Field number for the "allObjectives" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.PlayObjectives.AllObjectivesFieldNumber">
+            <summary>Field number for the "allObjectives" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Objective.IdFieldNumber">
+            <summary>Field number for the "id" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Objective.NameFieldNumber">
+            <summary>Field number for the "name" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Objective.DescriptionFieldNumber">
+            <summary>Field number for the "description" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Objective.StartingStateFieldNumber">
+            <summary>Field number for the "startingState" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Objective.SubObjectivesFieldNumber">
+            <summary>Field number for the "subObjectives" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Objective.StepsFieldNumber">
+            <summary>Field number for the "steps" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Objective.ResultTypeFieldNumber">
+            <summary>Field number for the "resultType" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.PlaytimeObjective.IdFieldNumber">
+            <summary>Field number for the "id" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.PlaytimeObjective.NameFieldNumber">
+            <summary>Field number for the "name" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.PlaytimeObjective.DescriptionFieldNumber">
+            <summary>Field number for the "description" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.PlaytimeObjective.SubObjectivesFieldNumber">
+            <summary>Field number for the "subObjectives" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.PlaytimeObjective.StepsFieldNumber">
+            <summary>Field number for the "steps" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.PlaytimeObjective.ResultTypeFieldNumber">
+            <summary>Field number for the "resultType" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.PlaytimeObjective.StateFieldNumber">
+            <summary>Field number for the "state" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.PlaytimeObjective.StepsDoneFieldNumber">
+            <summary>Field number for the "stepsDone" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.PlaytimeObjective.ResultFieldNumber">
+            <summary>Field number for the "result" field.</summary>
+        </member>
+        <member name="T:OpenUp.Protobuf.AppData.ObjectCollection">
+            <summary>
+            A set of objects in the app data.
+            </summary>
+        </member>
+        <member name="P:OpenUp.Protobuf.AppData.ObjectCollection.ObjectPath">
+            <inheritdoc />
+        </member>
+        <member name="P:OpenUp.Protobuf.AppData.ObjectCollection.ParentObject">
+            <inheritdoc />
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.ObjectCollection.RefreshParentData(OpenUp.Protobuf.AppData.IAppDataObject)">
+            <inheritdoc />
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.ObjectCollection.ObjectsFieldNumber">
+            <summary>Field number for the "objects" field.</summary>
+        </member>
+        <member name="T:OpenUp.Protobuf.AppData.ObjectStructure">
+            <summary>
+            The data of an object in the app.
+            </summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.ObjectStructure.IdFieldNumber">
+            <summary>Field number for the "id" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.ObjectStructure.NameFieldNumber">
+            <summary>Field number for the "name" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.ObjectStructure.LockStateFieldNumber">
+            <summary>Field number for the "lockState" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.ObjectStructure.ExpectedInstanceIdFieldNumber">
+            <summary>Field number for the "expectedInstanceId" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.ObjectStructure.TransformFieldNumber">
+            <summary>Field number for the "transform" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.ObjectStructure.TransformCorrectionFieldNumber">
+            <summary>Field number for the "transformCorrection" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.ObjectStructure.VisualFieldNumber">
+            <summary>Field number for the "visual" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.ObjectStructure.ChildrenFieldNumber">
+            <summary>Field number for the "children" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.ObjectStructure.BehavioursFieldNumber">
+            <summary>Field number for the "behaviours" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.ObjectStructure.EventsFieldNumber">
+            <summary>Field number for the "events" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.ObjectStructure.LocalVariablesFieldNumber">
+            <summary>Field number for the "localVariables" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.ObjectStructure.FromFlowFieldNumber">
+            <summary>Field number for the "fromFlow" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.ObjectInstance.ObjectIdFieldNumber">
+            <summary>Field number for the "objectId" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.ObjectInstance.InstanceIdFieldNumber">
+            <summary>Field number for the "instanceId" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.ObjectInstance.ParentIdFieldNumber">
+            <summary>Field number for the "parentId" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.ObjectInstance.ObjectDataFieldNumber">
+            <summary>Field number for the "objectData" field.</summary>
+        </member>
+        <member name="T:OpenUp.Protobuf.AppData.Behaviour">
+            <summary>
+            Data of a behaviour on the object.
+            </summary>
+        </member>
+        <member name="P:OpenUp.Protobuf.AppData.Behaviour.ObjectPath">
+            <inheritdoc />
+        </member>
+        <member name="P:OpenUp.Protobuf.AppData.Behaviour.ParentObject">
+            <inheritdoc />
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.Behaviour.RefreshParentData(OpenUp.Protobuf.AppData.IAppDataObject)">
+            <inheritdoc />
+        </member>
+        <member name="P:OpenUp.Protobuf.AppData.Behaviour.Item(System.String)">
+            <summary>
+            Get a property by its name, this is slightly slower than access by integer.
+            </summary>
+            <param name="propName"></param>
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.Behaviour.PathTo(System.String)">
+            <summary>
+            Returns the path to a nested field of this visual.
+            </summary>
+            <param name="property"></param>
+            <returns></returns>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Behaviour.TypeFieldNumber">
+            <summary>Field number for the "type" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Behaviour.PropertiesFieldNumber">
+            <summary>Field number for the "properties" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.BehaviourCollection.BehavioursFieldNumber">
+            <summary>Field number for the "behaviours" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.PropertyList._shape">
+            <summary>
+            cached version to speed up shape get. (This assumes that the Type of the parent
+            <see cref="T:OpenUp.Protobuf.AppData.Behaviour"/> or <see cref="T:OpenUp.Protobuf.AppData.Visual"/> does not change once it is set.) 
+            </summary>
+        </member>
+        <member name="P:OpenUp.Protobuf.AppData.PropertyList.shape">
+            <summary>
+            The shape of the <see cref="T:OpenUp.Protobuf.AppData.PropertyList"/>, this gets automatically set
+            when the parent data node is set.
+            </summary>
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.PropertyList.GetValue(System.String)">
+            <summary>
+            Gets the value or default value for a given property.
+            </summary>
+            <param name="prop"></param>
+            <returns></returns>
+            <exception cref="T:System.Collections.Generic.KeyNotFoundException"></exception>
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.PropertyList.SetValue(System.String,OpenUp.Protobuf.AppData.ValueData)">
+            <summary>
+            Sets the value of a given property.
+            </summary>
+            <param name="prop"></param>
+            <returns></returns>
+            <exception cref="T:System.Collections.Generic.KeyNotFoundException"></exception>
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.PropertyList.GetValue(System.Int32)">
+            <summary>
+            Returns the value or default for the given property.
+            </summary>
+            <param name="prop"></param>
+            <returns></returns>
+            <exception cref="T:System.Collections.Generic.KeyNotFoundException"></exception>
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.PropertyList.SetValue(System.Int32,OpenUp.Protobuf.AppData.ValueData)">
+            <summary>
+            Sets the value of the given property.
+            </summary>
+            <param name="prop"></param>
+            <param name="value"></param>
+            <returns></returns>
+            <exception cref="T:System.Collections.Generic.KeyNotFoundException"></exception>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.PropertyList.ValuesIntFieldNumber">
+            <summary>Field number for the "valuesInt" field.</summary>
+        </member>
+        <member name="T:OpenUp.Protobuf.AppData.SemanticType">
+            <summary>
+            Describes the meaning of a data type. This is used to distinguish between multiple data
+            that have identical underlying types, e.g. a direction and a position which are both Vector3. 
+            </summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.SemanticType.Direction">
+            <summary>
+            A Vector3 pointing in a direction
+            </summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.SemanticType.Position">
+            <summary>
+            A Vector3 that is a location in 3D space
+            </summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.SemanticType.Rotation">
+            <summary>
+            A Vector3 that is a x,y,z rotation
+            </summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.SemanticType.Float">
+            <summary>
+            A number that can be any floating point number
+            </summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.SemanticType.Integer">
+            <summary>
+            A number that can only be an integer (a whole number) 
+            </summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.SemanticType.Index">
+            <summary>
+            A number that is an index of a list.
+            </summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.SemanticType.ObjectId">
+            <summary>
+            A number that is the Id of some object 
+            </summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.SemanticType.InstanceId">
+            <summary>
+            A number that is the Instance Id of an object
+            </summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.SemanticType.VariableId">
+            <summary>
+            A number that is the Id of a variable
+            </summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.SemanticType.ObjectiveId">
+            <summary>
+            A number that represents the Id of an objective
+            </summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.PropertySpec.DefaultValueFieldNumber">
+            <summary>Field number for the "defaultValue" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.PropertySpec.NameFieldNumber">
+            <summary>Field number for the "name" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.PropertySpec.IdFieldNumber">
+            <summary>Field number for the "id" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.PropertySpec.SemanticTypeValueFieldNumber">
+            <summary>Field number for the "semanticTypeValue" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.PropertySpec.EntriesFieldNumber">
+            <summary>Field number for the "entries" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.PropertySpec.ShapeFieldNumber">
+            <summary>Field number for the "shape" field.</summary>
+        </member>
+        <member name="T:OpenUp.Protobuf.AppData.PropertySpec.NestedOneofCase">
+            <summary>Enum of possible cases for the "nested" oneof.</summary>
+        </member>
+        <member name="T:OpenUp.Protobuf.AppData.Shape">
+            <summary>
+            Shape represents the properties that a <see cref="T:OpenUp.Protobuf.AppData.Visual"/> or <see cref="T:OpenUp.Protobuf.AppData.Behaviour"/> can have.
+            It holds the property specifications for each property as well the name of the shape and
+            a reference to the <see cref="T:UnityEngine.MonoBehaviour"/> class associated with it. 
+            </summary>
+        </member>
+        <member name="P:OpenUp.Protobuf.AppData.Shape.MonoBehaviourClass">
+            <summary>
+            Holds the <see cref="T:UnityEngine.MonoBehaviour"/> that needs to be added for the visual
+            or behaviour with these properties.
+            </summary>
+        </member>
+        <member name="P:OpenUp.Protobuf.AppData.Shape.Type">
+            <summary>
+            The type associated with this shape.
+            </summary>
+        </member>
+        <member name="P:OpenUp.Protobuf.AppData.Shape.IsFrozen">
+            <summary>
+            If the shape is frozen, it cannot be edited anymore.
+            </summary>
+        </member>
+        <member name="P:OpenUp.Protobuf.AppData.Shape.Item(System.Int32)">
+            <summary>
+            Indexer that automatically sets the Id of the object passed to it.
+            </summary>
+            <param name="idx"></param>
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.Shape.GetPropertyByName(System.String)">
+            <summary>
+            Gets the property definition from the name.
+            </summary>
+            <remarks>
+            Before calling this method you must first call <see cref="M:OpenUp.Protobuf.AppData.Shape.Freeze"/>.
+            If you do not, then the mapping for the properties will not exist.
+            </remarks>
+            <param name="name"></param>
+            <returns></returns>
+            <exception cref="T:System.Collections.Generic.KeyNotFoundException">Thrown if there is no property with the given name.</exception>
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.Shape.Freeze">
+            <summary>
+            Blocks later attempts to change the shape. This should be called as soon as the shape has been initialized
+            to avoid any errors where objects of the same type can have different properties.
+            </summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Shape.NameFieldNumber">
+            <summary>Field number for the "name" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Shape.ValuesIntFieldNumber">
+            <summary>Field number for the "valuesInt" field.</summary>
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.ShapeCollection.GetShape(System.Int32,OpenUp.Networking.Protobuf.ShapeFetch.ShapeType)">
+            <summary>
+            Gets the shape of a behaviour or visual.
+            </summary>
+            <param name="type"></param>
+            <param name="shapeType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.ShapeCollection.HasShape(System.Int32,OpenUp.Networking.Protobuf.ShapeFetch.ShapeType)">
+            <summary>
+            Returns true if the shape has been added.
+            </summary>
+            <param name="type"></param>
+            <param name="shapeType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.ShapeCollection.TrySetShape(OpenUp.Protobuf.AppData.Shape,System.Int32,OpenUp.Networking.Protobuf.ShapeFetch.ShapeType)">
+            <summary>
+            Tries to set the shape and returns true if its successful. It returns false if the shape had already been added.
+            </summary>
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.ShapeCollection.SetShape(OpenUp.Protobuf.AppData.Shape,System.Int32,OpenUp.Networking.Protobuf.ShapeFetch.ShapeType)">
+            <summary>
+            Sets the shape of a visual or behaviour.
+            </summary>
+            <param name="shape"></param>
+            <param name="type"></param>
+            <param name="shapeType"></param>
+            <exception cref="T:System.InvalidOperationException">
+            Shapes that have already been added cannot be set again. This must be done once as part of initial setup.
+            </exception>
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.ShapeCollection.GetShapes">
+            <summary>
+            Returns all shapes in the shape collection.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.Visual.PathTo(System.String)">
+            <summary>
+            Returns the path to a nested field of this visual.
+            </summary>
+            <param name="property"></param>
+            <returns></returns>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Visual.TypeFieldNumber">
+            <summary>Field number for the "type" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Visual.PropertiesFieldNumber">
+            <summary>Field number for the "properties" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Services.Services.ArFieldNumber">
+            <summary>Field number for the "ar" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Services.Services.FlowFieldNumber">
+            <summary>Field number for the "flow" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Services.Services.TemplatesFieldNumber">
+            <summary>Field number for the "templates" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Services.Services.ObjectivesFieldNumber">
+            <summary>Field number for the "objectives" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Services.AR.SharedBoxFieldNumber">
+            <summary>Field number for the "sharedBox" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Services.ARSharedBox.CenterFieldNumber">
+            <summary>Field number for the "center" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Services.ARSharedBox.ExtentsFieldNumber">
+            <summary>Field number for the "extents" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Services.ARSharedBox.YRotationFieldNumber">
+            <summary>Field number for the "yRotation" field.</summary>
+        </member>
+        <member name="T:OpenUp.Protobuf.AppData.Services.ServicesReflection">
+            <summary>Holder for reflection information generated from AppData/Services.proto</summary>
+        </member>
+        <member name="P:OpenUp.Protobuf.AppData.Services.ServicesReflection.Descriptor">
+            <summary>File descriptor for AppData/Services.proto</summary>
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.EventCollection.RefreshParentData(OpenUp.Protobuf.AppData.IAppDataObject)">
+            <inheritdoc />
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.EventCollection.EventsFieldNumber">
+            <summary>Field number for the "events" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.EventData.IdFieldNumber">
+            <summary>Field number for the "id" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.EventData.IndexFieldNumber">
+            <summary>Field number for the "index" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.EventData.FromFlowNodeFieldNumber">
+            <summary>Field number for the "fromFlowNode" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.EventData.PartOfFlowSetFieldNumber">
+            <summary>Field number for the "partOfFlowSet" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.EventData.NameFieldNumber">
+            <summary>Field number for the "name" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.EventData.GroupNameFieldNumber">
+            <summary>Field number for the "groupName" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.EventData.ActiveAtStartFieldNumber">
+            <summary>Field number for the "activeAtStart" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.EventData.ConditionFieldNumber">
+            <summary>Field number for the "condition" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.EventData.ResponseFieldNumber">
+            <summary>Field number for the "response" field.</summary>
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.ValueData.op_Implicit(System.String)~OpenUp.Protobuf.AppData.ValueData">
+            <summary>
+            Can cast string to ValueData with text.
+            </summary>
+            <param name="text"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.ValueData.op_Implicit(System.Single)~OpenUp.Protobuf.AppData.ValueData">
+            <summary>
+            Can cast numbers to ValueData with number.
+            </summary>
+            <param name="number"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.ValueData.op_Implicit(System.Int32)~OpenUp.Protobuf.AppData.ValueData">
+            <summary>
+            Can cast numbers to ValueData with number.
+            </summary>
+            <param name="number"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.ValueData.op_Implicit(UnityEngine.Color)~OpenUp.Protobuf.AppData.ValueData">
+            <summary>
+            Can cast numbers to ValueData with color.
+            </summary>
+            <param name="color"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.ValueData.op_Implicit(UnityEngine.Vector3)~OpenUp.Protobuf.AppData.ValueData">
+            <summary>
+            Can cast numbers to ValueData with vector.
+            </summary>
+            <param name="vector"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.ValueData.op_Implicit(System.Boolean)~OpenUp.Protobuf.AppData.ValueData">
+            <summary>
+            Can cast numbers to ValueData with vector.
+            </summary>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.ValueData.ToShortString">
+            <summary>
+            Returns a shortened version of the string, e.g. returns "4" instead of  "{ "number": { "value": 4 } }"
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.ValueData.op_Implicit(OpenUp.Protobuf.AppData.ValueData)~System.Boolean">
+            <summary>
+            ValueDatas can be converted to booleans in the same way JavaScript does, boolean false, 0, and nothing
+            evaluate to false, everything else is true.
+            </summary>
+            <param name="v"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.ValueData.op_Equality(OpenUp.Protobuf.AppData.ValueData,OpenUp.Protobuf.AppData.ValueData)">
+            <summary>
+            Values are equal if their types are the same and they hold the same values.
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+            <exception cref="T:System.NotImplementedException"></exception>
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.ValueData.op_Inequality(OpenUp.Protobuf.AppData.ValueData,OpenUp.Protobuf.AppData.ValueData)">
+            <summary>
+            Values are not equal if their types are the different or they hold different values.
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+            <exception cref="T:System.NotImplementedException"></exception>
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.ValueData.op_Addition(OpenUp.Protobuf.AppData.ValueData,OpenUp.Protobuf.AppData.ValueData)">
+            <summary>
+            ValueDatas can be added if they are both Vector3s, both numbers, or if either is a string.
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.ValueData.op_Subtraction(OpenUp.Protobuf.AppData.ValueData,OpenUp.Protobuf.AppData.ValueData)">
+            <summary>
+            ValueDatas can be subtracted if both are numbers, or both are Vector3s
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.ValueData.op_Multiply(OpenUp.Protobuf.AppData.ValueData,OpenUp.Protobuf.AppData.ValueData)">
+            <summary>
+            ValueDatas can multiply if they are both numbers, or if one is number and the other a Vector3.
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.ValueData.op_Division(OpenUp.Protobuf.AppData.ValueData,OpenUp.Protobuf.AppData.ValueData)">
+            <summary>
+            Vector3s and Numbers can be divided by numbers 
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:OpenUp.Protobuf.AppData.ValueData.op_BitwiseAnd(OpenUp.Protobuf.AppData.ValueData,OpenUp.Protobuf.AppData.ValueData)" -->
+        <member name="M:OpenUp.Protobuf.AppData.ValueData.op_BitwiseOr(OpenUp.Protobuf.AppData.ValueData,OpenUp.Protobuf.AppData.ValueData)">
+            <summary>
+            Using the | for two ValueData objects functions like a || except it returns a new ValueData
+            which has a bool value.
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.ValueData.SemanticTypeFieldNumber">
+            <summary>Field number for the "semanticType" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.ValueData.BoolFieldNumber">
+            <summary>Field number for the "bool" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.ValueData.ColorFieldNumber">
+            <summary>Field number for the "color" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.ValueData.DictFieldNumber">
+            <summary>Field number for the "dict" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.ValueData.EnumFieldNumber">
+            <summary>Field number for the "enum" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.ValueData.ListFieldNumber">
+            <summary>Field number for the "list" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.ValueData.ModelFieldNumber">
+            <summary>Field number for the "model" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.ValueData.NumberFieldNumber">
+            <summary>Field number for the "number" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.ValueData.TextFieldNumber">
+            <summary>Field number for the "text" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.ValueData.TransformationFieldNumber">
+            <summary>Field number for the "transformation" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.ValueData.Vector3FieldNumber">
+            <summary>Field number for the "vector3" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.ValueData.PaintCommandFieldNumber">
+            <summary>Field number for the "paintCommand" field.</summary>
+        </member>
+        <member name="T:OpenUp.Protobuf.AppData.ValueData.ValueOneofCase">
+            <summary>Enum of possible cases for the "value" oneof.</summary>
+        </member>
+        <member name="T:OpenUp.Protobuf.AppData.BoolData">
+            <summary>
+            Contains a boolean value.
+            </summary>
+            <remarks>
+            This boxed version of a boolean is needed to run the expressions on IL2CPP platforms on unity.
+            </remarks>
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.BoolData.op_Implicit(System.Boolean)~OpenUp.Protobuf.AppData.BoolData">
+            <summary>
+            Booleans get automatically wrapped.
+            </summary>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.BoolData.ValueFieldNumber">
+            <summary>Field number for the "value" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.EnumData.SelectedIdxFieldNumber">
+            <summary>Field number for the "selectedIdx" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.EnumData.OptionsFieldNumber">
+            <summary>Field number for the "options" field.</summary>
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.NumberData.op_Implicit(System.Single)~OpenUp.Protobuf.AppData.NumberData">
+            <summary>
+            Can cast numbers to ValueData with number.
+            </summary>
+            <param name="number"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.NumberData.op_Implicit(OpenUp.Protobuf.AppData.NumberData)~System.Int32">
+            <summary>
+            Can cast numbers to ValueData with number.
+            </summary>
+            <param name="number"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.NumberData.op_Implicit(OpenUp.Protobuf.AppData.NumberData)~System.Single">
+            <summary>
+            Can cast numbers to ValueData with number.
+            </summary>
+            <param name="number"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.NumberData.op_Implicit(System.Int32)~OpenUp.Protobuf.AppData.NumberData">
+            <summary>
+            Can cast numbers to ValueData with number.
+            </summary>
+            <param name="number"></param>
+            <returns></returns>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.NumberData.ValueFieldNumber">
+            <summary>Field number for the "value" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.TextData.ValueFieldNumber">
+            <summary>Field number for the "value" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.ListData.ValueFieldNumber">
+            <summary>Field number for the "value" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.DictionaryData.ValueFieldNumber">
+            <summary>Field number for the "value" field.</summary>
+        </member>
+        <member name="T:OpenUp.Protobuf.AppData.IAppDataObject">
+            <summary>
+            Interface that represents objects in an <see cref="T:OpenUp.Protobuf.AppData.AppRuntimeData"/> allowing two way navigation.
+            </summary>
+        </member>
+        <member name="P:OpenUp.Protobuf.AppData.IAppDataObject.ObjectPath">
+            <summary>
+            The path to get to this object.
+            </summary>
+        </member>
+        <member name="P:OpenUp.Protobuf.AppData.IAppDataObject.ParentObject">
+            <summary>
+            The object that contains this object. 
+            </summary>
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.IAppDataObject.RefreshParentData(OpenUp.Protobuf.AppData.IAppDataObject)">
+            <summary>
+            Sets the parent of all nested objects to the given object.
+            </summary>
+            <remarks>This works recursively</remarks>
+        </member>
+        <member name="T:OpenUp.Protobuf.AppData.IVariable">
+            <summary>
+            Represents anything that can be used as a variable by the expressions.
+            </summary>
+        </member>
+        <member name="T:OpenUp.Protobuf.AppData.ObjectRef">
+            <summary>
+            Reference to an object in the game.
+            </summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.ObjectRef.GLOBAL">
+            <summary>
+            Reserved unique id for the root of a solution, it is the parent of all ElementIDs.
+            </summary>
+            <remarks>Is equivalent to <c>new ObjectRef(0)</c></remarks>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.ObjectRef.SELF">
+            <summary>
+            Reserved unique id used by expressions for referring to the executing object.
+            </summary>
+            <remarks>Is equivalent to <c>new ObjectRef(-1)</c></remarks>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.ObjectRef.ANY">
+            <summary>
+            Reserved unique id used by expressions for referring to any arbitrary object.
+            </summary>
+            <remarks>Is equivalent to <c>new ObjectRef(-2)</c></remarks>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.ObjectRef.NONE">
+            <summary>
+            Reserved unique id representing no id.
+            </summary>
+            <remarks>
+            This is not the same as <c>null</c>, which means no data known.
+            See this as getting the answer "NO" whilst <c>null</c> should be reserved
+            for not knowing an answer.
+            </remarks>
+            <remarks>Is equivalent to <c>new ObjectRef(Int32.MinValue)</c></remarks>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.ObjectRef.NewInstanceId">
+            <summary>
+            Used for new non-shared objects.
+            </summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.ObjectRef.instanceId">
+            <summary>
+            Unique id for the object, shared objects use positive ids. Personal objects use negative ids.
+            </summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.ObjectRef._parent">
+            <summary>
+            the parent object of this object.
+            </summary>
+        </member>
+        <member name="P:OpenUp.Protobuf.AppData.ObjectRef.children">
+            <summary>
+            All child objects of this object.
+            </summary>
+        </member>
+        <member name="P:OpenUp.Protobuf.AppData.ObjectRef.parent">
+            <summary>
+            the parent object of this object.
+            </summary>
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.ObjectRef.#ctor(System.Int32,OpenUp.Protobuf.AppData.ObjectRef)">
+            <summary>
+            Create a new object reference with parent.
+            </summary>
+            <param name="id"></param>
+            <param name="parent"></param>
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.ObjectRef.#ctor(OpenUp.Protobuf.AppData.ObjectRef)">
+            <summary>
+            Create a new personal object.
+            </summary>
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.ObjectRef.#ctor">
+            <summary>
+            Create a new personal object.
+            </summary>
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.ObjectRef.IsParentOf(OpenUp.Protobuf.AppData.ObjectRef,System.Boolean)">
+            <summary>
+            Checks if this ObjectRef is a parent of the passed ObjectRef. A optional second argument
+            can be passed to specify if the entire path should be checked or just the immediate parent.
+            </summary>
+            <param name="possibleKid">The id for which you want to know if it is a child</param>
+            <param name="directOnly">Set to true to do the check only for the first parent</param>
+            <returns>True if self is a parent of possibleKid, otherwise False</returns>
+            <remarks>
+            When passed itself, return false if directOnly is true, and true if directOnly is false.
+            </remarks>
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.ObjectRef.IsChildOf(System.Int32)">
+            <summary>
+            Checks if the object with id: <paramref name="componentID"/> is a parent of this instance.
+            </summary>
+            <param name="componentID">The componentID of the object.</param>
+            <returns>True if the object is a parent of the instance, otherwise false.</returns>
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.ObjectRef.GetHashCode">
+            <summary>
+            HashCode implementation, needed for usage as Dictionary keys.
+            </summary>
+            <returns>Integer representing the hash, equal ElementIDs always have equal hashes.</returns>
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.ObjectRef.Equals(OpenUp.Protobuf.AppData.ObjectRef)">
+            <summary>
+            Checks if two ElementIDs refer to the same instance, needed for the IEquatable interface.
+            </summary>
+            <param name="id">The other ObjectRef.</param>
+            <returns>True if they refer to the same instance.</returns>
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.ObjectRef.Equals(System.Object)">
+            <summary>
+            Checks if two ElementIDs refer to the same instance, needed for the IEquatable interface.
+            </summary>
+            <param name="obj">The other ObjectRef, gets soft-casted if not an ObjectRef</param>
+            <returns>True if they refer to the same instance.</returns>
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.ObjectRef.ToString">
+            <summary>
+            ObjectRefs turned to string just return the instance id.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.ObjectRef.op_Equality(OpenUp.Protobuf.AppData.ObjectRef,OpenUp.Protobuf.AppData.ObjectRef)">
+            <summary>
+            Checks if two ElementIDs refer to the same instance, needed for the IEquatable interface.
+            </summary>
+            <returns>True if they refer to the same instance, or are both null.</returns>
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.ObjectRef.op_Inequality(OpenUp.Protobuf.AppData.ObjectRef,OpenUp.Protobuf.AppData.ObjectRef)">
+            <summary>
+            Checks if two ElementIDs do not refer to the same instance, needed for the IEquatable interface.
+            </summary>
+            <returns>True if they refer do not to the same instance, or if either, but not both, are null.</returns>
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.ObjectRef.op_Addition(OpenUp.Protobuf.AppData.ObjectRef,System.Int32)">
+            <summary>
+            Creates a new ObjectRef by creating a child of the ObjectRef with the string as componentID
+            </summary>
+            <returns>A new child ObjectRef</returns>
+            <remarks>
+            This might need to be fixed as there is no way to make sure the instance id is unique.
+            </remarks>
+        </member>
+        <member name="M:OpenUp.Protobuf.AppData.ObjectRef.op_Addition(OpenUp.Protobuf.AppData.ObjectRef,OpenUp.Protobuf.AppData.ObjectRef)">
+            <summary>
+            Creates a new ObjectRef by appending the path of the child to the path of the parent.
+            </summary>
+            <returns>A new child ObjectRef</returns>
+            <remarks>
+            This might need to be fixed as there is no way to make sure the instance id is unique.
+            </remarks>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.TemplateBlob.ObjectsFieldNumber">
+            <summary>Field number for the "objects" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.TemplateBlob.NodesFieldNumber">
+            <summary>Field number for the "nodes" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.TemplateBlob.ConfigurablesFieldNumber">
+            <summary>Field number for the "configurables" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.TemplateBlob.RootsFieldNumber">
+            <summary>Field number for the "roots" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.TemplateBlob.VariablesFieldNumber">
+            <summary>Field number for the "variables" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.TemplateBlob.GlobalEventsFieldNumber">
+            <summary>Field number for the "globalEvents" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.TemplateBlob.ModeFieldNumber">
+            <summary>Field number for the "mode" field.</summary>
+        </member>
+        <member name="T:OpenUp.Protobuf.AppData.AppStructureReflection">
+            <summary>Holder for reflection information generated from AppData/AppStructure.proto</summary>
+        </member>
+        <member name="P:OpenUp.Protobuf.AppData.AppStructureReflection.Descriptor">
+            <summary>File descriptor for AppData/AppStructure.proto</summary>
+        </member>
+        <member name="T:OpenUp.Protobuf.AppData.ExpressionsReflection">
+            <summary>Holder for reflection information generated from AppData/Expressions.proto</summary>
+        </member>
+        <member name="P:OpenUp.Protobuf.AppData.ExpressionsReflection.Descriptor">
+            <summary>File descriptor for AppData/Expressions.proto</summary>
+        </member>
+        <member name="T:OpenUp.Protobuf.AppData.FlowReflection">
+            <summary>Holder for reflection information generated from AppData/Flow.proto</summary>
+        </member>
+        <member name="P:OpenUp.Protobuf.AppData.FlowReflection.Descriptor">
+            <summary>File descriptor for AppData/Flow.proto</summary>
+        </member>
+        <member name="T:OpenUp.Protobuf.AppData.Connection">
+            <summary>
+            A FlowConnection is a part of the node that points to other nodes.
+            A node's connection point can connect to multiple other nodes
+            </summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Connection.NameFieldNumber">
+            <summary>Field number for the "name" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Connection.NodesFieldNumber">
+            <summary>Field number for the "nodes" field.</summary>
+        </member>
+        <member name="T:OpenUp.Protobuf.AppData.HierarchyReflection">
+            <summary>Holder for reflection information generated from AppData/Hierarchy.proto</summary>
+        </member>
+        <member name="P:OpenUp.Protobuf.AppData.HierarchyReflection.Descriptor">
+            <summary>File descriptor for AppData/Hierarchy.proto</summary>
+        </member>
+        <member name="T:OpenUp.Protobuf.AppData.ObjectivesReflection">
+            <summary>Holder for reflection information generated from AppData/Objectives.proto</summary>
+        </member>
+        <member name="P:OpenUp.Protobuf.AppData.ObjectivesReflection.Descriptor">
+            <summary>File descriptor for AppData/Objectives.proto</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.SubObjectiveList.IdsFieldNumber">
+            <summary>Field number for the "ids" field.</summary>
+        </member>
+        <member name="T:OpenUp.Protobuf.AppData.ObjectStructureReflection">
+            <summary>Holder for reflection information generated from AppData/ObjectStructure.proto</summary>
+        </member>
+        <member name="P:OpenUp.Protobuf.AppData.ObjectStructureReflection.Descriptor">
+            <summary>File descriptor for AppData/ObjectStructure.proto</summary>
+        </member>
+        <member name="T:OpenUp.Protobuf.AppData.OUValueReflection">
+            <summary>Holder for reflection information generated from AppData/OUValue.proto</summary>
+        </member>
+        <member name="P:OpenUp.Protobuf.AppData.OUValueReflection.Descriptor">
+            <summary>File descriptor for AppData/OUValue.proto</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.ModelData.UrlFieldNumber">
+            <summary>Field number for the "url" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.ModelData.SubObjectFieldNumber">
+            <summary>Field number for the "subObject" field.</summary>
+        </member>
+        <member name="P:OpenUp.Protobuf.AppData.ModelData.SubObject">
+            <summary>
+            Empty list means the entire object, otherwise pick the sub object via nth child path.
+            </summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.ModelData.IgnoredPathsFieldNumber">
+            <summary>Field number for the "ignoredPaths" field.</summary>
+        </member>
+        <member name="P:OpenUp.Protobuf.AppData.ModelData.IgnoredPaths">
+            <summary>
+            Paths of objects that should not be loaded.
+            </summary>
+        </member>
+        <member name="T:OpenUp.Protobuf.AppData.ModelData.Types">
+            <summary>Container for nested types declared in the ModelData message type.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.ModelData.Types.SubPath.PathFieldNumber">
+            <summary>Field number for the "path" field.</summary>
+        </member>
+        <member name="T:OpenUp.Protobuf.AppData.Paint3D.Paint3DReflection">
+            <summary>Holder for reflection information generated from AppData/Paint3D.proto</summary>
+        </member>
+        <member name="P:OpenUp.Protobuf.AppData.Paint3D.Paint3DReflection.Descriptor">
+            <summary>File descriptor for AppData/Paint3D.proto</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommand.IndexFieldNumber">
+            <summary>Field number for the "index" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommand.PreviewFieldNumber">
+            <summary>Field number for the "preview" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommand.PriorityFieldNumber">
+            <summary>Field number for the "priority" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommand.MaterialHashFieldNumber">
+            <summary>Field number for the "materialHash" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommand.PassFieldNumber">
+            <summary>Field number for the "pass" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommand.ModelHashFieldNumber">
+            <summary>Field number for the "modelHash" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommand.SubmeshFieldNumber">
+            <summary>Field number for the "submesh" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommand.LocalMaskTextureHashFieldNumber">
+            <summary>Field number for the "localMaskTextureHash" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommand.LocalMaskChannelFieldNumber">
+            <summary>Field number for the "localMaskChannel" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommand.DecalFieldNumber">
+            <summary>Field number for the "decal" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommand.FillFieldNumber">
+            <summary>Field number for the "fill" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommand.ReplaceFieldNumber">
+            <summary>Field number for the "replace" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommand.ReplaceChannelsFieldNumber">
+            <summary>Field number for the "replaceChannels" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommand.SphereFieldNumber">
+            <summary>Field number for the "sphere" field.</summary>
+        </member>
+        <member name="T:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommand.TypeOneofCase">
+            <summary>Enum of possible cases for the "type" oneof.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandDecal.BlendFieldNumber">
+            <summary>Field number for the "blend" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandDecal.In3DFieldNumber">
+            <summary>Field number for the "in3D" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandDecal.PositionFieldNumber">
+            <summary>Field number for the "position" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandDecal.EndPositionFieldNumber">
+            <summary>Field number for the "endPosition" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandDecal.Position2FieldNumber">
+            <summary>Field number for the "position2" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandDecal.EndPosition2FieldNumber">
+            <summary>Field number for the "endPosition2" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandDecal.ExtrusionsFieldNumber">
+            <summary>Field number for the "extrusions" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandDecal.MatrixFieldNumber">
+            <summary>Field number for the "matrix" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandDecal.DirectionFieldNumber">
+            <summary>Field number for the "direction" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandDecal.ColorFieldNumber">
+            <summary>Field number for the "color" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandDecal.OpacityFieldNumber">
+            <summary>Field number for the "opacity" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandDecal.HardnessFieldNumber">
+            <summary>Field number for the "hardness" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandDecal.WrappingFieldNumber">
+            <summary>Field number for the "wrapping" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandDecal.HashedTextureFieldNumber">
+            <summary>Field number for the "hashedTexture" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandDecal.HashedShapeFieldNumber">
+            <summary>Field number for the "hashedShape" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandDecal.ShapeChannelFieldNumber">
+            <summary>Field number for the "shapeChannel" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandDecal.NormalFrontFieldNumber">
+            <summary>Field number for the "normalFront" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandDecal.NormalBackFieldNumber">
+            <summary>Field number for the "normalBack" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandDecal.HashedTileTextureFieldNumber">
+            <summary>Field number for the "hashedTileTexture" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandDecal.TileMatrixFieldNumber">
+            <summary>Field number for the "tileMatrix" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandDecal.TileOpacityFieldNumber">
+            <summary>Field number for the "tileOpacity" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandDecal.TileTransitionFieldNumber">
+            <summary>Field number for the "tileTransition" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandDecal.MaskMatrixFieldNumber">
+            <summary>Field number for the "maskMatrix" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandDecal.HashedMaskShapeFieldNumber">
+            <summary>Field number for the "hashedMaskShape" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandDecal.MaskChannelFieldNumber">
+            <summary>Field number for the "maskChannel" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandDecal.MaskStretchFieldNumber">
+            <summary>Field number for the "maskStretch" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandFill.BlendFieldNumber">
+            <summary>Field number for the "blend" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandFill.HashedTextureFieldNumber">
+            <summary>Field number for the "hashedTexture" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandFill.ColorFieldNumber">
+            <summary>Field number for the "color" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandFill.OpacityFieldNumber">
+            <summary>Field number for the "opacity" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandFill.MinimumFieldNumber">
+            <summary>Field number for the "minimum" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandReplace.HashedTextureFieldNumber">
+            <summary>Field number for the "hashedTexture" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandReplace.ColorFieldNumber">
+            <summary>Field number for the "color" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandReplaceChannels.HashedTextureRFieldNumber">
+            <summary>Field number for the "hashedTextureR" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandReplaceChannels.HashedTextureGFieldNumber">
+            <summary>Field number for the "hashedTextureG" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandReplaceChannels.HashedTextureBFieldNumber">
+            <summary>Field number for the "hashedTextureB" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandReplaceChannels.HashedTextureAFieldNumber">
+            <summary>Field number for the "hashedTextureA" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandReplaceChannels.ChannelRFieldNumber">
+            <summary>Field number for the "channelR" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandReplaceChannels.ChannelGFieldNumber">
+            <summary>Field number for the "channelG" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandReplaceChannels.ChannelBFieldNumber">
+            <summary>Field number for the "channelB" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandReplaceChannels.ChannelAFieldNumber">
+            <summary>Field number for the "channelA" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandSphere.BlendFieldNumber">
+            <summary>Field number for the "blend" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandSphere.In3DFieldNumber">
+            <summary>Field number for the "in3D" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandSphere.PositionFieldNumber">
+            <summary>Field number for the "position" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandSphere.EndPositionFieldNumber">
+            <summary>Field number for the "endPosition" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandSphere.Position2FieldNumber">
+            <summary>Field number for the "position2" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandSphere.EndPosition2FieldNumber">
+            <summary>Field number for the "endPosition2" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandSphere.ExtrusionsFieldNumber">
+            <summary>Field number for the "extrusions" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandSphere.MatrixFieldNumber">
+            <summary>Field number for the "matrix" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandSphere.ColorFieldNumber">
+            <summary>Field number for the "color" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandSphere.OpacityFieldNumber">
+            <summary>Field number for the "opacity" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandSphere.HardnessFieldNumber">
+            <summary>Field number for the "hardness" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandSphere.HashedTileTextureFieldNumber">
+            <summary>Field number for the "hashedTileTexture" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandSphere.TileMatrixFieldNumber">
+            <summary>Field number for the "tileMatrix" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandSphere.TileOpacityFieldNumber">
+            <summary>Field number for the "tileOpacity" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandSphere.TileTransitionFieldNumber">
+            <summary>Field number for the "tileTransition" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandSphere.MaskMatrixFieldNumber">
+            <summary>Field number for the "maskMatrix" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandSphere.HashedMaskShapeFieldNumber">
+            <summary>Field number for the "hashedMaskShape" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandSphere.MaskChannelFieldNumber">
+            <summary>Field number for the "maskChannel" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandSphere.MaskStretchFieldNumber">
+            <summary>Field number for the "maskStretch" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandData.CommandFieldNumber">
+            <summary>Field number for the "command" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandData.TargetFieldNumber">
+            <summary>Field number for the "target" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandList.CommandsFieldNumber">
+            <summary>Field number for the "commands" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DCommandList.TargetFieldNumber">
+            <summary>Field number for the "target" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DBlendMode.IndexFieldNumber">
+            <summary>Field number for the "index" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DBlendMode.ColorFieldNumber">
+            <summary>Field number for the "color" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DBlendMode.HashedTextureFieldNumber">
+            <summary>Field number for the "hashedTexture" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DBlendMode.KernelFieldNumber">
+            <summary>Field number for the "kernel" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Paint3D.Paint3DBlendMode.ChannelsFieldNumber">
+            <summary>Field number for the "channels" field.</summary>
+        </member>
+        <member name="T:OpenUp.Protobuf.AppData.PropertyListsReflection">
+            <summary>Holder for reflection information generated from AppData/PropertyLists.proto</summary>
+        </member>
+        <member name="P:OpenUp.Protobuf.AppData.PropertyListsReflection.Descriptor">
+            <summary>File descriptor for AppData/PropertyLists.proto</summary>
+        </member>
+        <member name="T:OpenUp.Protobuf.AppData.StoryDataReflection">
+            <summary>Holder for reflection information generated from AppData/StoryData.proto</summary>
+        </member>
+        <member name="P:OpenUp.Protobuf.AppData.StoryDataReflection.Descriptor">
+            <summary>File descriptor for AppData/StoryData.proto</summary>
+        </member>
+        <member name="T:OpenUp.Protobuf.AppData.TemplatesReflection">
+            <summary>Holder for reflection information generated from AppData/Templates.proto</summary>
+        </member>
+        <member name="P:OpenUp.Protobuf.AppData.TemplatesReflection.Descriptor">
+            <summary>File descriptor for AppData/Templates.proto</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Configurable.IdFieldNumber">
+            <summary>Field number for the "id" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Configurable.TypeFieldNumber">
+            <summary>Field number for the "type" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Configurable.NameFieldNumber">
+            <summary>Field number for the "name" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.Configurable.PathsFieldNumber">
+            <summary>Field number for the "paths" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.TemplateService.UsesFieldNumber">
+            <summary>Field number for the "uses" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.TemplateUsage.IdFieldNumber">
+            <summary>Field number for the "id" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.TemplateUsage.InstancesFieldNumber">
+            <summary>Field number for the "instances" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.TemplateLoad.DidReuseFieldNumber">
+            <summary>Field number for the "didReuse" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.TemplateLoad.ConfigurationFieldNumber">
+            <summary>Field number for the "configuration" field.</summary>
+        </member>
+        <member name="T:OpenUp.Protobuf.TransformStructure">
+            <summary>
+            Holds a position, rotation, and scale.
+            </summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.TransformStructure.position">
+            <summary>
+            The position of the object.
+            </summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.TransformStructure.rotation">
+            <summary>
+            The rotation of a object.
+            </summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.TransformStructure.scale">
+            <summary>
+            The scale of object.
+            </summary>
+        </member>
+        <member name="M:OpenUp.Protobuf.TransformStructure.#ctor(OpenUp.Protobuf.TransformStructure)">
+            <summary>
+            Creates a new transform structure that is a copy of the given transform.
+            </summary>
+        </member>
+        <member name="M:OpenUp.Protobuf.TransformStructure.#ctor(UnityEngine.Transform,UnityEngine.Transform,System.Boolean)">
+            <summary>
+            Creates a new transform structure from some unity transform.
+            </summary>
+            <param name="unityTransform"></param>
+            <param name="relativeTo">
+            If not null, the transform will be relative to this transform. (i.e. if <paramref name="relativeTo"/>
+            is A, and <paramref name="unityTransform"/> is B, then a child of A with the resulting transform structure
+            would have a identical transform to B.
+            </param>
+            <param name="localValues">
+            Set to true to use the local values, this is the same as <paramref name="relativeTo"/>
+            being equal to the parent, but significantly faster.
+            </param>
+        </member>
+        <member name="M:OpenUp.Protobuf.TransformStructure.#ctor(Google.Protobuf.ByteString)">
+            <summary>
+            Construct a transform from a protobuf bytestring
+            </summary>
+            <param name="data"></param>
+        </member>
+        <member name="P:OpenUp.Protobuf.TransformStructure.IDENTITY">
+            <summary>
+            Transform that leaves an object unchanged.
+            </summary>
+        </member>
+        <member name="M:OpenUp.Protobuf.TransformStructure.QuickHash">
+            <summary>
+            A simple hash to detect changes. This is NOT the same as a <see cref="M:System.Object.GetHashCode"/>
+            as the value of hash can change for the same struct (See the jetbrains link for why that's bad).
+            </summary>
+            <seealso href="https://www.jetbrains.com/help/rider/NonReadonlyMemberInGetHashCode.html"/>
+        </member>
+        <member name="T:OpenUp.Protobuf.UnityTypes.Vector3Data">
+            <summary>
+            Wraps a <see cref="T:UnityEngine.Vector3"/>. 
+            </summary>
+        </member>
+        <member name="P:OpenUp.Protobuf.UnityTypes.Vector3Data.Value">
+            <summary>
+            Uses the <see cref="P:OpenUp.Protobuf.UnityTypes.Vector3Data.VectorBytes"/> as backing field, so editing this sets
+            the <see cref="P:OpenUp.Protobuf.UnityTypes.Vector3Data.VectorBytes"/> and vice versa.
+            </summary>
+        </member>
+        <member name="M:OpenUp.Protobuf.UnityTypes.Vector3Data.op_Implicit(UnityEngine.Vector3)~OpenUp.Protobuf.UnityTypes.Vector3Data">
+            <summary>
+            <see cref="T:UnityEngine.Vector3"/>s are automatically converted to <see cref="T:OpenUp.Protobuf.UnityTypes.Vector3Data"/> 
+            </summary>
+            <param name="vec"></param>
+        </member>
+        <member name="M:OpenUp.Protobuf.UnityTypes.Vector3Data.op_Implicit(OpenUp.Protobuf.UnityTypes.Vector3Data)~UnityEngine.Vector3">
+            <summary>
+            <see cref="T:UnityEngine.Vector3"/>s are automatically converted to <see cref="T:OpenUp.Protobuf.UnityTypes.Vector3Data"/> 
+            </summary>
+            <param name="vec"></param>
+        </member>
+        <member name="F:OpenUp.Protobuf.UnityTypes.Vector3Data.VectorBytesFieldNumber">
+            <summary>Field number for the "vectorBytes" field.</summary>
+        </member>
+        <member name="M:OpenUp.Protobuf.UnityTypes.ColorData.op_Implicit(UnityEngine.Color)~OpenUp.Protobuf.UnityTypes.ColorData">
+            <summary>
+            <see cref="T:UnityEngine.Vector3"/>s are automatically converted to <see cref="T:OpenUp.Protobuf.UnityTypes.Vector3Data"/> 
+            </summary>
+            <param name="color"></param>
+        </member>
+        <member name="M:OpenUp.Protobuf.UnityTypes.ColorData.op_Implicit(OpenUp.Protobuf.UnityTypes.ColorData)~UnityEngine.Color">
+            <summary>
+            <see cref="T:UnityEngine.Vector3"/>s are automatically converted to <see cref="T:OpenUp.Protobuf.UnityTypes.Vector3Data"/> 
+            </summary>
+            <param name="color"></param>
+        </member>
+        <member name="F:OpenUp.Protobuf.UnityTypes.ColorData.ColorBytesFieldNumber">
+            <summary>Field number for the "colorBytes" field.</summary>
+        </member>
+        <member name="M:OpenUp.Protobuf.UnityTypes.QuaternionData.op_Implicit(UnityEngine.Quaternion)~OpenUp.Protobuf.UnityTypes.QuaternionData">
+            <summary>
+            <see cref="T:UnityEngine.Vector3"/>s are automatically converted to <see cref="T:OpenUp.Protobuf.UnityTypes.Vector3Data"/> 
+            </summary>
+            <param name="quaternion"></param>
+        </member>
+        <member name="M:OpenUp.Protobuf.UnityTypes.QuaternionData.op_Implicit(OpenUp.Protobuf.UnityTypes.QuaternionData)~UnityEngine.Quaternion">
+            <summary>
+            <see cref="T:UnityEngine.Vector3"/>s are automatically converted to <see cref="T:OpenUp.Protobuf.UnityTypes.Vector3Data"/> 
+            </summary>
+            <param name="quaternion"></param>
+        </member>
+        <member name="F:OpenUp.Protobuf.UnityTypes.QuaternionData.QuaternionBytesFieldNumber">
+            <summary>Field number for the "quaternionBytes" field.</summary>
+        </member>
+        <member name="M:OpenUp.Protobuf.UnityTypes.TransformData.op_Implicit(OpenUp.Protobuf.TransformStructure)~OpenUp.Protobuf.UnityTypes.TransformData">
+            <summary>
+            <see cref="T:UnityEngine.Vector3"/>s are automatically converted to <see cref="T:OpenUp.Protobuf.UnityTypes.Vector3Data"/> 
+            </summary>
+            <param name="transform"></param>
+        </member>
+        <member name="M:OpenUp.Protobuf.UnityTypes.TransformData.op_Implicit(OpenUp.Protobuf.UnityTypes.TransformData)~OpenUp.Protobuf.TransformStructure">
+            <summary>
+            <see cref="T:UnityEngine.Vector3"/>s are automatically converted to <see cref="T:OpenUp.Protobuf.UnityTypes.Vector3Data"/> 
+            </summary>
+            <param name="transform"></param>
+        </member>
+        <member name="F:OpenUp.Protobuf.UnityTypes.TransformData.TransformBytesFieldNumber">
+            <summary>Field number for the "transformBytes" field.</summary>
+        </member>
+        <member name="M:OpenUp.Protobuf.UnityTypes.Matrix4x4Data.op_Implicit(UnityEngine.Matrix4x4)~OpenUp.Protobuf.UnityTypes.Matrix4x4Data">
+            <summary>
+            <see cref="T:UnityEngine.Vector3"/>s are automatically converted to <see cref="T:OpenUp.Protobuf.UnityTypes.Vector3Data"/> 
+            </summary>
+            <param name="matrix"></param>
+        </member>
+        <member name="M:OpenUp.Protobuf.UnityTypes.Matrix4x4Data.op_Implicit(OpenUp.Protobuf.UnityTypes.Matrix4x4Data)~UnityEngine.Matrix4x4">
+            <summary>
+            <see cref="T:UnityEngine.Vector3"/>s are automatically converted to <see cref="T:OpenUp.Protobuf.UnityTypes.Vector3Data"/> 
+            </summary>
+            <param name="matrix"></param>
+        </member>
+        <member name="F:OpenUp.Protobuf.UnityTypes.Matrix4x4Data.MatrixBytesFieldNumber">
+            <summary>Field number for the "matrixBytes" field.</summary>
+        </member>
+        <member name="T:OpenUp.Protobuf.UnityTypes.UnityTypesReflection">
+            <summary>Holder for reflection information generated from UnityTypes.proto</summary>
+        </member>
+        <member name="P:OpenUp.Protobuf.UnityTypes.UnityTypesReflection.Descriptor">
+            <summary>File descriptor for UnityTypes.proto</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.UnityTypes.Vector4Data.VectorBytesFieldNumber">
+            <summary>Field number for the "vectorBytes" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.UnityTypes.Vector2Data.VectorBytesFieldNumber">
+            <summary>Field number for the "vectorBytes" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.Updates.UpdateData.TypeFieldNumber">
+            <summary>Field number for the "type" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.Updates.UpdateData.PathFieldNumber">
+            <summary>Field number for the "path" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.Updates.UpdateData.UpdatesFieldNumber">
+            <summary>Field number for the "updates" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.Updates.UpdateData.NewValueBytesFieldNumber">
+            <summary>Field number for the "newValueBytes" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.Updates.UpdateData.NewValueIntFieldNumber">
+            <summary>Field number for the "newValueInt" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.Updates.UpdateData.NewValueUIntFieldNumber">
+            <summary>Field number for the "newValueUInt" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.Updates.UpdateData.NewValueStringFieldNumber">
+            <summary>Field number for the "newValueString" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.Updates.UpdateData.NewValueFloatFieldNumber">
+            <summary>Field number for the "newValueFloat" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.Updates.UpdateData.NewValueBoolFieldNumber">
+            <summary>Field number for the "newValueBool" field.</summary>
+        </member>
+        <member name="T:OpenUp.Protobuf.Updates.UpdateData.NewValueOneofCase">
+            <summary>Enum of possible cases for the "newValue" oneof.</summary>
+        </member>
+        <member name="T:OpenUp.Protobuf.Updates.UpdatesReflection">
+            <summary>Holder for reflection information generated from Updates.proto</summary>
+        </member>
+        <member name="P:OpenUp.Protobuf.Updates.UpdatesReflection.Descriptor">
+            <summary>File descriptor for Updates.proto</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.Updates.UpdatePath.PathFieldNumber">
+            <summary>Field number for the "path" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.Updates.UpdatePath.IntegerPathFieldNumber">
+            <summary>Field number for the "integerPath" field.</summary>
+        </member>
+        <member name="T:OpenUp.Networking.Protobuf.ShapeFetch.PropertyShapeReflection">
+            <summary>Holder for reflection information generated from PropertyShape.proto</summary>
+        </member>
+        <member name="P:OpenUp.Networking.Protobuf.ShapeFetch.PropertyShapeReflection.Descriptor">
+            <summary>File descriptor for PropertyShape.proto</summary>
+        </member>
+        <member name="F:OpenUp.Networking.Protobuf.ShapeFetch.ShapeRef.IdFieldNumber">
+            <summary>Field number for the "id" field.</summary>
+        </member>
+        <member name="F:OpenUp.Networking.Protobuf.ShapeFetch.ShapeRef.TypeFieldNumber">
+            <summary>Field number for the "type" field.</summary>
+        </member>
+        <member name="F:OpenUp.Networking.Protobuf.ShapeFetch.ShapeRef.EnumKeyFieldNumber">
+            <summary>Field number for the "enumKey" field.</summary>
+        </member>
+        <member name="F:OpenUp.Networking.Protobuf.ShapeFetch.ShapeRef.NameFieldNumber">
+            <summary>Field number for the "name" field.</summary>
+        </member>
+        <member name="F:OpenUp.Networking.Protobuf.ShapeFetch.ShapeRef.ShapeFieldNumber">
+            <summary>Field number for the "shape" field.</summary>
+        </member>
+        <member name="F:OpenUp.Networking.Protobuf.ShapeFetch.ShapeRefList.ShapesFieldNumber">
+            <summary>Field number for the "shapes" field.</summary>
+        </member>
+        <member name="T:OpenUp.Updating.ReaderMap.FieldReadMethodAttribute">
+            <summary>
+            The attribute is used to mark the method that return a reader for a field
+            </summary>
+            <seealso cref="M:OpenUp.Updating.ReaderMap.GetReaderFor(System.Type,System.String)"/>
+            <remarks>Inherits from <see cref="T:UnityEngine.Scripting.PreserveAttribute"/> so that Unity does not remove any of the marked methods.</remarks>
+            <remarks>
+            Must be used on a method with signature <code>public Func&lt;ArraySegment&lt;byte&gt;, object&gt; Method(string field)</code>
+            </remarks>
+        </member>
+        <member name="M:OpenUp.Updating.ReaderMap.FieldReadMethodAttribute.#ctor">
+            <remarks>
+            Must be used on a method with signature <code>public Func&lt;ArraySegment&lt;byte&gt;, object&gt; Method(string field)</code>
+            </remarks>
+        </member>
+        <member name="M:OpenUp.Updating.IUpdatable`1.TryApplyUpdate(OpenUp.Protobuf.Updates.UpdateData,System.String@)">
+            <summary>
+            Attempts to apply an update and returns true if successful, otherwise returns false.
+            </summary>
+            <param name="update">The <see cref="T:OpenUp.Protobuf.Updates.UpdateData"/> to apply</param>
+            <param name="reason">The reason the update was rejected, or null if the update was successful</param>
+            <returns>True if update was applied, otherwise false</returns>
+        </member>
+        <member name="M:OpenUp.Updating.IUpdatable`1.TryApplyUpdate(OpenUp.Protobuf.Updates.UpdateData,System.Exception@)">
+            <summary>
+            Attempts to apply an update and returns true if successful, otherwise returns false.
+            </summary>
+            <param name="update">The <see cref="T:OpenUp.Protobuf.Updates.UpdateData"/> to apply</param>
+            <param name="reason">The exception that caused the update to fail, or null if the update was successful</param>
+            <returns>True if update was applied, otherwise false</returns>
+        </member>
+        <member name="M:OpenUp.Updating.IUpdatable`1.UseUpdatesThreadSafe``1(System.Func{System.Collections.Generic.IReadOnlyList{OpenUp.Protobuf.Updates.UpdateData},``0})">
+            <summary>
+            Uses the updates in a thread-safe context.
+            </summary>
+            <param name="consumer"></param>
+            <returns></returns>
+            <remarks>
+            NOTE: do not use this to get a LINQ expression (methods that return <see cref="T:System.Collections.Generic.IEnumerator`1"/>),
+            they are lazy and will only actually evaluate when used by a foreach loop or copied to a list/array.
+            Either put the foreach loop inside the <paramref name="consumer"/> or use ToList to force enumeration.
+            </remarks>
+        </member>
+        <member name="M:OpenUp.Updating.IUpdatable`1.UseUpdatesThreadSafe(System.Action{System.Collections.Generic.IReadOnlyList{OpenUp.Protobuf.Updates.UpdateData}})">
+            <summary>
+            Uses the updates in a thread-safe context.
+            </summary>
+            <param name="consumer"></param>
+            <returns></returns>
+        </member>
+        <member name="T:OpenUp.Updating.TargetedUpdateListener">
+            <summary>
+            Utility that allows you to listen for updates and can fire on updates at nested data.
+            </summary>
+        </member>
+        <member name="P:OpenUp.Updating.TargetedUpdateListener.Item(OpenUp.Updating.UpdateIntPath)">
+            <summary>
+            Registers a callback to respond to updates at a particular point in the data.
+            </summary>
+            <param name="path">The path to the data point.</param>
+        </member>
+        <member name="M:OpenUp.Updating.TargetedUpdateListener.Invoke(OpenUp.Protobuf.Updates.UpdateData)">
+            <summary>
+            Fires the listeners to all parts of the path, i.e. if you call this with an update to the transform
+            of an object, the listeners for updates to the transform, the object, and any object all fire, (in that order). 
+            </summary>
+            <param name="update"></param>
+        </member>
+        <member name="T:OpenUp.Updating.Protobuf.InvalidUpdateHandler">
+            <summary>
+            Represents the callback when an update is rejected
+            </summary>
+            <param name="exception"></param>
+        </member>
+        <member name="T:OpenUp.Updating.Protobuf.UpdateHandler">
+            <summary>
+            Represents the callback for when the app data has been updated
+            </summary>
+            <param name="update"></param>
+        </member>
+        <member name="T:OpenUp.Updating.Protobuf.UndoHandler">
+            <summary>
+            Represents the callback for when updates are undone.
+            </summary>
+            <param name="steps">The amount of updates to undo</param>
+        </member>
+        <member name="F:OpenUp.Updating.Protobuf.Updatable`1.COMPACT_INTERVAL">
+            <summary>
+            For every this many updates, the <see cref="M:OpenUp.Updating.Protobuf.Updatable`1.CompactUpdates"/> method will run and compress the
+            list of updates to contain as few as possible updates. 
+            </summary>
+        </member>
+        <member name="P:OpenUp.Updating.Protobuf.Updatable`1.OnUpdateAt">
+            <summary>
+            Subscribe to this object to listen to updates to a nested part of the data.
+            </summary>
+        </member>
+        <member name="P:OpenUp.Updating.Protobuf.Updatable`1.OnUpdateUndoAt">
+            <summary>
+            Subscribe to this object to listen to undo calls to a nested part of the data.
+            </summary>
+        </member>
+        <member name="E:OpenUp.Updating.Protobuf.Updatable`1.OnInvalidUpdate">
+            <summary>
+            Subscribe to this to listen for updates that could not be applied to the object.
+            </summary>
+        </member>
+        <member name="E:OpenUp.Updating.Protobuf.Updatable`1.OnUpdate">
+            <summary>
+            Subscribe to this to listen for updates to the object.
+            </summary>
+        </member>
+        <member name="E:OpenUp.Updating.Protobuf.Updatable`1.OnUndo">
+            <summary>
+            Subscribe to this to listen to undo calls to the object.
+            </summary>
+        </member>
+        <member name="M:OpenUp.Updating.Protobuf.Updatable`1.#ctor(`0)">
+            <summary>
+            Creates an updatable wrapper around a single protobuf object.
+            </summary>
+            <param name="target"></param>
+            <remarks>
+            Uses the generic <see cref="T:OpenUp.Updating.Updaters.MessageUpdater`1"/> as updater instead of a specific implementation
+            for the message type.
+            </remarks>
+        </member>
+        <member name="M:OpenUp.Updating.Protobuf.Updatable`1.#ctor(`0,System.Func{`0,OpenUp.Updating.Updaters.IUpdater})">
+            <summary>
+            Creates an updatable wrapper around a single protobuf object. This overload requires you to pass the
+            <see cref="T:OpenUp.Updating.Updaters.IUpdater"/> which handles the updates.
+            </summary>
+            <param name="target"></param>
+            <param name="updaterProvider"></param>
+        </member>
+        <member name="M:OpenUp.Updating.Protobuf.Updatable`1.GetCurrentState">
+            <summary>
+            Returns the updatable object in its current state.
+            </summary>
+            <returns>A reference to the current object</returns>
+            <remarks>This reference is mutable, so any change applied to the object will affect other parts of the program.</remarks>
+        </member>
+        <member name="M:OpenUp.Updating.Protobuf.Updatable`1.GetBaseData">
+            <summary>
+            Returns the base data that this updatable is based off of.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:OpenUp.Updating.Protobuf.Updatable`1.UseUpdatesThreadSafe``1(System.Func{System.Collections.Generic.IReadOnlyList{OpenUp.Protobuf.Updates.UpdateData},``0})">
+            <summary>
+            Uses the updates in a thread-safe context.
+            </summary>
+            <param name="consumer"></param>
+            <returns></returns>
+            <remarks>
+            NOTE: do not use this to get a LINQ expression (methods that return <see cref="T:System.Collections.Generic.IEnumerator`1"/>),
+            they are lazy and will only actually evaluate when used by a foreach loop or copied to a list/array.
+            Either put the foreach loop inside the <paramref name="consumer"/> or use ToList to force enumeration.
+            </remarks>
+        </member>
+        <member name="M:OpenUp.Updating.Protobuf.Updatable`1.UseUpdatesThreadSafe(System.Action{System.Collections.Generic.IReadOnlyList{OpenUp.Protobuf.Updates.UpdateData}})">
+            <summary>
+            Uses the updates in a thread-safe context.
+            </summary>
+            <param name="consumer"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OpenUp.Updating.Protobuf.Updatable`1.ApplyUpdate(OpenUp.Protobuf.Updates.UpdateData)">
+            <summary>
+            Applies an update to the data, then fires the relevant listeners. 
+            </summary>
+            <param name="update"></param>
+        </member>
+        <member name="M:OpenUp.Updating.Protobuf.Updatable`1.TryApplyUpdate(OpenUp.Protobuf.Updates.UpdateData,System.String@)">
+            <inheritdoc />
+        </member>
+        <member name="M:OpenUp.Updating.Protobuf.Updatable`1.TryApplyUpdate(OpenUp.Protobuf.Updates.UpdateData,System.Exception@)">
+            <inheritdoc />
+        </member>
+        <member name="M:OpenUp.Updating.Protobuf.Updatable`1.UndoUpdate(System.Int32)">
+            <summary>
+            Undoes the last <paramref name="stepsBack"/> updates to the app.
+            </summary>
+            <param name="stepsBack"></param>
+            <exception cref="T:System.ArgumentException">Thrown if the steps back is 0 or negative.</exception>
+        </member>
+        <member name="M:OpenUp.Updating.Protobuf.Updatable`1.CompactUpdates">
+            <summary>
+            Reduces the amount of updates in the <see cref="F:OpenUp.Updating.Protobuf.Updatable`1._updates"/> list by removing all updates to any specific
+            path except the last on to that path. This is done to greatly reduce the memory load of the updatable.
+            </summary>
+            <remarks>Note: This method splits composite updates into individual updates</remarks>
+        </member>
+        <member name="M:OpenUp.Updating.Protobuf.Updatable`1.CreateCopy">
+            <summary>
+            Creates a copy of the updatable object, including the updates apply to this updatable.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:OpenUp.Updating.UpdateFactory.UpdateFactory.AddBehaviourToObject(OpenUp.Protobuf.AppData.BehaviourType,OpenUp.Protobuf.AppData.ObjectStructure)">
+            <summary>
+            Helper method for adding a behaviour to the object when one of its properties are being set in an expression.
+            </summary>
+            <param name="type"></param>
+            <param name="objectData"></param>
+            <returns>Returns null if the object already has the behaviour</returns>
+        </member>
+        <member name="M:OpenUp.Updating.UpdateFactory.UpdateFactory.SafeDeleteObject(System.Int32,OpenUp.Protobuf.AppData.AppRuntimeData)">
+            <summary>
+            Update that safely delete the object. This ensures references to it are cut. Eg: actions that load it, storynodes that edit it.
+            </summary>
+            <seealso cref="T:OpenUp.Protobuf.Updates.UpdateData"/>
+            <param name="id">The object identifier.</param>
+        </member>
+        <member name="M:OpenUp.Updating.UpdateFactory.UpdateFactory.NewObjectForModel(System.String,System.String)">
+            <summary>
+            Adds a new UnityObject to the solution with a model
+            </summary>
+            <param name="modelURL">The url from which to load a model.</param>
+            <param name="name">The name given to the eventual object in the session.</param>
+            <returns>An update that creates an object with a model.</returns>
+        </member>
+        <member name="M:OpenUp.Updating.UpdateFactory.UpdateFactory.NewObject(System.String,OpenUp.Protobuf.AppData.Visual)">
+            <summary>
+            Update that adds a new object to the session.
+            </summary>
+            <param name="name">Name to give the new object.</param>
+            <param name="visual">Data defining the type of object created.</param>
+            <returns>An update that creates a new object in the session.</returns>
+        </member>
+        <member name="T:OpenUp.Updating.UpdateIntPath">
+            <summary>
+            A highly optimized readonly version of the <see cref="!:UpdatePath"/>.
+            </summary>
+            <remarks>The length of the update path is fixed and cannot be extended.</remarks>
+        </member>
+        <member name="F:OpenUp.Updating.UpdateIntPath.furtherFields">
+            <summary>
+            This field is only assigned if the length requires it. If the path is short enough, then nothing is
+            assigned to the heap.
+            </summary>
+        </member>
+        <member name="P:OpenUp.Updating.UpdateIntPath.Item(System.Int32)">
+            <summary>
+            Gets the nth part of the path.
+            </summary>
+            <param name="index"></param>
+            <exception cref="T:System.IndexOutOfRangeException"></exception>
+        </member>
+        <member name="M:OpenUp.Updating.UpdateIntPath.#ctor(System.Int32[])">
+            <summary>
+            Takes multiple fields and concatenates them as if they were each an update path.
+            </summary>
+            <param name="fields"></param>
+        </member>
+        <member name="M:OpenUp.Updating.UpdateIntPath.#ctor(System.Collections.Generic.IEnumerable{System.Int32})">
+            <summary>
+            Takes a list of fields and concatenates them as if they were each an update path.
+            </summary>
+            <param name="fields"></param>		
+        </member>
+        <member name="M:OpenUp.Updating.UpdateIntPath.#ctor(OpenUp.Updating.UpdateIntPath[])">
+            <summary>
+            Takes multiple paths and concatenates them.
+            </summary>
+            <param name="paths"></param>
+        </member>
+        <member name="M:OpenUp.Updating.UpdateIntPath.#ctor(OpenUp.Updating.UpdateIntPath,OpenUp.Updating.UpdateIntPath)">
+            <summary>
+            Concatenation constructor that avoids creating garbage.
+            </summary>
+            <param name="rootPath"></param>
+            <param name="subPath"></param>
+        </member>
+        <member name="M:OpenUp.Updating.UpdateIntPath.#ctor(OpenUp.Updating.UpdateIntPath,System.Int32,System.String)">
+            <summary>
+            Subtraction constructor that avoid garbage allocation.
+            </summary>
+            <param name="rootPath"></param>
+            <param name="stepsBack"></param>
+            <param name="mark">this parameter is added to help the compiler avoid confusion.</param>
+        </member>
+        <member name="M:OpenUp.Updating.UpdateIntPath.IsSubPathOf(OpenUp.Updating.UpdateIntPath)">
+            <summary>
+            checks if this path points to data contained within the data of another path.
+            </summary>
+            <param name="other"></param>
+            <returns>
+            Returns true if this path points to data contained
+            inside the data of the other.
+            </returns>
+            <remarks>Returns true if the paths are identical</remarks>
+            <remarks>Returns true if other is empty</remarks>
+        </member>
+        <member name="M:OpenUp.Updating.UpdateIntPath.ToString">
+            <summary>
+            Creates a string representation of a path.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:OpenUp.Updating.UpdateIntPath.op_Implicit(System.Int32)~OpenUp.Updating.UpdateIntPath">
+            <summary>
+            Single fields can be converted to a path to that field.
+            </summary>
+            <param name="item">The name of the field.</param>
+            <returns>A path to the given field.</returns>
+        </member>
+        <member name="M:OpenUp.Updating.UpdateIntPath.op_BitwiseAnd(OpenUp.Updating.UpdateIntPath,OpenUp.Updating.UpdateIntPath)">
+            <summary>
+            The <c>&amp;</c> operator is used to concatenate paths.
+            </summary>
+            <param name="path">Path to some nested object.</param>
+            <param name="extra">Path from the nested object to some deeply nested object therein.</param>
+            <returns>Absolute path to the deeply nested object.</returns>
+        </member>
+        <member name="M:OpenUp.Updating.UpdateIntPath.op_Subtraction(OpenUp.Updating.UpdateIntPath,System.Int32)">
+            <summary>
+            The <c>-</c> operator is used to get less nested paths, for instance to point to a parent object.
+            </summary>
+            <param name="path">The deeply nested path.</param>
+            <param name="steps">How many steps back in the path you want to go (e.g. -1 would point to a parent object).</param>
+            <returns>The less nested path.</returns>
+            <exception cref="T:System.InvalidOperationException">Thrown if you attempt to go more steps back than in the path.</exception>
+        </member>
+        <member name="M:OpenUp.Updating.UpdateIntPath.op_Equality(OpenUp.Updating.UpdateIntPath,OpenUp.Updating.UpdateIntPath)">
+            <summary>
+            Equality has been overriden so that paths are equal if they point to the
+            same field in the data.
+            </summary>
+            <param name="path1"></param>
+            <param name="path2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OpenUp.Updating.UpdateIntPath.op_Inequality(OpenUp.Updating.UpdateIntPath,OpenUp.Updating.UpdateIntPath)">
+            <summary>
+            Paths have their equality overriden so that they are equal if they point
+            to the same field in the data.
+            </summary>
+            <param name="path1"></param>
+            <param name="path2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OpenUp.Updating.UpdateIntPath.Equals(OpenUp.Updating.UpdateIntPath)">
+            <summary>
+            Equality has been overriden so that paths are equal if they point to the
+            same object in the data.
+            </summary>
+            <param name="other"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OpenUp.Updating.UpdateIntPath.Equals(System.Object)">
+            <summary>
+            Equality has been overriden so that paths are equal if they point to the
+            same object in the data.
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OpenUp.Updating.UpdateIntPath.GetHashCode">
+            <summary>
+            As equality has been overriden we must also override <see cref="M:OpenUp.Updating.UpdateIntPath.GetHashCode"/>
+            so that hash codes are identical for paths pointing to the same point in the
+            data structure.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:OpenUp.Updating.UpdateIntPath.GetEnumerator">
+            <inheritdoc />
+        </member>
+        <member name="M:OpenUp.Updating.UpdateIntPath.Enumerator.MoveNext">
+            <inheritdoc />
+        </member>
+        <member name="M:OpenUp.Updating.UpdateIntPath.Enumerator.Reset">
+            <inheritdoc />
+        </member>
+        <member name="M:OpenUp.Updating.UpdateIntPath.Enumerator.Dispose">
+            <inheritdoc />
+        </member>
+        <member name="T:OpenUp.Updating.Updaters.AppUpdater">
+            <summary>
+            Creates an updater that allows you to update an <see cref="T:OpenUp.Protobuf.AppData.AppRuntimeData"/>.
+            </summary>
+        </member>
+        <member name="M:OpenUp.Updating.Updaters.AppUpdater.UpdateField(System.Int32,OpenUp.Protobuf.Updates.UpdateData)">
+            <inheritdoc />
+        </member>
+        <member name="M:OpenUp.Updating.Updaters.AppUpdater.ClearField(System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:OpenUp.Updating.Updaters.AppUpdater.GetField(System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:OpenUp.Updating.Updaters.AppUpdater.GetUpdatableField(System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:OpenUp.Updating.Updaters.DefaultImplementations._GetValueAt(OpenUp.Updating.Updaters.IUpdater,OpenUp.Protobuf.Updates.UpdatePath)">
+            <remarks>For internal use only, only public for testing purposes</remarks>
+        </member>
+        <member name="M:OpenUp.Updating.Updaters.DefaultImplementations._GetValueAt(OpenUp.Updating.Updaters.IUpdater,OpenUp.Updating.UpdateIntPath)">
+            <remarks>For internal use only, only public for testing purposes</remarks>
+        </member>
+        <member name="M:OpenUp.Updating.Updaters.BinaryExpressionDataUpdater.GetValueAt(OpenUp.Protobuf.Updates.UpdatePath)">
+            <inheritdoc />
+        </member>
+        <member name="M:OpenUp.Updating.Updaters.BinaryExpressionDataUpdater.GetValueAt(OpenUp.Updating.UpdateIntPath)">
+            <inheritdoc />
+        </member>
+        <member name="M:OpenUp.Updating.Updaters.ExpressionDataUpdater.GetValueAt(OpenUp.Protobuf.Updates.UpdatePath)">
+            <inheritdoc />
+        </member>
+        <member name="M:OpenUp.Updating.Updaters.ExpressionDataUpdater.GetValueAt(OpenUp.Updating.UpdateIntPath)">
+            <inheritdoc />
+        </member>
+        <member name="T:OpenUp.Updating.Updaters.IUpdater">
+            <summary>
+            Interface for objects that can be used to apply an update.
+            </summary>
+        </member>
+        <member name="M:OpenUp.Updating.Updaters.IUpdater.UpdateField(System.Int32,OpenUp.Protobuf.Updates.UpdateData)">
+            <summary>
+            Sets the value of <paramref name="field"/>.
+            </summary>
+            <param name="field"></param>
+            <param name="update"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OpenUp.Updating.Updaters.IUpdater.ClearField(System.Int32)">
+            <summary>
+            Remove the value at <paramref name="field"/>.
+            </summary>
+            <param name="field"></param>
+        </member>
+        <member name="M:OpenUp.Updating.Updaters.IUpdater.GetField(System.Int32)">
+            <summary>
+            Returns the value of the given field.
+            </summary>
+            <param name="field"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OpenUp.Updating.Updaters.IUpdater.GetUpdatableField(System.Int32)">
+            <summary>
+            Gets a nested field that can be updated.
+            </summary>
+            <param name="field"></param>
+            <returns></returns>
+        </member>
+        <member name="T:OpenUp.Updating.Updaters.MessageUpdater`1">
+            <summary>
+            Generic updater that updates an <see cref="T:Google.Protobuf.IMessage"/>
+            </summary>
+        </member>
+        <member name="M:OpenUp.Updating.Updaters.MessageUpdater`1.#ctor(`0)">
+            <summary>
+            Creates an updater for the given target message.
+            </summary>
+            <param name="target"></param>
+        </member>
+        <member name="M:OpenUp.Updating.Updaters.MessageUpdater`1.UpdateField(System.Int32,OpenUp.Protobuf.Updates.UpdateData)">
+            <inheritdoc />
+        </member>
+        <member name="M:OpenUp.Updating.Updaters.MessageUpdater`1.ClearField(System.Int32)">
+            <summary>
+            Clears a field from the message.
+            </summary>
+            <param name="field"></param>
+        </member>
+        <member name="M:OpenUp.Updating.Updaters.MessageUpdater`1.GetField(System.Int32)">
+            <summary>
+            Gets the value behind a specific field.
+            </summary>
+            <param name="field"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OpenUp.Updating.Updaters.MessageUpdater`1.GetUpdatableField(System.Int32)">
+            <summary>
+            Gets the updater for a nested field, or throws an error if the field is not nested. 
+            </summary>
+            <param name="field"></param>
+            <returns></returns>
+            <exception cref="T:System.NotSupportedException"></exception>
+        </member>
+        <member name="T:OpenUp.Updating.Updaters.ObjectCollectionUpdater">
+            <summary>
+            An updater that allows you to update an <see cref="T:OpenUp.Protobuf.AppData.ObjectCollection"/>.
+            </summary>
+        </member>
+        <member name="M:OpenUp.Updating.Updaters.ObjectCollectionUpdater.UpdateField(System.Int32,OpenUp.Protobuf.Updates.UpdateData)">
+            <inheritdoc />
+        </member>
+        <member name="M:OpenUp.Updating.Updaters.ObjectCollectionUpdater.ClearField(System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:OpenUp.Updating.Updaters.ObjectCollectionUpdater.GetField(System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:OpenUp.Updating.Updaters.ObjectCollectionUpdater.GetUpdatableField(System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:OpenUp.Updating.Updaters.ObjectUpdater.UpdateField(System.Int32,OpenUp.Protobuf.Updates.UpdateData)">
+            <inheritdoc />
+        </member>
+        <member name="M:OpenUp.Updating.Updaters.ObjectUpdater.ClearField(System.Int32)">
+            <summary>
+            Objects have no fields that can be cleared.
+            </summary>
+            <param name="field"></param>
+            <exception cref="T:System.NotSupportedException"></exception>
+        </member>
+        <member name="M:OpenUp.Updating.Updaters.ObjectUpdater.GetField(System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:OpenUp.Updating.Updaters.ObjectUpdater.GetUpdatableField(System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="T:OpenUp.Updating.Updaters.TemplateBlobUpdater">
+            <summary>
+            This is used by templating module in the SDK, do not delete it.
+            </summary>
+        </member>
+        <member name="T:OpenUp.Updating.Updaters.UpdateImplementation">
+            <summary>
+            Uses the <see cref="T:OpenUp.Protobuf.Updates.UpdateData"/> and the <see cref="T:OpenUp.Updating.Updaters.IUpdater"/> interface
+            to apply updates to objects.
+            </summary>
+        </member>
+        <member name="M:OpenUp.Updating.Updaters.UpdateImplementation.ApplyTo(OpenUp.Protobuf.Updates.UpdateData,OpenUp.Protobuf.AppData.AppRuntimeData)">
+            <summary>
+            Change some <see cref="T:OpenUp.Protobuf.AppData.AppRuntimeData"/> according to an <see cref="T:OpenUp.Protobuf.Updates.UpdateData"/>
+            </summary>
+            <param name="update"></param>
+            <param name="app"></param>
+        </member>
+        <member name="M:OpenUp.Updating.Updaters.UpdateImplementation.ApplyTo(OpenUp.Protobuf.Updates.UpdateData,OpenUp.Protobuf.AppData.ObjectStructure)">
+            <summary>
+            Change an <see cref="T:OpenUp.Protobuf.AppData.ObjectStructure"/> according to an <see cref="T:OpenUp.Protobuf.Updates.UpdateData"/>
+            </summary>
+            <param name="update"></param>
+            <param name="obj"></param>
+        </member>
+        <member name="M:OpenUp.Updating.Updaters.UpdateImplementation.ApplyToMessage``1(OpenUp.Protobuf.Updates.UpdateData,``0)">
+            <summary>
+            Change an <see cref="T:OpenUp.Protobuf.AppData.ObjectStructure"/> according to an <see cref="T:Google.Protobuf.IMessage"/>
+            </summary>
+            <param name="update"></param>
+            <param name="message"></param>
+        </member>
+        <member name="M:OpenUp.Updating.Updaters.UpdateImplementation.Apply(OpenUp.Updating.Updaters.IUpdater,OpenUp.Protobuf.Updates.UpdateData)">
+            <summary>
+            Use an <see cref="T:OpenUp.Updating.Updaters.IUpdater"/> to update some data.
+            </summary>
+            <param name="updater"></param>
+            <param name="update"></param>
+            <exception cref="T:System.ArgumentOutOfRangeException"></exception>
+        </member>
+        <member name="M:OpenUp.Updating.Updaters.UpdateImplementation.ApplySingle(OpenUp.Updating.Updaters.IUpdater,OpenUp.Protobuf.Updates.UpdateData)">
+            <summary>
+            Consumes a single change, either a set or delete update.
+            </summary>
+            <param name="updater"></param>
+            <param name="update"></param>
+            <exception cref="T:System.InvalidOperationException"></exception>
+        </member>
+        <member name="T:OpenUpDataStructures.Extensions.RepeatedFieldExtensions">
+            <summary>
+            Utilities to make using protobuf repeated fields slightly easier.
+            </summary>
+        </member>
+        <member name="M:OpenUpDataStructures.Extensions.RepeatedFieldExtensions.SetFromRange``1(Google.Protobuf.Collections.RepeatedField{``0},System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Copies a collection to this repeated field.
+            </summary>
+            <param name="repeatedField"></param>
+            <param name="range"></param>
+            <typeparam name="T"></typeparam>
+            <remarks>Clears the repeated field of all other values.</remarks>
+        </member>
+        <member name="T:OpenUpDataStructures.ProtobufAdditions.MergeTools.RecursiveMerge">
+            <summary>
+            The default <see cref="M:Google.Protobuf.IMessage`1.MergeFrom(`0)"/> cannot handle <see cref="T:Google.Protobuf.Collections.MapField`2"/>s.
+             If two map fields have a key in common, the method throws an error instead of trying to merge
+            the field fields. So we have to write the entire merge method again if we want the merge to bloody work...
+            </summary>
+        </member>
+        <member name="M:OpenUpDataStructures.ProtobufAdditions.MergeTools.RecursiveMerge.MergeHierarchies(OpenUp.Protobuf.AppData.Hierarchy,OpenUp.Protobuf.AppData.Hierarchy)">
+            <summary>
+            
+            </summary>
+            <param name="original"></param>
+            <param name="overrides"></param>
+        </member>
+        <member name="M:OpenUpDataStructures.ProtobufAdditions.MergeTools.RecursiveMerge.MergeVisuals(OpenUp.Protobuf.AppData.Visual,OpenUp.Protobuf.AppData.Visual)">
+            <summary>
+            
+            </summary>
+            <param name="original"></param>
+            <param name="overrides"></param>
+            <exception cref="T:System.InvalidOperationException"></exception>
+        </member>
+        <member name="M:OpenUpDataStructures.ProtobufAdditions.MergeTools.RecursiveMerge.MergePropertyLists(OpenUp.Protobuf.AppData.PropertyList,OpenUp.Protobuf.AppData.PropertyList)">
+            <summary>
+            
+            </summary>
+            <param name="original"></param>
+            <param name="overrides"></param>
+        </member>
+        <member name="M:OpenUpDataStructures.ProtobufAdditions.MergeTools.RecursiveMerge.MergeObjects(OpenUp.Protobuf.AppData.ObjectStructure,OpenUp.Protobuf.AppData.ObjectStructure)">
+            <summary>
+            <para>
+            Merges all values from the new object onto the original. Scalar values are overwritten, nested
+            objects and collections are merged.
+            </para>
+            <para>
+            NOTE: <see cref="T:OpenUp.Protobuf.AppData.ExpressionData"/> and <see cref="T:OpenUp.Protobuf.AppData.ValueData"/> are treated as scalar values and are
+            overwritten, not merged.
+            </para> 
+            </summary>
+            <remarks>
+            All copying is by value, not by reference.
+            </remarks>
+            <param name="original"></param>
+            <param name="overrides"></param>
+        </member>
+        <member name="T:OpenUpDataStructures.ProtobufAdditions.OverwriteTools.RecursiveOverwrite">
+            <summary>
+            The default <see cref="M:Google.Protobuf.IMessage`1.MergeFrom(`0)"/> cannot handle <see cref="T:Google.Protobuf.Collections.MapField`2"/>s.
+             If two map fields have a key in common, the method throws an error instead of trying to merge
+            the field fields. So we have to write the entire merge method again if we want the merge to bloody work...
+            </summary>
+        </member>
+        <member name="M:OpenUpDataStructures.ProtobufAdditions.OverwriteTools.RecursiveOverwrite.OverwriteHierarchies(OpenUp.Protobuf.AppData.Hierarchy,OpenUp.Protobuf.AppData.Hierarchy)">
+            <summary>
+            
+            </summary>
+            <param name="original"></param>
+            <param name="overrides"></param>
+        </member>
+        <member name="M:OpenUpDataStructures.ProtobufAdditions.OverwriteTools.RecursiveOverwrite.OverwriteVisuals(OpenUp.Protobuf.AppData.Visual,OpenUp.Protobuf.AppData.Visual)">
+            <summary>
+            
+            </summary>
+            <param name="original"></param>
+            <param name="overrides"></param>
+            <exception cref="T:System.InvalidOperationException"></exception>
+        </member>
+        <member name="M:OpenUpDataStructures.ProtobufAdditions.OverwriteTools.RecursiveOverwrite.OverwritePropertyLists(OpenUp.Protobuf.AppData.PropertyList,OpenUp.Protobuf.AppData.PropertyList)">
+            <summary>
+            
+            </summary>
+            <param name="original"></param>
+            <param name="overrides"></param>
+        </member>
+        <member name="M:OpenUpDataStructures.ProtobufAdditions.OverwriteTools.RecursiveOverwrite.OverwriteObjects(OpenUp.Protobuf.AppData.ObjectStructure,OpenUp.Protobuf.AppData.ObjectStructure)">
+            <summary>
+            <para>
+            Merges all values from the new object onto the original. Scalar values are overwritten, nested
+            objects and collections are merged.
+            </para>
+            <para>
+            NOTE: <see cref="T:OpenUp.Protobuf.AppData.ExpressionData"/> and <see cref="T:OpenUp.Protobuf.AppData.ValueData"/> are treated as scalar values and are
+            overwritten, not merged.
+            </para> 
+            </summary>
+            <remarks>
+            All copying is by value, not by reference.
+            </remarks>
+            <param name="original"></param>
+            <param name="overrides"></param>
+        </member>
+    </members>
+</doc>
