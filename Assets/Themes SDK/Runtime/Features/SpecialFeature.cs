@@ -12,7 +12,8 @@ namespace OpenUp.Environment.Features
             String,
             Vector3,
             Float,
-            Int
+            Int,
+            GameObject,
         }
         
         [Serializable]
@@ -26,6 +27,7 @@ namespace OpenUp.Environment.Features
             public Vector3 vector3Value;
             public float floatValue;
             public int intValue;
+            public GameObject gameObjectValue;
 
             public object Value => type switch
             {
@@ -34,6 +36,7 @@ namespace OpenUp.Environment.Features
                 FeatureValueType.Vector3 => vector3Value,
                 FeatureValueType.Float => floatValue,
                 FeatureValueType.Int => intValue,
+                FeatureValueType.GameObject => gameObjectValue,
                 _ => throw new ArgumentOutOfRangeException()
             };
         }

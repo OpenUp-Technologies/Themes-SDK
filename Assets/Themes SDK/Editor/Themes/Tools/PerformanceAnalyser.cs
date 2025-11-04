@@ -84,6 +84,7 @@ namespace OpenUp.Editor.EnvironmentsSdk
                 {
                     IndexFormat.UInt16 => meshData.GetIndexData<ushort>().Length / 3,
                     IndexFormat.UInt32 => meshData.GetIndexData<int>().Length / 3,
+                    _ => 0
                 };
             }
 

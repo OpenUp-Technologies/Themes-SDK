@@ -32,6 +32,7 @@ namespace OpenUp.Editor.ThemesSDK
                 SpecialFeature.FeatureValueType.Vector3 => nameof(SpecialFeature.FeatureValue.vector3Value),
                 SpecialFeature.FeatureValueType.Float => nameof(SpecialFeature.FeatureValue.floatValue),
                 SpecialFeature.FeatureValueType.Int => nameof(SpecialFeature.FeatureValue.intValue),
+                SpecialFeature.FeatureValueType.GameObject => nameof(SpecialFeature.FeatureValue.gameObjectValue),
                 _ => nameof(SpecialFeature.FeatureValue.intValue)
             };
 

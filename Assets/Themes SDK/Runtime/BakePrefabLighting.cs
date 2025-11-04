@@ -49,7 +49,7 @@ namespace OpenUp.Utils
         
         private void Awake()
         {
-            Init();
+            //Init();
         }
 
         private void Init()
@@ -86,21 +86,6 @@ namespace OpenUp.Utils
             LightmapSettings.lightmapsMode = (lightmapsDir.Length == lightmaps.Length && directional) ? LightmapsMode.CombinedDirectional : LightmapsMode.NonDirectional;
             ApplyRendererInfo(rendererInfos, offsetsIndexes, lightInfos);
             LightmapSettings.lightmaps = combinedLightmaps2;
-        }
-
-        private void OnEnable()
-        {
-            SceneManager.sceneLoaded += OnSceneLoaded;
-        }
-
-        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-        {
-            Init();
-        }
-
-        private void OnDisable()
-        {
-            SceneManager.sceneLoaded -= OnSceneLoaded;
         }
 
         private static void ApplyRendererInfo(RendererInfo[] infos, int[] lightmapOffsetIndex, LightInfo[] lightsInfo)
