@@ -121,7 +121,6 @@ namespace OpenUp.Editor.EnvironmentsSdk
             }
 
             await caller.PutAsync($"environments/{environment.Id}/version", newVersion);
-
         }
     }
 }

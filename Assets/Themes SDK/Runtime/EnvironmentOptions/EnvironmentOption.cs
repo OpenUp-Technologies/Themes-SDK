@@ -1,4 +1,5 @@
 ﻿using System;
+using OpenUp.Environment.Features;
 using OpenUp.Interpreter.Environment;
 using UnityEngine;
 
@@ -15,7 +16,7 @@ namespace OpenUp.Environment
 
         public string Name => environmentName;
 
-        public string Id => "none";
+        public string Id => databaseId;
 
         public string Version => "0.1";
         
@@ -30,6 +31,11 @@ namespace OpenUp.Environment
         public string databaseId;
         public string orgId;
 
+        [TextArea]
+        public string description;
+        
+        public string thumbnailImage;
+        
         /// <summary>
         /// The game object to load in.
         /// </summary>

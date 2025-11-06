@@ -49,6 +49,10 @@ namespace OpenUp.Networking
 
             HttpContent         httpContent = new StringContent(json, Encoding.UTF8, "application/json");
             HttpResponseMessage response = await client.PostAsync($"{baseAddress}{endpoint}", httpContent);
+            
+            // If it's a bad request, we want to know what was bad about it
+            if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                throw new HttpRequestException("400 (Bad Request): " + await response.Content.ReadAsStringAsync());
 
             response.EnsureSuccessStatusCode();
 

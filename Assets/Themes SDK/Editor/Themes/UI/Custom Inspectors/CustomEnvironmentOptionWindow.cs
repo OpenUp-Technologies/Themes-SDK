@@ -1,19 +1,38 @@
 ﻿using System;
+using System.Threading.Tasks;
 using OpenUp.Environment;
+using OpenUp.Networking.Editor;
+using OpenUp.Utils;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 
 namespace OpenUp.Editor.EnvironmentsSdk
 {
     [CustomEditor(typeof(EnvironmentOption))]
     public class CustomEnvironmentOptionWindow : UnityEditor.Editor
     {
+        private enum Mode
+        {
+            [InspectorName("Root Object (Legacy)")]
+            RootObject,
+            [InspectorName("Scenes")]
+            Scene
+        }
+        
         private SerializedProperty nameProp;
+        private SerializedProperty descriptionProp;
+        private SerializedProperty thumbnailProp;
+        
         private SerializedProperty rootObjProp;
         private SerializedProperty rootObjARProp;
         private SerializedProperty skyboxProp;
         private SerializedProperty sceneProp;
         private PerformanceAnalysis analysis;
+        private Mode mode;
+        private UnityWebRequest thumbReq;
 
         private new EnvironmentOption target => base.target as EnvironmentOption;
         
@@ -23,20 +42,40 @@ namespace OpenUp.Editor.EnvironmentsSdk
             serializedObject.Update ();
             
             nameProp = serializedObject.FindProperty(nameof(EnvironmentOption.environmentName));
+            descriptionProp = serializedObject.FindProperty(nameof(EnvironmentOption.description));
+            thumbnailProp = serializedObject.FindProperty(nameof(EnvironmentOption.thumbnailImage));
+            
             rootObjProp = serializedObject.FindProperty(nameof(EnvironmentOption.rootObject));
             rootObjARProp = serializedObject.FindProperty(nameof(EnvironmentOption.rootObjectAR));
             skyboxProp = serializedObject.FindProperty(nameof(EnvironmentOption.skybox));
             sceneProp = serializedObject.FindProperty(nameof(EnvironmentOption.scene));
             
+            EditorGUILayout.Space();
+            RenderDetails();
             
-            EditorGUILayout.PropertyField(nameProp);
-            EditorGUILayout.PropertyField(rootObjProp);
-            EditorGUILayout.PropertyField(rootObjARProp);
-            EditorGUILayout.PropertyField(skyboxProp);
-            EditorGUILayout.PropertyField(sceneProp);
+            EditorGUILayout.Space();
+            EditorGUILayout.LabelField("Root", EditorStyles.boldLabel);
+
+            Mode oldMode = mode;
+            mode = (Mode)EditorGUILayout.EnumPopup("Mode", mode);
+
+            if (mode == Mode.RootObject)
+            {
+                EditorGUILayout.PropertyField(rootObjProp);
+                EditorGUILayout.PropertyField(rootObjARProp);
+                EditorGUILayout.PropertyField(skyboxProp);
+            }
+            else
+            {
+                EditorGUILayout.PropertyField(sceneProp);
+            }
             
-            // base.OnInspectorGUI();
+            if (mode != oldMode)
+                DoAnalysis();
             
+            EditorGUILayout.Space();
+            EditorGUILayout.Space();
+            EditorGUILayout.LabelField("Custom Objects", EditorStyles.boldLabel);
             RenderObjectList();
             
             serializedObject.ApplyModifiedProperties();
@@ -44,8 +83,64 @@ namespace OpenUp.Editor.EnvironmentsSdk
 
         private void OnEnable()
         {
-            if (target.rootObject.isSet)
-                analysis = PerformanceAnalysis.Analyse(target.rootObject.asset);
+            mode = target.scene ? Mode.Scene : Mode.RootObject;
+
+            ReloadImage();
+            DoAnalysis();
+        }
+
+        private void ReloadImage()
+        {
+            if (thumbReq is { isDone: true })
+                thumbReq.Dispose();
+            else if (thumbReq is { isDone: false })
+                thumbReq.Abort();
+            
+            thumbReq = UnityWebRequestTexture.GetTexture(target.thumbnailImage);
+            thumbReq.SendWebRequest();
+        }
+
+        private void RenderDetails()
+        {
+            EditorGUILayout.LabelField("Environment Details", EditorStyles.boldLabel);
+            EditorGUILayout.PropertyField(nameProp);
+            EditorGUILayout.PropertyField(descriptionProp);
+
+            bool clicked;
+            if (thumbReq is { isDone: true, result: UnityWebRequest.Result.Success })
+            {
+                DownloadHandlerTexture tex = thumbReq.downloadHandler as DownloadHandlerTexture;
+                Rect rect = GUILayoutUtility.GetRect(0,0, GUILayout.ExpandWidth(true));
+                GUILayout.Box(tex!.texture, GUILayout.Width(400), GUILayout.Height(tex.texture.height * 400 / tex.texture.width), GUILayout.ExpandWidth(true));
+                
+                rect.height = 24;
+                rect.y += 10;
+                rect.x += rect.width - 150;
+                rect.width = 140;
+                clicked = GUI.Button(rect, "Change Image");
+            }
+            else
+            {
+                clicked = GUILayout.Button("Set Image");
+            }
+            
+            if (clicked)
+            {
+                ImageUploadWindow upload = EditorWindow.GetWindow<ImageUploadWindow>();
+                
+                upload.Setup(url =>
+                {
+                    thumbnailProp.stringValue = url;
+                    thumbnailProp.serializedObject.ApplyModifiedProperties();
+                    ReloadImage();
+                });
+            }
+
+            if (GUILayout.Button("Apply Changes (affects all versions)"))
+            {
+                DeveloperProfile profile = DeveloperProfile.Instance;
+                AsyncHelperEditor.DoAsync(ApplyChanges(profile));
+            }
         }
 
         private void RenderObjectList()
@@ -86,7 +181,7 @@ namespace OpenUp.Editor.EnvironmentsSdk
             EditorGUILayout.LabelField("Stats", EditorStyles.boldLabel);
             
             if (GUILayout.Button("Recalculate")) 
-                analysis = PerformanceAnalysis.Analyse(target.rootObject.asset);
+                DoAnalysis();
             
             EditorGUILayout.EndHorizontal();
             
@@ -98,5 +193,30 @@ namespace OpenUp.Editor.EnvironmentsSdk
             
             EditorGUILayout.EndVertical();
         }
+
+        private void DoAnalysis()
+        {
+            if (mode is Mode.RootObject && target.rootObject.isSet)
+            {
+                analysis = PerformanceAnalysis.Analyse(target.rootObject.asset);
+            }
+            else if (mode is Mode.Scene && target.scene)
+            {
+                Scene scene = SceneManager.GetSceneByPath(AssetDatabase.GetAssetPath(target.scene));
+                if (scene.isLoaded)
+                    analysis = PerformanceAnalysis.Analyse(scene.GetRootGameObjects());
+            }
+        }
+
+        private Func<Task> ApplyChanges(DeveloperProfile profile) => async () =>
+        {
+            var caller = await profile.GetSignedCaller();
+
+            await caller.PutAsync(
+                $"environments/{target.Id}/details",
+                new { Name = target.environmentName, Description = target.description, Thumbnail = target.thumbnailImage });
+            
+            Debug.Log("Changes applied");
+        };
     }
 }

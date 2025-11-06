@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 namespace OpenUp.Utils
 {
@@ -37,7 +38,6 @@ namespace OpenUp.Utils
             return result;
         }
 
-
         private static void StartEditorBackground()
         {
             if (hasAddedEditorLoop) return;
@@ -69,6 +69,27 @@ namespace OpenUp.Utils
                 work();
             }
             sw.Stop();
+        }
+
+        /// <summary>
+        /// Do some async work outside the main thread. Also, neatly unsilences any exceptions.
+        /// </summary>
+        /// <param name="action"></param>
+        public static void DoAsync(Func<Task> action)
+        {
+            async Task Wrapped()
+            {
+                try
+                {
+                    await action();
+                }
+                catch (Exception exception)
+                {
+                    Debug.LogException(exception);
+                }
+            }
+
+            Task.Run(Wrapped);
         }
     }
 }

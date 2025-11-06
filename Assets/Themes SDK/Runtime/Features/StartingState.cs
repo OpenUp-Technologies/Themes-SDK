@@ -48,7 +48,7 @@ namespace OpenUp.Environment.Features
             private const int CENTER_OF_MASS = 4;
             private const int DRAG = 5;
             
-            // Defautl value for the lockstate flags
+            // Default value for the lockstate flags
             private const uint DEFAULT_LOCK_STATE = 67110913U;
             
             private int newObjectId = 1;

@@ -148,8 +148,11 @@ namespace OpenUp.Editor.EnvironmentsSdk
 
             EditorUtility.ClearProgressBar();
 
-            if (tsk.IsFaulted) throw new Exception("Failed to create new env", tsk.Exception);
-            if (newEnv == null) throw new Exception("Failed to assign env");
+            if (tsk.IsFaulted) 
+                throw new Exception("Failed to create new env", tsk.Exception);
+            
+            if (newEnv == null) 
+                throw new Exception("Failed to assign env");
 
             option.databaseId = newEnv.Id;
             
