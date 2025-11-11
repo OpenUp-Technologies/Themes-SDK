@@ -61,5 +61,7 @@ namespace OpenUp.Environment
 
         public string[] prefabPaths = Array.Empty<string>();
         public string[] PrefabPaths => prefabPaths;
+        
+        [SerializeField] public CustomPrefab[] customObjects = Array.Empty<CustomPrefab>();
     }
 }
