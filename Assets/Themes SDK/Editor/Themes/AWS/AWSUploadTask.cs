@@ -23,7 +23,8 @@ namespace OpenUp.Networking.AWS
             ERRORED
         }
         
-        public readonly ConcurrentDictionary<AWSDataSource, string> uploadLinks = new ConcurrentDictionary<AWSDataSource, string>();
+        public readonly ConcurrentDictionary<AWSDataSource, UploadUrlResponse> uploadLinks = 
+            new ConcurrentDictionary<AWSDataSource, UploadUrlResponse>();
 
         public readonly string bucket;
         public readonly long totalBytes;
@@ -38,7 +39,7 @@ namespace OpenUp.Networking.AWS
 
         public Status status { get; internal set; } = Status.STARTING;
 
-        public UploadTask(string bucket, string prefix, string name, params AWSDataSource[] files)
+        public UploadTask(string bucket, string prefix, params AWSDataSource[] files)
         {
             this.bucket = bucket;
             this.prefix = prefix;
@@ -47,7 +48,7 @@ namespace OpenUp.Networking.AWS
             totalBytes = files.Sum(f => f.size);
         }
 
-        public void AddLink(AWSDataSource file, string link)
+        public void AddLink(AWSDataSource file, UploadUrlResponse link)
         {
             if (!files.Contains(file))
             {

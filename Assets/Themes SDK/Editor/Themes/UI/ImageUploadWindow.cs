@@ -17,6 +17,11 @@ namespace OpenUp.Editor.EnvironmentsSdk
         private Action<string> callback;
         private UnityWebRequest previewRequest;
 
+        /// <summary>
+        /// Required to create a url for the thumbnail.
+        /// </summary>
+        public IUrlSource urlSource;
+
         private void OnEnable()
         {
             titleContent = new GUIContent("Choose or upload an image");
@@ -30,7 +35,7 @@ namespace OpenUp.Editor.EnvironmentsSdk
                 
                 if (path.Length > 0)
                 {
-                    Task.Run(UploadToCloud(DeveloperProfile.Instance, path));
+                    Task.Run(UploadToCloud(path));
                 }
 
                 return;
@@ -78,23 +83,26 @@ namespace OpenUp.Editor.EnvironmentsSdk
             previewRequest.SendWebRequest();
         }
 
-        private Func<Task> UploadToCloud(DeveloperProfile profile, string filePath) => async () =>
+        private Func<Task> UploadToCloud(string filePath) => async () =>
         {
             try
             {
-                SimpleApiCaller caller = await profile.GetSignedCaller();
+                if (urlSource == null)
+                    throw new ArgumentNullException(nameof(urlSource));
+                
                 AWSDataSource source = new FileInfo(filePath);
                 
                 string id = Guid.NewGuid().ToString() + ".png";
                 source.name = id;
-                
+
+                UploadTask uploadTask = new UploadTask("openup-environments", "thumbnails", source);
                 await Uploader.UploadAsset(
-                    new UploadTask("openup-environments", "thumbnails", id, source),
-                    caller);
+                    uploadTask,
+                    urlSource);
 
                 await AsyncHelperEditor.DoUnityWork(() =>
                 {
-                    string url = $@"https://openup-environments.s3.eu-central-1.amazonaws.com/thumbnails/{id}";
+                    string url = uploadTask.uploadLinks[source].ResourceUrl;
                     callback.Invoke(url);
                     Close();
                 });

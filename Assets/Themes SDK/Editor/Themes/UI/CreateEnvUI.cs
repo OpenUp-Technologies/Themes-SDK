@@ -186,7 +186,7 @@ namespace OpenUp.Editor.EnvironmentsSdk
         {
             try
             {
-                EnvUploader uploader = new EnvUploader(developerProfile, remoteOption);
+                EnvUploader uploader = new EnvUploader(developerProfile, remoteOption, "0.1");
                 
                 Dictionary<Platform, RemoteBundle> uploaded = await uploader.UploadAllBuildsAsync(bundles);
                 

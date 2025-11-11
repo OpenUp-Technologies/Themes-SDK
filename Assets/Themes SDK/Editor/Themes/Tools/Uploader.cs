@@ -15,13 +15,36 @@ namespace OpenUp.Editor.EnvironmentsSdk
 {
     public class EnvUploader
     {
+        private class EnvBundleUrlSource : IUrlSource
+        {
+            private readonly string id;
+            private readonly string version;
+            private readonly SimpleApiCaller caller;
+        
+            public EnvBundleUrlSource(string id, string version, SimpleApiCaller caller)
+            {
+                this.id = id;
+                this.version = version;
+                this.caller = caller;
+            }
+
+            public async Task<UploadUrlResponse> GetUrl(string fileName)
+            {
+                return await caller.PostAsync<UploadUrlResponse>(
+                    $"environments/{id}/upload_url",
+                    new { Version = version, FileName = fileName });
+            }
+        }
+        
         private readonly DeveloperProfile profile;
         private readonly RemoteOption environment;
+        private readonly string version;
 
-        public EnvUploader(DeveloperProfile profile, RemoteOption environment)
+        public EnvUploader(DeveloperProfile profile, RemoteOption environment, string version)
         {
             this.profile     = profile;
             this.environment = environment;
+            this.version = version;
         }
         
         /// <summary>
@@ -40,9 +63,10 @@ namespace OpenUp.Editor.EnvironmentsSdk
              
              AWSDataSource[] files = sourceForTarget.Keys.ToArray();
              
-             UploadTask task = new UploadTask("openup-environments", environment.Id, environment.Name, files);
+             UploadTask task = new UploadTask("openup-environments", environment.Id, files);
         
              SimpleApiCaller caller = await profile.GetSignedCaller();
+             var urlSource = new EnvBundleUrlSource(environment.Id, version, caller);
              
              // We want go past this call while it runs to display the progress bar
 #pragma warning disable CS4014
@@ -51,7 +75,7 @@ namespace OpenUp.Editor.EnvironmentsSdk
              {
                  try
                  {
-                     await Uploader.UploadAsset(task, caller);
+                     await Uploader.UploadAsset(task, urlSource);
                  }
                  catch (Exception exception)
                  {

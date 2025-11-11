@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using OpenUp.Environment;
+using OpenUp.Networking.AWS;
 using OpenUp.Networking.Editor;
 using OpenUp.Utils;
 using UnityEditor;
@@ -14,6 +15,27 @@ namespace OpenUp.Editor.EnvironmentsSdk
     [CustomEditor(typeof(EnvironmentOption))]
     public class CustomEnvironmentOptionWindow : UnityEditor.Editor
     {
+        private class ImageUrlSource : IUrlSource
+        {
+            private readonly string environmentId;
+            private readonly DeveloperProfile profile;
+            
+            public ImageUrlSource(string environmentId, DeveloperProfile profile)
+            {
+                this.environmentId = environmentId;
+                this.profile = profile;
+            }
+
+            public async Task<UploadUrlResponse> GetUrl(string fileName)
+            {
+                var caller = await profile.GetSignedCaller();
+                
+                return await caller.PostAsync<UploadUrlResponse>(
+                    $"environments/{environmentId}/upload_image_url", 
+                    new { FileName = fileName });
+            }
+        }
+        
         private enum Mode
         {
             [InspectorName("Root Object (Legacy)")]
@@ -75,7 +97,6 @@ namespace OpenUp.Editor.EnvironmentsSdk
             
             EditorGUILayout.Space();
             EditorGUILayout.Space();
-            EditorGUILayout.LabelField("Custom Objects", EditorStyles.boldLabel);
             RenderObjectList();
             
             serializedObject.ApplyModifiedProperties();
@@ -128,6 +149,7 @@ namespace OpenUp.Editor.EnvironmentsSdk
             {
                 ImageUploadWindow upload = EditorWindow.GetWindow<ImageUploadWindow>();
                 
+                upload.urlSource = new ImageUrlSource(target.databaseId, DeveloperProfile.Instance);
                 upload.Setup(url =>
                 {
                     thumbnailProp.stringValue = url;
@@ -145,7 +167,7 @@ namespace OpenUp.Editor.EnvironmentsSdk
 
         private void RenderObjectList()
         {
-            SerializedProperty prop = serializedObject.FindProperty(nameof(EnvironmentOption.prefabs));
+            SerializedProperty prop = serializedObject.FindProperty(nameof(EnvironmentOption.customObjects));
             EditorGUILayout.PropertyField(prop, true);
             
             SetPrefabPaths();

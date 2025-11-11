@@ -6,7 +6,20 @@ using UnityEngine;
 
 namespace OpenUp.Networking.AWS
 {
-    // This stuff's a bit of a mess, apologies..
+    /// <summary>
+    /// Model that the server provides for upload requests
+    /// </summary>
+    /// <param name="UploadUrl"></param>
+    /// <param name="ResourceUrl"></param>
+    public record UploadUrlResponse(string UploadUrl, string ResourceUrl);
+    
+    public interface IUrlSource
+    {
+        Task<UploadUrlResponse> GetUrl(string fileName);
+    }
+
+    
+    // This stuff's a bit of a mess, apologies...
     public static class Uploader
     {
         private static readonly HttpClient HTTPClient = new HttpClient();
@@ -14,10 +27,10 @@ namespace OpenUp.Networking.AWS
         /// <summary>
         /// Uploads the asset to AWS.
         /// </summary>
-        /// <param name="task"></param>
-        /// <param name="caller"></param>
+        /// <param name="task">The stuff to upload.</param>
+        /// <param name="source">A UrlProvider that can generate a URL for each file.</param>
         /// <exception cref="HttpRequestException"></exception>
-        public static async Task UploadAsset(UploadTask task, SimpleApiCaller caller)
+        public static async Task UploadAsset(UploadTask task, IUrlSource source)
         {
             HTTPClient.Timeout = TimeSpan.FromHours(1);
             
@@ -30,10 +43,7 @@ namespace OpenUp.Networking.AWS
 
                 async Task SetUrl(AWSDataSource file)
                 {
-                    string url = await caller.PostAsync<string>(
-                        "assets/signedurl",
-                        new { Bucket = task.bucket, Key = $"{task.prefix}/{file.name}" }
-                    );
+                    var url = await source.GetUrl(file.name);
 
                     task.AddLink(file, url);
                 }
@@ -51,7 +61,7 @@ namespace OpenUp.Networking.AWS
 
                 async Task Upload(AWSDataSource file)
                 {
-                    Uri           uri     = new Uri(task.uploadLinks[file]);
+                    Uri           uri     = new Uri(task.uploadLinks[file].UploadUrl);
                     byte[]        data    = file.data;
                     UploadContent content = new UploadContent(data);
 
