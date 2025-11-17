@@ -92,10 +92,10 @@ namespace OpenUp.Editor.EnvironmentsSdk
                 
                 AWSDataSource source = new FileInfo(filePath);
                 
-                string id = Guid.NewGuid().ToString() + ".png";
+                string id = Guid.NewGuid() + ".png";
                 source.name = id;
 
-                UploadTask uploadTask = new UploadTask("openup-environments", "thumbnails", source);
+                UploadTask uploadTask = new UploadTask(source);
                 await Uploader.UploadAsset(
                     uploadTask,
                     urlSource);

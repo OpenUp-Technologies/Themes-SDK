@@ -22,6 +22,8 @@ namespace OpenUp.Editor.EnvironmentsSdk
             public string hash;
             public string scenePath;
             public string sceneHash;
+            public string objectsPath;
+            public string objectsHash;
         }
 
         public record ValidationResult(bool IsValid, IEnumerable<string> Reasons)
@@ -48,7 +50,8 @@ namespace OpenUp.Editor.EnvironmentsSdk
             };
         
         private readonly EnvironmentOption option;
-        
+        private readonly Regex dontWants = new Regex(@"\.cs|\.dll");
+
         public Bundler(EnvironmentOption option)
         {
             this.option = option;
@@ -118,7 +121,43 @@ namespace OpenUp.Editor.EnvironmentsSdk
             return tempPath;
         }
 
-        private (AssetBundleBuild prefabs, AssetBundleBuild scene) CreateBuildInstructions()
+        private AssetBundleBuild CreateThemedObjectsBundle(ThemedObject[] objects)
+        {
+            IEnumerable<string> allFiles = new string[0];
+            IEnumerable<string> prefabPaths = objects.Select(obj => AssetDatabase.GetAssetPath(obj.GameObject));
+
+            foreach (string prefabPath in prefabPaths)
+            {
+                string[] prefabFiles = AssetDatabase.GetDependencies(prefabPath, true)
+                                                    .Where(d => !dontWants.IsMatch(d))
+                                                    .Append(prefabPath)
+                                                    .ToArray();
+                
+                if (!prefabFiles.Any()) throw new FileNotFoundException($"Prefab at path {prefabPath} not found");
+                
+                allFiles = allFiles.Concat(prefabFiles);
+            }
+            
+            allFiles = allFiles.Distinct();
+            
+            ThemedObjectsList list = ScriptableObject.CreateInstance<ThemedObjectsList>();
+            list.ThemedObjects = objects;
+            
+            string tempPath = @"Assets/Generated/ThemedObjectsList.asset";
+            AssetDatabase.CreateAsset(list, tempPath);
+            
+            allFiles = allFiles.Append(tempPath);
+            string[] names = allFiles.ToArray();
+            names[^1] = EnvironmentOption.THEMED_OBJECTS_NAME;
+            
+            return new AssetBundleBuild
+            {
+                assetNames = allFiles.ToArray(),
+                addressableNames = names
+            };
+        }
+
+        private (AssetBundleBuild prefabs, AssetBundleBuild scene, AssetBundleBuild objects) CreateBuildInstructions()
         {
             string           bundleName = $"world_{option.GetInstanceID()}";
             string rootPath = AssetDatabase.GetAssetPath(option.rootObject.asset.GetInstanceID());
@@ -126,8 +165,6 @@ namespace OpenUp.Editor.EnvironmentsSdk
             string rootPathAR = option.rootObjectAR.isSet
                 ? AssetDatabase.GetAssetPath(option.rootObjectAR.asset.GetInstanceID())
                 : rootPath;
-            
-            Regex dontWants = new Regex(@"\.cs|\.dll");
 
             IEnumerable<string> allFiles = AssetDatabase.GetDependencies(rootPath, true)
                                                         .Concat(AssetDatabase.GetDependencies(rootPathAR, true))
@@ -210,11 +247,14 @@ namespace OpenUp.Editor.EnvironmentsSdk
                 assetNames = new[] { scenePath },
                 addressableNames = new[] { EnvironmentOption.SCENE_NAME }
             };
+
+            var objects = CreateThemedObjectsBundle(option.themedObjects);
+            objects.assetBundleName = bundleName+"_themed_objects";
             
-            return (prefabs, scene);
+            return (prefabs, scene, objects);
         }
 
-        public BundledEnv[] BuildBundles((AssetBundleBuild prefabs, AssetBundleBuild scene) build, Platform[] platforms)
+        public BundledEnv[] BuildBundles((AssetBundleBuild prefabs, AssetBundleBuild scene, AssetBundleBuild objects) build, Platform[] platforms)
         {
             string targetFolder = $"{Application.temporaryCachePath}/env_bundles";
 
@@ -226,9 +266,11 @@ namespace OpenUp.Editor.EnvironmentsSdk
             {
                 AssetBundleBuild buildPrefabs = build.prefabs;
                 AssetBundleBuild buildScene = build.scene;
+                AssetBundleBuild buildObjects = build.objects;
                 
                 buildPrefabs.assetBundleName = $"{build.prefabs.assetBundleName}_{target}";
                 buildScene.assetBundleName = $"{build.scene.assetBundleName}_{target}";
+                buildObjects.assetBundleName = $"{build.objects.assetBundleName}_{target}";
                 
                 string subFolder = $"{targetFolder}/{target}";
 
@@ -236,7 +278,7 @@ namespace OpenUp.Editor.EnvironmentsSdk
                 
                 AssetBundleManifest manifest = BuildPipeline.BuildAssetBundles(
                     subFolder, 
-                    new[] { buildPrefabs, buildScene },
+                    new[] { buildPrefabs, buildScene, buildObjects },
                     BuildAssetBundleOptions.StrictMode, 
                     target
                 );
@@ -248,10 +290,11 @@ namespace OpenUp.Editor.EnvironmentsSdk
                 {
                     bundledEnv.path = $"{subFolder}/{buildPrefabs.assetBundleName}";
                     bundledEnv.scenePath = $"{subFolder}/{buildScene.assetBundleName}";
-                    bundledEnv.hash = manifest.GetAssetBundleHash(buildPrefabs.assetBundleName)
-                                              .ToString();
-                    bundledEnv.sceneHash = manifest.GetAssetBundleHash(buildScene.assetBundleName)
-                                              .ToString();
+                    bundledEnv.objectsPath = $"{subFolder}/{buildObjects.assetBundleName}";
+                    
+                    bundledEnv.hash = manifest.GetAssetBundleHash(buildPrefabs.assetBundleName).ToString();
+                    bundledEnv.sceneHash = manifest.GetAssetBundleHash(buildScene.assetBundleName).ToString();
+                    bundledEnv.objectsHash = manifest.GetAssetBundleHash(buildObjects.assetBundleName).ToString();
                 }
             }
 

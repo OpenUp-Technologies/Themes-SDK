@@ -12,29 +12,30 @@ using UnityEngine.SceneManagement;
 
 namespace OpenUp.Editor.EnvironmentsSdk
 {
+    internal class ImageUrlSource : IUrlSource
+    {
+        private readonly string environmentId;
+        private readonly DeveloperProfile profile;
+        
+        public ImageUrlSource(string environmentId, DeveloperProfile profile)
+        {
+            this.environmentId = environmentId;
+            this.profile = profile;
+        }
+
+        public async Task<UploadUrlResponse> GetUrl(string fileName)
+        {
+            var caller = await profile.GetSignedCaller();
+            
+            return await caller.PostAsync<UploadUrlResponse>(
+                $"environments/{environmentId}/upload_image_url", 
+                new { FileName = fileName });
+        }
+    }
+    
     [CustomEditor(typeof(EnvironmentOption))]
     public class CustomEnvironmentOptionWindow : UnityEditor.Editor
     {
-        private class ImageUrlSource : IUrlSource
-        {
-            private readonly string environmentId;
-            private readonly DeveloperProfile profile;
-            
-            public ImageUrlSource(string environmentId, DeveloperProfile profile)
-            {
-                this.environmentId = environmentId;
-                this.profile = profile;
-            }
-
-            public async Task<UploadUrlResponse> GetUrl(string fileName)
-            {
-                var caller = await profile.GetSignedCaller();
-                
-                return await caller.PostAsync<UploadUrlResponse>(
-                    $"environments/{environmentId}/upload_image_url", 
-                    new { FileName = fileName });
-            }
-        }
         
         private enum Mode
         {
@@ -167,7 +168,7 @@ namespace OpenUp.Editor.EnvironmentsSdk
 
         private void RenderObjectList()
         {
-            SerializedProperty prop = serializedObject.FindProperty(nameof(EnvironmentOption.customObjects));
+            SerializedProperty prop = serializedObject.FindProperty(nameof(EnvironmentOption.themedObjects));
             EditorGUILayout.PropertyField(prop, true);
             
             SetPrefabPaths();

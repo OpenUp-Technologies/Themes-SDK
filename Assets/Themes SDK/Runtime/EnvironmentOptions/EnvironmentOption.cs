@@ -13,6 +13,7 @@ namespace OpenUp.Environment
         public const string SKYBOX_NAME = "SkyBox";
         public const string SCENE_NAME = "RootScene";
         public const string STARTING_STATE_NAME = "StartingState";
+        public const string THEMED_OBJECTS_NAME = "ThemedObjects";
 
         public string Name => environmentName;
 
@@ -62,6 +63,6 @@ namespace OpenUp.Environment
         public string[] prefabPaths = Array.Empty<string>();
         public string[] PrefabPaths => prefabPaths;
         
-        [SerializeField] public CustomPrefab[] customObjects = Array.Empty<CustomPrefab>();
+        [SerializeField] public ThemedObject[] themedObjects = Array.Empty<ThemedObject>();
     }
 }

@@ -216,7 +216,7 @@ namespace OpenUp.Editor.EnvironmentsSdk
                                                                   AppVersion = themesPackage.version
                                                               };
 
-                await uploader.ConfirmUploadOf(newVersion, localAsset.prefabPaths, uploaded);
+                await uploader.ConfirmUploadOf(newVersion, localAsset.themedObjects, uploaded);
 
                 isFinished = true;
             }

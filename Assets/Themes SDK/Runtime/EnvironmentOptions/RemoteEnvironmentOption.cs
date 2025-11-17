@@ -1,4 +1,5 @@
 using System;
+using OpenUp.Environment.Features;
 
 namespace OpenUp.Interpreter.Environment
 {
@@ -23,6 +24,17 @@ namespace OpenUp.Interpreter.Environment
         public string BundleHash { get; set; }
         public string SceneBundleUrl { get; set; }
         public string SceneBundleHash { get; set; }
+        public string ObjectsUrl { get; set; }
+        public string ObjectsHash { get; set; }
+    }
+
+    /// <summary>
+    /// How the server stores the themed objects.
+    /// </summary>
+    public record RemoteThemedObject(string DisplayName, string RelativePath, string Thumbnail)
+    {
+        public RemoteThemedObject(ThemedObject themedObject) 
+            : this(themedObject.DisplayName, themedObject.RelativePath, themedObject.Thumbnail) { }
     }
 
     public class RemoteVersion : IEnvironmentOption
@@ -47,6 +59,7 @@ namespace OpenUp.Interpreter.Environment
         
         public string[] UsedScripts { get; set; }
         public string[] PrefabPaths { get; set; }
+        public RemoteThemedObject[] ThemedObjects { get; set; }
 
         public RemoteBundle StandaloneMac { get; set; }
 

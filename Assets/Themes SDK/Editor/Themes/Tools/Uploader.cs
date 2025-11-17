@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using OpenUp.Environment.Features;
 using OpenUp.Interpreter.Environment;
 using OpenUp.Networking;
 using OpenUp.Networking.AWS;
@@ -59,11 +60,12 @@ namespace OpenUp.Editor.EnvironmentsSdk
              {
                  sourceForTarget[new FileInfo(bundle.path)] = bundle;
                  sourceForTarget[new FileInfo(bundle.scenePath)] = bundle;
+                 sourceForTarget[new FileInfo(bundle.objectsPath)] = bundle;
              }
              
              AWSDataSource[] files = sourceForTarget.Keys.ToArray();
              
-             UploadTask task = new UploadTask("openup-environments", environment.Id, files);
+             UploadTask task = new UploadTask(files);
         
              SimpleApiCaller caller = await profile.GetSignedCaller();
              var urlSource = new EnvBundleUrlSource(environment.Id, version, caller);
@@ -97,17 +99,19 @@ namespace OpenUp.Editor.EnvironmentsSdk
         
              await AsyncHelperEditor.DoUnityWork(EditorUtility.ClearProgressBar);
         
-             for (int i = 0; i < files.Length; i+=2)
+             for (int i = 0; i < files.Length; i+=3)
              {
                  Bundler.BundledEnv bundl = sourceForTarget[files[i]];
 
                  uploaded[bundl.platform] =
                      new RemoteBundle
                      {
-                         BundleUrl = $@"https://openup-environments.s3.eu-central-1.amazonaws.com/{environment.Id}/{task.files[i].name}",
+                         BundleUrl = task.GetUrl(files[i]),
                          BundleHash = bundl.hash,
-                         SceneBundleUrl = $@"https://openup-environments.s3.eu-central-1.amazonaws.com/{environment.Id}/{task.files[i+1].name}",
+                         SceneBundleUrl = task.GetUrl(files[i+1]),
                          SceneBundleHash = bundl.sceneHash,
+                         ObjectsUrl = task.GetUrl(files[i+2]),
+                         ObjectsHash = bundl.objectsHash
                      };
              }
 
@@ -132,12 +136,17 @@ namespace OpenUp.Editor.EnvironmentsSdk
             return $"{up:F1} of {tot:F1} {names[idx]}";
         }
 
-        public async Task ConfirmUploadOf(RemoteVersion newVersion, string[] prefabPaths, Dictionary<Platform, RemoteBundle> uploaded)
+        public async Task ConfirmUploadOf(RemoteVersion newVersion, ThemedObject[] themedObjects, Dictionary<Platform, RemoteBundle> uploaded)
         {
             SimpleApiCaller caller = await profile.GetSignedCaller();
             
             newVersion.UsedScripts = Array.Empty<string>();
-            newVersion.PrefabPaths = prefabPaths;
+            
+            newVersion.PrefabPaths = themedObjects.Select(obj => obj.RelativePath)
+                                                  .ToArray();
+            
+            newVersion.ThemedObjects = themedObjects.Select(t => new RemoteThemedObject(t))
+                                                    .ToArray();
 
             foreach ((Platform platform, RemoteBundle bundle) in uploaded)
             {

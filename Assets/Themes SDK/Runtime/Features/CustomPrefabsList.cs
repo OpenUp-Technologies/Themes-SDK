@@ -3,17 +3,20 @@ using UnityEngine;
 
 namespace OpenUp.Environment.Features
 {
+    /// <summary>
+    /// A themed object is an object that fits the theme that players can add to your world.
+    /// </summary>
     [Serializable]
-    public class CustomPrefab
+    public class ThemedObject
     {
         public GameObject GameObject;
         public string DisplayName;
-        public string ThumbnailImage;
-        [HideInInspector] public string Path;
+        public string Thumbnail; 
+        public string RelativePath;
     }
     
-    public class CustomPrefabsList : ScriptableObject
+    public class ThemedObjectsList : ScriptableObject
     {
-        [SerializeField] public CustomPrefab[] Prefabs;
+        [SerializeField] public ThemedObject[] ThemedObjects;
     }
 }

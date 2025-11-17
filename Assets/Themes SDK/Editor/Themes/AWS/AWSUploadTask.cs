@@ -26,25 +26,21 @@ namespace OpenUp.Networking.AWS
         public readonly ConcurrentDictionary<AWSDataSource, UploadUrlResponse> uploadLinks = 
             new ConcurrentDictionary<AWSDataSource, UploadUrlResponse>();
 
-        public readonly string bucket;
         public readonly long totalBytes;
         public readonly AWSDataSource[] files;
 
+        // we use a backing field as that is required to use the Interlocked class
         private long _uploadedBytes;
         
         public Action<Exception> OnComplete;
 
         public long uploadedBytes => _uploadedBytes;
-        public string prefix { get; }
 
         public Status status { get; internal set; } = Status.STARTING;
 
-        public UploadTask(string bucket, string prefix, params AWSDataSource[] files)
+        public UploadTask(params AWSDataSource[] files)
         {
-            this.bucket = bucket;
-            this.prefix = prefix;
             this.files = files;
-
             totalBytes = files.Sum(f => f.size);
         }
 
@@ -57,6 +53,8 @@ namespace OpenUp.Networking.AWS
 
             uploadLinks.TryAdd(file, link);
         }
+
+        public string GetUrl(AWSDataSource file) => uploadLinks[file].ResourceUrl;
 
         public void ChunkUploaded(int bytesUploaded)
         {

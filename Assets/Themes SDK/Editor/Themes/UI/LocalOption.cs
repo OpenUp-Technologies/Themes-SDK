@@ -193,7 +193,7 @@ namespace OpenUp.Editor.EnvironmentsSdk
                 
                 RemoteVersion newVersion = new RemoteVersion { BundleVersion = "0.1", AppVersion = EnvironmentsSettingsWindow.APP_VERSION };
                 
-                await uploader.ConfirmUploadOf(newVersion, option.prefabPaths, uploaded);
+                await uploader.ConfirmUploadOf(newVersion, option.themedObjects, uploaded);
             }
             catch (Exception exception)
             {
