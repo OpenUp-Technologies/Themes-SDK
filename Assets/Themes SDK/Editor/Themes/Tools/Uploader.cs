@@ -145,7 +145,7 @@ namespace OpenUp.Editor.EnvironmentsSdk
             newVersion.PrefabPaths = themedObjects.Select(obj => obj.RelativePath)
                                                   .ToArray();
             
-            newVersion.ThemedObjects = themedObjects.Select(t => new RemoteThemedObject(t))
+            newVersion.ThemedObjects = themedObjects.Select(RemoteThemedObject.Create)
                                                     .ToArray();
 
             foreach ((Platform platform, RemoteBundle bundle) in uploaded)

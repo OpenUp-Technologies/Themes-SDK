@@ -18,6 +18,14 @@ namespace OpenUp.Interpreter.Environment
         EDITOR_MAC
     }
     
+    /// <summary>
+    /// Contains the bundles for the Root Object, Scene, and Themed Objects.
+    /// </summary>
+    /// <remarks>
+    /// Due to not being able to include the same object in different bundles, we have a line of dependency as follows:
+    /// <li>The Scene Bundle depends on the Root Object Bundle.</li>
+    /// <li>The Root Object Bundle depends on the Themed Objects Bundle.</li>
+    /// </remarks>
     public class RemoteBundle
     {
         public string BundleUrl  { get; set; }
@@ -33,8 +41,8 @@ namespace OpenUp.Interpreter.Environment
     /// </summary>
     public record RemoteThemedObject(string DisplayName, string RelativePath, string Thumbnail)
     {
-        public RemoteThemedObject(ThemedObject themedObject) 
-            : this(themedObject.DisplayName, themedObject.RelativePath, themedObject.Thumbnail) { }
+        public static RemoteThemedObject Create(ThemedObject themedObject) =>
+            new RemoteThemedObject(themedObject.DisplayName, themedObject.RelativePath, themedObject.Thumbnail);
     }
 
     public class RemoteVersion : IEnvironmentOption

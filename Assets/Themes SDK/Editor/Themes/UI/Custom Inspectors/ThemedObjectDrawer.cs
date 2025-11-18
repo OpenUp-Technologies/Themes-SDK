@@ -11,7 +11,7 @@ using UnityEngine.Networking;
 namespace OpenUp.Editor.ThemesSDK
 {
     [CustomPropertyDrawer(typeof(ThemedObject))]
-    public class CustomPrefabDrawer : PropertyDrawer, IDisposable
+    public class ThemedObjectDrawer : PropertyDrawer, IDisposable
     {
         private readonly Dictionary<string, UnityWebRequest> thumbs = new Dictionary<string, UnityWebRequest>();
         
@@ -60,6 +60,11 @@ namespace OpenUp.Editor.ThemesSDK
                 ChangeImage(thumbProp);
             
             ReloadImage(thumbProp.stringValue);
+            
+            var pathProp = property.FindPropertyRelative(nameof(ThemedObject.RelativePath));
+            
+            pathProp.stringValue = AssetDatabase.GetAssetPath(goProp.objectReferenceValue);
+            pathProp.serializedObject.ApplyModifiedProperties();
         }
 
         private void ChangeImage(SerializedProperty thumbProp)

@@ -1,4 +1,5 @@
 ﻿using System;
+using Newtonsoft.Json;
 using UnityEngine;
 
 namespace OpenUp.Environment.Features
@@ -18,5 +19,7 @@ namespace OpenUp.Environment.Features
     public class ThemedObjectsList : ScriptableObject
     {
         [SerializeField] public ThemedObject[] ThemedObjects;
+        public string PrintList() => string.Join("\n", Array.ConvertAll(ThemedObjects, obj => 
+            $"Object {obj.DisplayName}:\n\tPath: {obj.RelativePath}\n\tThumbnail:{obj.Thumbnail}\n\tGameObject:{obj.GameObject}"));
     }
 }
