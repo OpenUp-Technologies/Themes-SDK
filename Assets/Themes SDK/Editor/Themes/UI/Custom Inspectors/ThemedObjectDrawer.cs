@@ -79,7 +79,7 @@ namespace OpenUp.Editor.ThemesSDK
             {
                 thumbProp.stringValue = url;
                 thumbProp.serializedObject.ApplyModifiedProperties();
-            });
+            }, ImageRatio.Square);
         }
 
         private void ReloadImage(string url)
@@ -97,7 +97,7 @@ namespace OpenUp.Editor.ThemesSDK
         
         public void Dispose()
         {
-            foreach ((string url, UnityWebRequest req) in thumbs)
+            foreach ((_, UnityWebRequest req) in thumbs)
             {
                 if (req is { isDone: true})
                     req.Dispose();

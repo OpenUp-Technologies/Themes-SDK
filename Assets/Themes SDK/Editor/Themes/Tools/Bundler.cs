@@ -119,15 +119,21 @@ namespace OpenUp.Editor.EnvironmentsSdk
             }
 
             string tempPath = @"Assets/Generated/StartingState.asset";
+            
             AssetDatabase.CreateAsset(startingState, tempPath);
             return tempPath;
         }
 
         private AssetBundleBuild CreateThemedObjectsBundle(ThemedObject[] objects)
         {
-            if (!objects.Any()) return new AssetBundleBuild();
+            // if (!objects.Any())
+            //     return new AssetBundleBuild
+            //     {
+            //         assetNames = Array.Empty<string>(),
+            //         addressableNames = Array.Empty<string>()
+            //     };
             
-            IEnumerable<string> allFiles = new string[0];
+            IEnumerable<string> allFiles = Array.Empty<string>();
             IEnumerable<string> prefabPaths = objects.Select(obj => AssetDatabase.GetAssetPath(obj.GameObject));
 
             foreach (string prefabPath in prefabPaths)
@@ -252,6 +258,9 @@ namespace OpenUp.Editor.EnvironmentsSdk
 
         private (AssetBundleBuild rootObject, AssetBundleBuild scene, AssetBundleBuild objects) CreateBuildInstructions()
         {
+            if (!Directory.Exists(Application.dataPath.Replace("Assets", "Assets/Generated")))
+                Directory.CreateDirectory(Application.dataPath.Replace("Assets", "Assets/Generated"));
+                        
             string bundleName = $"world_{option.GetInstanceID()}";
 
             var objects = CreateThemedObjectsBundle(option.themedObjects);

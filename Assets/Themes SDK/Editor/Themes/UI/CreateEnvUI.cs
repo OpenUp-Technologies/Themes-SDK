@@ -9,6 +9,7 @@ using OpenUp.Networking;
 using OpenUp.Networking.Editor;
 using UnityEditor;
 using UnityEngine;
+using PackageInfo = UnityEditor.PackageManager.PackageInfo;
 
 namespace OpenUp.Editor.EnvironmentsSdk
 {
@@ -17,6 +18,7 @@ namespace OpenUp.Editor.EnvironmentsSdk
         private readonly HashSet<Platform> chosenPlatforms = new HashSet<Platform>();
         private string envName = "";
         private GameObject rootPrefab = null;
+        private SceneAsset sceneAsset = null;
         private Material skybox = null;
         private string organisation = "";
 
@@ -26,6 +28,7 @@ namespace OpenUp.Editor.EnvironmentsSdk
         {
             envName = "";
             rootPrefab = null;
+            sceneAsset = null;
             skybox = null;
             titleContent = new GUIContent("New Theme");
             
@@ -42,16 +45,24 @@ namespace OpenUp.Editor.EnvironmentsSdk
             
             envName = EditorGUILayout.TextField("Theme Name", envName);
             rootPrefab = EditorGUILayout.ObjectField("Root Prefab", rootPrefab, typeof(GameObject), false) as GameObject;
+            sceneAsset = EditorGUILayout.ObjectField("Main Scene", sceneAsset, typeof(SceneAsset), false) as SceneAsset;
             skybox = EditorGUILayout.ObjectField("Skybox", skybox, typeof(Material), false) as Material;
             
             RenderOrgDropdown();
             RenderPlatformSelection();
             
+            string reason = CantCreateReason();
+            
+            if ( reason != null)
+                EditorGUILayout.HelpBox("Can't create theme:\n"+reason, MessageType.Warning);
+            
+            GUI.enabled = reason == null;
             if (GUILayout.Button("Create Theme"))
             {
                 Create();
                 Close();
             }
+            GUI.enabled = true;
         }
 
         private void Create()
@@ -63,9 +74,27 @@ namespace OpenUp.Editor.EnvironmentsSdk
             option.name = envName;
             option.environmentName = envName;
             option.rootObject = rootPrefab;
+            option.scene = sceneAsset;
             
             CreateOption(option);
-        } 
+        }
+
+        private string CantCreateReason()
+        {
+            if (envName.Length < 3) 
+                return "Theme name must be at least 3 characters long.";
+            
+            if (rootPrefab == null) 
+                return "Must assign a root prefab for the theme";
+            
+            if (sceneAsset == null) 
+                return "Must assign a scene for the theme";
+            
+            if (chosenPlatforms.Count == 0) 
+                return "Must choose at least 1 build target";
+
+            return null;
+        }
         
         private void RenderOrgDropdown()
         {
@@ -178,11 +207,13 @@ namespace OpenUp.Editor.EnvironmentsSdk
 
             Bundler bundler = new Bundler(option);
             Bundler.BundledEnv[] bundles = bundler.BuildBundles(chosenPlatforms.ToArray());
+            PackageInfo themesPackage = PackageInfo.FindForPackageName("world.aryzon.themes-sdk");
 
-            Task.Run(() => DoAsyncUploadWork(profile, bundles, newEnv, option));
+
+            Task.Run(() => DoAsyncUploadWork(themesPackage, profile, bundles, newEnv, option));
         }
 
-        private async Task DoAsyncUploadWork(DeveloperProfile developerProfile, Bundler.BundledEnv[] bundles, RemoteOption remoteOption, EnvironmentOption option)
+        private async Task DoAsyncUploadWork(PackageInfo themesPackage, DeveloperProfile developerProfile, Bundler.BundledEnv[] bundles, RemoteOption remoteOption, EnvironmentOption option)
         {
             try
             {
@@ -190,7 +221,7 @@ namespace OpenUp.Editor.EnvironmentsSdk
                 
                 Dictionary<Platform, RemoteBundle> uploaded = await uploader.UploadAllBuildsAsync(bundles);
                 
-                RemoteVersion newVersion = new RemoteVersion { BundleVersion = "0.1", AppVersion = EnvironmentsSettingsWindow.APP_VERSION };
+                RemoteVersion newVersion = new RemoteVersion { BundleVersion = "0.1", AppVersion = themesPackage.version };
                 
                 await uploader.ConfirmUploadOf(newVersion, option.themedObjects, uploaded);
             }

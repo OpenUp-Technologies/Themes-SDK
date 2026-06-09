@@ -156,7 +156,7 @@ namespace OpenUp.Editor.EnvironmentsSdk
                     thumbnailProp.stringValue = url;
                     thumbnailProp.serializedObject.ApplyModifiedProperties();
                     ReloadImage();
-                });
+                }, ImageRatio.Landscape);
             }
 
             if (GUILayout.Button("Apply Changes (affects all versions)"))
