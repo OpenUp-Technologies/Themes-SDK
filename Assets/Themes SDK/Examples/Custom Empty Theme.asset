@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c046aea43b876b44f8275e5ebdd8741a, type: 3}
+  m_Name: Custom Empty Theme
+  m_EditorClassIdentifier: World.Aryzon.EnvironmentSDK::OpenUp.Environment.EnvironmentOption
+  environmentName: Empty Space
+  databaseId: 
+  orgId: 
+  rootObject: {fileID: 3707126504330207402, guid: 9320dab00677b334e8f2add1b7a74ad0, type: 3}
+  rootObjectAR: {fileID: 5685283095612790971, guid: a1e26ddfb031b4a8cb1e8e94cddd6ea0, type: 3}
+  skybox: {fileID: 2100000, guid: 9a96542016577d541bf09ef3e9034ae3, type: 2}
+  prefabs:
+  - {fileID: 490759503333339462, guid: 57f60dbab50f7c14caa95e6d63fc7815, type: 3}
+  - {fileID: 7869501395726376244, guid: a7ad2b80e660e4be1867c8b77f36067a, type: 3}
+  prefabPaths:
+  - Assets/Themes SDK/Examples/Empty Space/Cube.prefab
+  - Assets/Themes SDK/Examples/Empty Space/Bee/HoneyBee.prefab

@@ -15,9 +15,22 @@ namespace OpenUp.Editor.EnvironmentsSdk
         private PerformanceAnalysis analysis;
 
         private new EnvironmentOption target => base.target as EnvironmentOption;
-        
+
+        private void CreateExport()
+        {
+            ExportWindow window = EditorWindow.GetWindow<ExportWindow>();
+            
+            window.SetAsset(target);
+            window.Show();
+        }
+
         public override void OnInspectorGUI()
         {
+            if (GUILayout.Button("Export"))
+            {
+                CreateExport();
+            }
+            
             serializedObject.Update ();
             
             nameProp = serializedObject.FindProperty(nameof(EnvironmentOption.environmentName));
