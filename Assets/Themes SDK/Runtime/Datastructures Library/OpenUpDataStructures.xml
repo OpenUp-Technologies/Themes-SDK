@@ -577,8 +577,8 @@
         <member name="F:OpenUp.Protobuf.AppData.Flow.NodesFieldNumber">
             <summary>Field number for the "nodes" field.</summary>
         </member>
-        <member name="F:OpenUp.Protobuf.AppData.Flow.FlowsFieldNumber">
-            <summary>Field number for the "flows" field.</summary>
+        <member name="F:OpenUp.Protobuf.AppData.Flow.StreamsFieldNumber">
+            <summary>Field number for the "streams" field.</summary>
         </member>
         <member name="T:OpenUp.Protobuf.AppData.FlowNode">
             <summary>
@@ -609,19 +609,28 @@
         <member name="F:OpenUp.Protobuf.AppData.FlowNode.PropertiesFieldNumber">
             <summary>Field number for the "properties" field.</summary>
         </member>
-        <member name="T:OpenUp.Protobuf.AppData.FlowSet">
+        <member name="T:OpenUp.Protobuf.AppData.FlowStream">
             <summary>
-            A FlowSet is a set of FlowNodes that can be converted to a set of events for an object.
+            A FlowStream is a set of FlowNodes that act as a function that can be called by other flow nodes.
             </summary>
         </member>
-        <member name="F:OpenUp.Protobuf.AppData.FlowSet.IdFieldNumber">
+        <member name="F:OpenUp.Protobuf.AppData.FlowStream.IdFieldNumber">
             <summary>Field number for the "id" field.</summary>
         </member>
-        <member name="F:OpenUp.Protobuf.AppData.FlowSet.NameFieldNumber">
+        <member name="F:OpenUp.Protobuf.AppData.FlowStream.NameFieldNumber">
             <summary>Field number for the "name" field.</summary>
         </member>
-        <member name="F:OpenUp.Protobuf.AppData.FlowSet.TriggersFieldNumber">
+        <member name="F:OpenUp.Protobuf.AppData.FlowStream.TriggersFieldNumber">
             <summary>Field number for the "triggers" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.FlowStream.TypeFieldNumber">
+            <summary>Field number for the "type" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.FlowStream.NodesFieldNumber">
+            <summary>Field number for the "nodes" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.FlowStream.ConnectionsFieldNumber">
+            <summary>Field number for the "connections" field.</summary>
         </member>
         <member name="F:OpenUp.Protobuf.AppData.Hierarchy.ChildDataFieldNumber">
             <summary>Field number for the "childData" field.</summary>
@@ -1093,6 +1102,20 @@
         <member name="F:OpenUp.Protobuf.AppData.EventData.ResponseFieldNumber">
             <summary>Field number for the "response" field.</summary>
         </member>
+        <member name="P:OpenUp.Protobuf.AppData.ValueData.Item(System.String)">
+            <summary>
+            String index can be used for values that are a dictionary
+            </summary>
+            <param name="key"></param>
+            <exception cref="T:System.NotSupportedException"></exception>
+        </member>
+        <member name="P:OpenUp.Protobuf.AppData.ValueData.Item(System.Int32)">
+            <summary>
+            Integer index can be used for values that are a list
+            </summary>
+            <param name="idx"></param>
+            <exception cref="T:System.NotSupportedException"></exception>
+        </member>
         <member name="M:OpenUp.Protobuf.AppData.ValueData.op_Implicit(System.String)~OpenUp.Protobuf.AppData.ValueData">
             <summary>
             Can cast string to ValueData with text.
@@ -1116,21 +1139,21 @@
         </member>
         <member name="M:OpenUp.Protobuf.AppData.ValueData.op_Implicit(UnityEngine.Color)~OpenUp.Protobuf.AppData.ValueData">
             <summary>
-            Can cast numbers to ValueData with color.
+            Can cast Color to ValueData with color.
             </summary>
             <param name="color"></param>
             <returns></returns>
         </member>
         <member name="M:OpenUp.Protobuf.AppData.ValueData.op_Implicit(UnityEngine.Vector3)~OpenUp.Protobuf.AppData.ValueData">
             <summary>
-            Can cast numbers to ValueData with vector.
+            Can cast Vector3 to ValueData with vector.
             </summary>
             <param name="vector"></param>
             <returns></returns>
         </member>
         <member name="M:OpenUp.Protobuf.AppData.ValueData.op_Implicit(System.Boolean)~OpenUp.Protobuf.AppData.ValueData">
             <summary>
-            Can cast numbers to ValueData with vector.
+            Can cast bool to ValueData with bool.
             </summary>
             <param name="b"></param>
             <returns></returns>
@@ -1527,6 +1550,52 @@
         </member>
         <member name="P:OpenUp.Protobuf.AppData.FlowReflection.Descriptor">
             <summary>File descriptor for AppData/Flow.proto</summary>
+        </member>
+        <member name="T:OpenUp.Protobuf.AppData.StreamNode">
+            <summary>
+            A StreamNode is a single node that is used by a stream.
+            </summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.StreamNode.IdFieldNumber">
+            <summary>Field number for the "id" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.StreamNode.RelativeTransformFieldNumber">
+            <summary>Field number for the "relativeTransform" field.</summary>
+        </member>
+        <member name="T:OpenUp.Protobuf.AppData.StreamConnection">
+            <summary>
+            A StreamConnection is where nodes inside the stream connect to nodes outside the stream. 
+            </summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.StreamConnection.IdFieldNumber">
+            <summary>Field number for the "id" field.</summary>
+        </member>
+        <member name="P:OpenUp.Protobuf.AppData.StreamConnection.Id">
+            <summary>
+            Id of this connection, nodes inside the stream connect to this id when connecting to outside nodes
+            </summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.StreamConnection.ConnectionIdxFieldNumber">
+            <summary>Field number for the "connectionIdx" field.</summary>
+        </member>
+        <member name="P:OpenUp.Protobuf.AppData.StreamConnection.ConnectionIdx">
+            <summary>
+            The index of the connection that contains the outside connections 
+            </summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.StreamConnection.NameFieldNumber">
+            <summary>Field number for the "name" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.StreamConnection.TypeFieldNumber">
+            <summary>Field number for the "type" field.</summary>
+        </member>
+        <member name="F:OpenUp.Protobuf.AppData.StreamConnection.NodesFieldNumber">
+            <summary>Field number for the "nodes" field.</summary>
+        </member>
+        <member name="P:OpenUp.Protobuf.AppData.StreamConnection.Nodes">
+            <summary>
+            Nodes that this connection uses when an outside node connects to inside nodes
+            </summary>
         </member>
         <member name="T:OpenUp.Protobuf.AppData.Connection">
             <summary>
@@ -2167,6 +2236,11 @@
             <param name="consumer"></param>
             <returns></returns>
         </member>
+        <member name="M:OpenUp.Updating.IUpdatable`1.Reset">
+            <summary>
+            Resets the data to its initial state.
+            </summary>
+        </member>
         <member name="T:OpenUp.Updating.TargetedUpdateListener">
             <summary>
             Utility that allows you to listen for updates and can fire on updates at nested data.
@@ -2232,6 +2306,11 @@
         <member name="E:OpenUp.Updating.Protobuf.Updatable`1.OnUndo">
             <summary>
             Subscribe to this to listen to undo calls to the object.
+            </summary>
+        </member>
+        <member name="E:OpenUp.Updating.Protobuf.Updatable`1.OnReset">
+            <summary>
+            Subscribe to this to listen for when the data is reset to its base state.
             </summary>
         </member>
         <member name="M:OpenUp.Updating.Protobuf.Updatable`1.#ctor(`0)">
@@ -2315,6 +2394,9 @@
             Creates a copy of the updatable object, including the updates apply to this updatable.
             </summary>
             <returns></returns>
+        </member>
+        <member name="M:OpenUp.Updating.Protobuf.Updatable`1.Reset">
+            <inheritdoc />
         </member>
         <member name="M:OpenUp.Updating.UpdateFactory.UpdateFactory.AddBehaviourToObject(OpenUp.Protobuf.AppData.BehaviourType,OpenUp.Protobuf.AppData.ObjectStructure)">
             <summary>
