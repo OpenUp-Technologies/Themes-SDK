@@ -11,10 +11,10 @@ namespace OpenUp.Editor.EnvironmentsSdk
     public class Exporter
     {
         public record Settings(string StorePath, HashSet<Platform> Platforms);
-        public record Manifest(Dictionary<string, BundledItem> BundledItems);
+        public record Manifest(string SdkVersion, Dictionary<string, BundledItem> BundledItems, ThemedItem[] ThemedItems);
         
-
-        public record BundledItem(string path, string hash);
+        public record BundledItem(string path, string hash, string fullPath);
+        public record ThemedItem(string name);
         
         private readonly EnvironmentOption environmentOption;
 
@@ -28,7 +28,11 @@ namespace OpenUp.Editor.EnvironmentsSdk
             Bundler bundler = new Bundler(environmentOption);
             Bundler.BundledEnv[] output = bundler.BuildBundles(settings.Platforms.ToArray());
             
-            Manifest manifest = new Manifest(output.ToDictionary(x => x.platform.ToString(), x => new BundledItem(x.path, x.hash)));
+            Manifest manifest = new Manifest(
+                Constants.SDK_VERSION,
+                output.ToDictionary(x => x.platform.ToString(), x => new BundledItem(new FileInfo(x.path).Name, x.hash, x.path)),
+                environmentOption.PrefabPaths.Select(x => new ThemedItem(x)).ToArray());
+            
             string manifestJson = Newtonsoft.Json.JsonConvert.SerializeObject(manifest);
             
             string targetFolder = $"{Application.temporaryCachePath}/env_bundles";
@@ -38,7 +42,7 @@ namespace OpenUp.Editor.EnvironmentsSdk
             
             ZipArchive zipArchive = new ZipArchive(File.Create(settings.StorePath), ZipArchiveMode.Create);
             
-            foreach (string file in manifest.BundledItems.Values.Select(x => x.path).Distinct())
+            foreach (string file in manifest.BundledItems.Values.Select(x => x.fullPath).Distinct())
                 AddFile(file, zipArchive);
             
             AddFile(manifestPath, zipArchive);
