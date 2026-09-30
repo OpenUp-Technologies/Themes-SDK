@@ -58,10 +58,22 @@ namespace OpenUp.Editor.EnvironmentsSdk
         private UnityWebRequest thumbReq;
 
         private new EnvironmentOption target => base.target as EnvironmentOption;
-        
+
+        private void CreateExport()
+        {
+            ExportWindow window = EditorWindow.GetWindow<ExportWindow>();
+            
+            window.SetAsset(target);
+            window.Show();
+        }
+
         public override void OnInspectorGUI()
         {
-            RenderStats();
+            if (GUILayout.Button("Export"))
+            {
+                CreateExport();
+            }
+
             serializedObject.Update ();
             
             nameProp = serializedObject.FindProperty(nameof(EnvironmentOption.environmentName));
