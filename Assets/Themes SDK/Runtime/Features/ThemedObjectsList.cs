@@ -12,8 +12,8 @@ namespace OpenUp.Environment.Features
     {
         public GameObject GameObject;
         public string DisplayName;
-        public string Thumbnail; 
         public string RelativePath;
+        public Texture2D Thumbnail;
     }
     
     public class ThemedObjectsList : ScriptableObject

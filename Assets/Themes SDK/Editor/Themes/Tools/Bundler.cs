@@ -113,7 +113,7 @@ namespace OpenUp.Editor.EnvironmentsSdk
                 var roots = scene.GetRootGameObjects();
                 startingState.SetStartingState(roots);
             }
-            else
+            else if (option.rootObject.isSet)
             {
                 startingState.SetStartingState(option.rootObject.asset);
             }
@@ -124,15 +124,14 @@ namespace OpenUp.Editor.EnvironmentsSdk
             return tempPath;
         }
 
+        /// <summary>
+        /// This bundle contains all objects that have been prepared and can be added to world by the player
+        /// </summary>
+        /// <param name="objects"></param>
+        /// <returns></returns>
+        /// <exception cref="FileNotFoundException"></exception>
         private AssetBundleBuild CreateThemedObjectsBundle(ThemedObject[] objects)
         {
-            // if (!objects.Any())
-            //     return new AssetBundleBuild
-            //     {
-            //         assetNames = Array.Empty<string>(),
-            //         addressableNames = Array.Empty<string>()
-            //     };
-            
             IEnumerable<string> allFiles = Array.Empty<string>();
             IEnumerable<string> prefabPaths = objects.Select(obj => AssetDatabase.GetAssetPath(obj.GameObject));
 
@@ -167,20 +166,40 @@ namespace OpenUp.Editor.EnvironmentsSdk
             };
         }
 
+        /// <summary>
+        /// Contains everything apart from the scene needed to create the world.
+        /// </summary>
+        /// <param name="dontInclude">Items to omit, this is used to make sure the themed objects are not bundled in twice</param>
+        /// <returns></returns>
+        /// <exception cref="FileNotFoundException"></exception>
         private AssetBundleBuild CreateRootPrefabBundle(string[] dontInclude)
         {
-            string rootPath = AssetDatabase.GetAssetPath(option.rootObject.asset.GetInstanceID());
+            IEnumerable<string> allFiles = new string[0];
 
-            string rootPathAR = option.rootObjectAR.isSet
-                ? AssetDatabase.GetAssetPath(option.rootObjectAR.asset.GetInstanceID())
-                : rootPath;
+            string rootPath = null;
+            string rootPathAR = null;
+            
+            if (option.scene)
+                allFiles = allFiles.Concat(AssetDatabase.GetDependencies(AssetDatabase.GetAssetPath(option.scene.GetInstanceID()), true));
+            
+            if (option.rootObject.isSet)
+            {
+                rootPath = AssetDatabase.GetAssetPath(option.rootObject.asset.GetInstanceID());
+                
+                allFiles = allFiles.Concat(AssetDatabase.GetDependencies(rootPath, true))
+                                   .Append(rootPath);
+            }
 
-            IEnumerable<string> allFiles = AssetDatabase.GetDependencies(rootPath, true)
-                                                        .Concat(AssetDatabase.GetDependencies(rootPathAR, true))
-                                                        .Where(d => !dontWants.IsMatch(d))
-                                                        .Append(rootPath)
-                                                        .Append(rootPathAR)
-                                                        .Distinct();
+            if (option.rootObjectAR.isSet)
+            {
+                rootPathAR = AssetDatabase.GetAssetPath(option.rootObjectAR.asset.GetInstanceID());
+                
+                allFiles = allFiles.Concat(AssetDatabase.GetDependencies(rootPathAR, true))
+                                   .Append(rootPathAR);
+            }
+
+            allFiles = allFiles.Where(d => !dontWants.IsMatch(d))
+                               .Distinct();
 
             string skyboxPath = null;
             
@@ -205,15 +224,18 @@ namespace OpenUp.Editor.EnvironmentsSdk
             }
             
             // Playable object can reference prefabs not included yet
-            allFiles = allFiles.Concat(option.rootObject.asset.GetComponentsInChildren<PlayableObject>().Select(play => play.source));
+            if (option.rootObject.isSet)
+                allFiles = allFiles.Concat(option.rootObject.asset.GetComponentsInChildren<PlayableObject>().Select(play => play.source));
             
             if (option.rootObjectAR.isSet) 
                 allFiles = allFiles.Concat(option.rootObjectAR.asset.GetComponentsInChildren<PlayableObject>().Select(play => play.source));
 
+            if (option.scene)
+                allFiles = allFiles.Concat(EditorSceneManager.GetActiveScene().GetRootGameObjects().SelectMany(go => go.GetComponentsInChildren<PlayableObject>()).Select(play => play.source));
+
             string startingStatePath = CreateStartingStateObject();
 
             allFiles = allFiles.Append(startingStatePath);
-            
             allFiles = allFiles.Where(path => !dontInclude.Contains(path));
             
             string[] deps = allFiles.Distinct()
@@ -260,21 +282,35 @@ namespace OpenUp.Editor.EnvironmentsSdk
         {
             if (!Directory.Exists(Application.dataPath.Replace("Assets", "Assets/Generated")))
                 Directory.CreateDirectory(Application.dataPath.Replace("Assets", "Assets/Generated"));
-                        
+
+            string scenePath = "scene_thing";
+            
+            if (option.scene )
+            {
+                scenePath = AssetDatabase.GetAssetPath(option.scene.GetInstanceID());
+                string activeScene = EditorSceneManager.GetActiveScene().path;
+                
+                if (activeScene != scenePath)
+                    EditorSceneManager.OpenScene(scenePath);
+            }
+            
             string bundleName = $"world_{option.GetInstanceID()}";
 
             var objects = CreateThemedObjectsBundle(option.themedObjects);
-            var rootObject = CreateRootPrefabBundle(objects.assetNames);
+            var rootObject = CreateRootPrefabBundle(objects.assetNames.Append(scenePath).ToArray());
             var scene = CreateSceneBundle();
             
             objects.assetBundleName = bundleName+"_objects";
-            rootObject.assetBundleName = bundleName+"_rootScene";
+            rootObject.assetBundleName = bundleName+"_assets";
             scene.assetBundleName = bundleName+"_scene";
             
             return (rootObject, scene, objects);
         }
 
-        public BundledEnv[] BuildBundles((AssetBundleBuild rootObject, AssetBundleBuild scene, AssetBundleBuild objects) build, Platform[] platforms)
+        private BundledEnv[] BuildBundles(
+            (AssetBundleBuild rootObject, AssetBundleBuild scene, AssetBundleBuild objects) build, 
+            Platform[] platforms , 
+            bool objectsOnly = false)
         {
             string targetFolder = $"{Application.temporaryCachePath}/env_bundles";
 
@@ -298,7 +334,7 @@ namespace OpenUp.Editor.EnvironmentsSdk
                 
                 AssetBundleManifest manifest = BuildPipeline.BuildAssetBundles(
                     subFolder, 
-                    new[] { buildPrefabs, buildScene, buildObjects },
+                    objectsOnly ? new[] { buildObjects } : new[] { buildPrefabs, buildScene, buildObjects },
                     BuildAssetBundleOptions.StrictMode
                         | BuildAssetBundleOptions.DisableLoadAssetByFileName
                         | BuildAssetBundleOptions.DisableLoadAssetByFileNameWithExtension
@@ -311,22 +347,25 @@ namespace OpenUp.Editor.EnvironmentsSdk
                 // assign the built bundle to all platforms that use this target.
                 foreach (BundledEnv bundledEnv in targetedPlatforms)
                 {
+                    bundledEnv.objectsPath = $"{subFolder}/{buildObjects.assetBundleName}";
+                    bundledEnv.objectsHash = manifest.GetAssetBundleHash(buildObjects.assetBundleName).ToString();
+                    
+                    if (objectsOnly) continue;
+                    
                     bundledEnv.path = $"{subFolder}/{buildPrefabs.assetBundleName}";
                     bundledEnv.scenePath = $"{subFolder}/{buildScene.assetBundleName}";
-                    bundledEnv.objectsPath = $"{subFolder}/{buildObjects.assetBundleName}";
                     
                     bundledEnv.hash = manifest.GetAssetBundleHash(buildPrefabs.assetBundleName).ToString();
                     bundledEnv.sceneHash = manifest.GetAssetBundleHash(buildScene.assetBundleName).ToString();
-                    bundledEnv.objectsHash = manifest.GetAssetBundleHash(buildObjects.assetBundleName).ToString();
                 }
             }
 
             return bundles;
         }
 
-        public BundledEnv[] BuildBundles(Platform[] targets)
+        public BundledEnv[] BuildBundles(Platform[] targets, bool objectsOnly = false)
         {
-            return BuildBundles(CreateBuildInstructions(), targets);
+            return BuildBundles(CreateBuildInstructions(), targets, objectsOnly);
         }
     }
 }

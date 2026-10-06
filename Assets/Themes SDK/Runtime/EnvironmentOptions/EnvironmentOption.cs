@@ -32,11 +32,6 @@ namespace OpenUp.Environment
         public string databaseId;
         public string orgId;
 
-        [TextArea]
-        public string description;
-        
-        public string thumbnailImage;
-        
         /// <summary>
         /// The game object to load in.
         /// </summary>
@@ -54,6 +49,36 @@ namespace OpenUp.Environment
 
 #if UNITY_EDITOR
         public UnityEditor.SceneAsset scene;
+        
+        public enum ModeSupport { Scene, RootObject, Both, None }
+        
+        public ModeSupport Supports  {
+            get
+            {
+                if (scene && rootObject.isSet)
+                    return ModeSupport.Both;
+                
+                if (scene)
+                    return ModeSupport.Scene;
+
+                if (rootObject.isSet)
+                    return ModeSupport.RootObject;
+
+                return ModeSupport.None;
+            }
+        }
+        
+        public enum Mode
+        {
+            [InspectorName("Root Object (Legacy)")]
+            RootObject,
+            [InspectorName("Scenes")]
+            Scene,
+            [InspectorName("Objects Only")]
+            ObjectsOnly,
+        }
+        
+        public Mode mode = Mode.Scene;
 #endif
         /// <summary>
         /// Cannot use LazyLoadReference due to crash on device.

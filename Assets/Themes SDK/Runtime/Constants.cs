@@ -2,6 +2,6 @@
 {
     public static class Constants
     {
-        public const string SDK_VERSION = "1.4.0";
+        public const string SDK_VERSION = "2026.2.0";
     }
 }

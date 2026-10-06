@@ -15,12 +15,24 @@ MonoBehaviour:
   environmentName: Empty Space
   databaseId: 
   orgId: 
+  description: 
+  thumbnailImage: 
   rootObject: {fileID: 3707126504330207402, guid: 9320dab00677b334e8f2add1b7a74ad0, type: 3}
   rootObjectAR: {fileID: 5685283095612790971, guid: a1e26ddfb031b4a8cb1e8e94cddd6ea0, type: 3}
   skybox: {fileID: 2100000, guid: 9a96542016577d541bf09ef3e9034ae3, type: 2}
+  scene: {fileID: 102900000, guid: b60912bc6cfdc7a4aa9d0135a22bd69e, type: 3}
   prefabs:
   - {fileID: 490759503333339462, guid: 57f60dbab50f7c14caa95e6d63fc7815, type: 3}
   - {fileID: 7869501395726376244, guid: a7ad2b80e660e4be1867c8b77f36067a, type: 3}
   prefabPaths:
   - Assets/Themes SDK/Examples/Empty Space/Cube.prefab
   - Assets/Themes SDK/Examples/Empty Space/Bee/HoneyBee.prefab
+  themedObjects:
+  - GameObject: {fileID: 7869501395726376244, guid: a7ad2b80e660e4be1867c8b77f36067a, type: 3}
+    DisplayName: Honey Bee
+    RelativePath: Assets/Themes SDK/Examples/Empty Space/Bee/HoneyBee.prefab
+    Thumbnail: {fileID: 2800000, guid: 138d38083b3e44a9289dd8b284c2fe02, type: 3}
+  - GameObject: {fileID: 490759503333339462, guid: 57f60dbab50f7c14caa95e6d63fc7815, type: 3}
+    DisplayName: Shiny Cube
+    RelativePath: Assets/Themes SDK/Examples/Empty Space/Cube.prefab
+    Thumbnail: {fileID: 2800000, guid: 48a7145839480884e8151eb6c078f3b5, type: 3}

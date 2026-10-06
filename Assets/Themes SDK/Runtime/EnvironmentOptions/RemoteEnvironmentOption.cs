@@ -42,7 +42,7 @@ namespace OpenUp.Interpreter.Environment
     public record RemoteThemedObject(string DisplayName, string RelativePath, string Thumbnail)
     {
         public static RemoteThemedObject Create(ThemedObject themedObject) =>
-            new RemoteThemedObject(themedObject.DisplayName, themedObject.RelativePath, themedObject.Thumbnail);
+            new RemoteThemedObject(themedObject.DisplayName, themedObject.RelativePath, null);
     }
 
     public class RemoteVersion : IEnvironmentOption
@@ -84,59 +84,26 @@ namespace OpenUp.Interpreter.Environment
         /// <exception cref="ArgumentOutOfRangeException"></exception>
         public RemoteBundle this[Platform platform]
         {
-            get
-            {
-                switch (platform)
+            get => platform switch
                 {
-                    case Platform.EDITOR:
-                    case Platform.STANDALONE: return Standalone;
-                    
-                    case Platform.EDITOR_MAC:
-                    case Platform.STANDALONE_MAC: return StandaloneMac;
-                    
-                    case Platform.OCULUS:         return Oculus;
-                    case Platform.ANDROID:        return Android;
-                    case Platform.IOS:            return iOS;
-                    case Platform.HOLOLENS:       return Hololens;
-                    default:
-                        throw new ArgumentOutOfRangeException(nameof(platform), platform, null);
-                }
-            }
-
-            set
-            {
-                switch (platform)
+                    Platform.EDITOR or Platform.STANDALONE => Standalone,
+                    Platform.EDITOR_MAC or Platform.STANDALONE_MAC => StandaloneMac,
+                    Platform.OCULUS => Oculus,
+                    Platform.ANDROID => Android,
+                    Platform.IOS => iOS,
+                    Platform.HOLOLENS => Hololens,
+                    _ => throw new ArgumentOutOfRangeException(nameof(platform), platform, null)
+                };
+            set => _ = platform switch
                 {
-                    case Platform.EDITOR:
-                    case Platform.STANDALONE: 
-                        Standalone = value;
-                        break;
-                    
-                    case Platform.EDITOR_MAC:
-                    case Platform.STANDALONE_MAC:
-                        StandaloneMac = value;
-                        break;
-                    
-                    case Platform.OCULUS:     
-                        Oculus = value;
-                        break;
-                    
-                    case Platform.ANDROID:    
-                        Android = value;
-                        break;
-                    
-                    case Platform.IOS:
-                        iOS = value;
-                        break;
-                    
-                    case Platform.HOLOLENS:   
-                        Hololens = value;
-                        return;
-                    
-                    default:
-                        throw new ArgumentOutOfRangeException(nameof(platform), platform, null);
-                }
-            }
+                    Platform.EDITOR or Platform.STANDALONE => Standalone = value,
+                    Platform.EDITOR_MAC or Platform.STANDALONE_MAC => StandaloneMac = value,
+                    Platform.OCULUS => Oculus = value,
+                    Platform.ANDROID => Android = value,
+                    Platform.IOS => iOS = value,
+                    Platform.HOLOLENS => Hololens = value,
+                    _ => throw new ArgumentOutOfRangeException(nameof(platform), platform, null)
+                };
         }
     }
     
