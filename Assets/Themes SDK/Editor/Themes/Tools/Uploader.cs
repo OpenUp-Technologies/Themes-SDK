@@ -107,11 +107,7 @@ namespace OpenUp.Editor.EnvironmentsSdk
                      new RemoteBundle
                      {
                          BundleUrl = task.GetUrl(files[i]),
-                         BundleHash = bundl.hash,
-                         SceneBundleUrl = task.GetUrl(files[i+1]),
-                         SceneBundleHash = bundl.sceneHash,
-                         ObjectsUrl = task.GetUrl(files[i+2]),
-                         ObjectsHash = bundl.objectsHash
+                         BundleHash = bundl.hash
                      };
              }
 

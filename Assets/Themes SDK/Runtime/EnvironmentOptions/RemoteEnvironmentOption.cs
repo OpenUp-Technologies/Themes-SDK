@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using OpenUp.Environment.Features;
 
 namespace OpenUp.Interpreter.Environment
@@ -30,10 +31,6 @@ namespace OpenUp.Interpreter.Environment
     {
         public string BundleUrl  { get; set; }
         public string BundleHash { get; set; }
-        public string SceneBundleUrl { get; set; }
-        public string SceneBundleHash { get; set; }
-        public string ObjectsUrl { get; set; }
-        public string ObjectsHash { get; set; }
     }
 
     /// <summary>
@@ -68,13 +65,21 @@ namespace OpenUp.Interpreter.Environment
         public string[] UsedScripts { get; set; }
         public string[] PrefabPaths { get; set; }
         public RemoteThemedObject[] ThemedObjects { get; set; }
+        
+        public Dictionary<string, RemoteBundle> BundleCollection { get; set; }
 
+        // These fields are being kept for backwards compatibility
+        [Obsolete("Use BundleCollection instead")]
         public RemoteBundle StandaloneMac { get; set; }
-
+        [Obsolete("Use BundleCollection instead")]
         public RemoteBundle Standalone  { get; set; }
+        [Obsolete("Use BundleCollection instead")]
         public RemoteBundle Oculus      { get; set; }
+        [Obsolete("Use BundleCollection instead")]
         public RemoteBundle Android     { get; set; }
+        [Obsolete("Use BundleCollection instead")]
         public RemoteBundle iOS         { get; set; }
+        [Obsolete("Use BundleCollection instead")]
         public RemoteBundle Hololens    { get; set; }
 
         /// <summary>
@@ -84,7 +89,8 @@ namespace OpenUp.Interpreter.Environment
         /// <exception cref="ArgumentOutOfRangeException"></exception>
         public RemoteBundle this[Platform platform]
         {
-            get => platform switch
+            // Try the dictionary, otherwise fallback to the dedicated fields.
+            get => BundleCollection.GetValueOrDefault(platform.ToString()) ?? platform switch
                 {
                     Platform.EDITOR or Platform.STANDALONE => Standalone,
                     Platform.EDITOR_MAC or Platform.STANDALONE_MAC => StandaloneMac,
@@ -94,16 +100,7 @@ namespace OpenUp.Interpreter.Environment
                     Platform.HOLOLENS => Hololens,
                     _ => throw new ArgumentOutOfRangeException(nameof(platform), platform, null)
                 };
-            set => _ = platform switch
-                {
-                    Platform.EDITOR or Platform.STANDALONE => Standalone = value,
-                    Platform.EDITOR_MAC or Platform.STANDALONE_MAC => StandaloneMac = value,
-                    Platform.OCULUS => Oculus = value,
-                    Platform.ANDROID => Android = value,
-                    Platform.IOS => iOS = value,
-                    Platform.HOLOLENS => Hololens = value,
-                    _ => throw new ArgumentOutOfRangeException(nameof(platform), platform, null)
-                };
+            set => BundleCollection[platform.ToString()] = value;
         }
     }
     
