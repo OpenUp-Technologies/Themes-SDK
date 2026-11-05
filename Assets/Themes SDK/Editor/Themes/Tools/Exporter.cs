@@ -73,7 +73,7 @@ namespace OpenUp.Editor.EnvironmentsSdk
                 Constants.SDK_VERSION, 
                 type, 
                 bundledItems,
-                environmentOption.PrefabPaths.Select(x => new ThemedItem(x)).ToArray());
+                environmentOption.themedObjects.Select(x => new ThemedItem(x.RelativePath)).ToArray());
             
             string manifestJson = JsonConvert.SerializeObject(manifest, Formatting.Indented);
             string targetFolder = $"{Application.temporaryCachePath}/env_bundles";

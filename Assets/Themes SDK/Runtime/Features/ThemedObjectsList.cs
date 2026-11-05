@@ -1,5 +1,4 @@
 ﻿using System;
-using Newtonsoft.Json;
 using UnityEngine;
 
 namespace OpenUp.Environment.Features
@@ -14,6 +13,11 @@ namespace OpenUp.Environment.Features
         public string DisplayName;
         public string RelativePath;
         public Texture2D Thumbnail;
+        
+        // Filled in by the editor during runtime
+        [HideInInspector] public string sourcePackageId;
+        [HideInInspector] public string sourcePackageVersion;
+        [HideInInspector] public string sourcePackageDisplayName;
     }
     
     public class ThemedObjectsList : ScriptableObject
