@@ -26,14 +26,7 @@ MonoBehaviour:
   - GameObject: {fileID: 4851099405541182349, guid: 10e58715b503bc34c93e3328defb9382, type: 3}
     DisplayName: Mascot
     RelativePath: Assets/Themes SDK/Examples/Mascot/Mascot.prefab
-    Thumbnail: {fileID: 2800000, guid: 74c9380a8a6424d46adaad0179088a75, type: 3}
-    sourcePackageId: 
-    sourcePackageVersion: 
-    sourcePackageDisplayName: 
-  - GameObject: {fileID: 4851099405541182349, guid: 10e58715b503bc34c93e3328defb9382, type: 3}
-    DisplayName: Mascot
-    RelativePath: Assets/Themes SDK/Examples/Mascot/Mascot.prefab
-    Thumbnail: {fileID: 2800000, guid: 74c9380a8a6424d46adaad0179088a75, type: 3}
+    Thumbnail: {fileID: 2800000, guid: 445d3cadb742d2849adbdc88a4ec4a70, type: 3}
     sourcePackageId: 
     sourcePackageVersion: 
     sourcePackageDisplayName: 
